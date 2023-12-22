@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Emss</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    
+    <header class="text-dark">
+       <%= render "partials/topbar" %>
+    </header>
+
+    <div class="container-fluid">
+      <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+          <%= render 'partials/left_side_bar' %>
+        </nav>
+
+        <main class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+          <%= yield %> </main>
+      </div>
+    </div>
+
+    <footer class="text-dark">
+      <%= render "partials/footer" %>
+    </footer>
+    <!-- div class="container-fluid">
+      <div class="row">
+        <div class="col-md-2">
+          <%= render 'partials/left_side_bar' %>
+        </div>
+        <div class="col-md-10">
+          <%= render "partials/topbar" %>
+          <div class="content-page">
+            <%= yield %>   
+          </div>
+         
+        </div>
+      </div>
+    </div>
+   <%= render "partials/footer" % -->
+  </body>
+</html>

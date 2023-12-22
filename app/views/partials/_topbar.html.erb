@@ -1,0 +1,19 @@
+<%if user_signed_in?%>
+	<nav class="navbar bg-body-tertiary  text-lg-start ">
+			<div class="navbar-header">
+				<%= image_tag("logo.png", class: "img-fluid", alt: "Sample image",style:"margin-right: 186px; height: 70px;") %>
+				</div>
+			<ul class="nav">
+				<li>
+					<%= button_to "logout", destroy_user_session_path, method: :delete%>
+				</li>
+				<li>
+					<span><%= current_user.name %></span>
+					<span><%= current_user&.role&.name %></span>
+				</li>
+				<%# <li></li>
+				<li><a href="#">Page 2</a></li>
+				<li><a href="#">Page 3</a></li>  %>
+			</ul>
+	</nav>
+<%end%>

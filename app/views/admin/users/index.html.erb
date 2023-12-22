@@ -1,0 +1,50 @@
+<h2>Admin</h2>
+<div class="card">
+	<div class="card-body">
+		<%= link_to "new_employee",new_user_registration_path%>
+		<table class='table table-responsive'>
+			<thead> 
+				<th>name</th>
+				<th>last_name</th>
+				<th>email</th>
+				<th>address</th>
+				<th>zip_code</th>
+				<th>employee_code</th>
+				<th>dob</th>
+				<th>actions</th>
+			</thead>
+			<tbody>
+				<% @users.each do|user|%>
+					<tr>
+						<td>
+							<%= user.name%>
+						</td>
+						<td>
+							<%= user.last_name%>
+						</td>
+						<td>
+							<%= user.email%>
+						</td>
+						<td>
+							<%= user.address%>
+						</td>
+						<td>
+							<%= user.zip_code%>
+						</td>
+						<td>
+							<%= user.employee_code%>
+						</td>
+						<td>
+							<%= user.dob%>
+						</td>
+						<td>
+							 <%= button_to "edit_user", edit_admin_user_path(user), method: :get%> 
+						</td>
+					</tr>
+				<%end%>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+  
