@@ -1,23 +1,31 @@
-<h2>Admin</h2>
+<div class="d-flex justify-content-between">
+	<div>
+		<h2>Admin</h2>
+	</div>
+	<div>
+		<%= button_to "New",new_admin_user_path, method: :get, class: "btn btn-primary"%>
+	</div>
+</div>
 <div class="card">
 	<div class="card-body">
-		<%= link_to "new_employee",new_user_registration_path%>
 		<table class='table table-responsive'>
 			<thead> 
-				<th>name</th>
-				<th>last_name</th>
-				<th>email</th>
-				<th>address</th>
-				<th>zip_code</th>
-				<th>employee_code</th>
+				<th>First Name</th>
+				<th>Last Name</th>
+				<th>Email</th>
+				<th>Phone No</th>
+				<th>Employee Code</th>
 				<th>dob</th>
-				<th>actions</th>
+				<th>Role</th>
+				<th>Zip Code</th>
+				<th>Address</th>
+				<th>Actions</th>
 			</thead>
 			<tbody>
 				<% @users.each do|user|%>
 					<tr>
 						<td>
-							<%= user.name%>
+							<%= user.first_name%>
 						</td>
 						<td>
 							<%= user.last_name%>
@@ -26,10 +34,7 @@
 							<%= user.email%>
 						</td>
 						<td>
-							<%= user.address%>
-						</td>
-						<td>
-							<%= user.zip_code%>
+							<%= user.phone%>
 						</td>
 						<td>
 							<%= user.employee_code%>
@@ -38,7 +43,19 @@
 							<%= user.dob%>
 						</td>
 						<td>
-							 <%= button_to "edit_user", edit_admin_user_path(user), method: :get%> 
+							<%= user.role&.name%>
+						</td>
+						<td>
+							<%= user.zip_code%>
+						</td>
+						<td>
+							<%= user.address%>
+						</td>
+						<td>
+							<div class="d-flex">
+							 		<%= button_to "Edit", edit_admin_user_path(user), method: :get, class: "btn btn-primary" %> 
+							 		<%= button_to "Delete", admin_user_path(user), method: :delete, class: "btn btn-danger" %> 
+							</div>
 						</td>
 					</tr>
 				<%end%>

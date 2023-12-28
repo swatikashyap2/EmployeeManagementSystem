@@ -14,4 +14,5 @@ Rails.application.routes.draw do
   namespace :manager do
     resources :users
   end
+  resources :roles
 end

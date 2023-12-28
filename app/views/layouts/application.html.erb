@@ -9,40 +9,39 @@
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
-  <body>
-    
-    <header class="text-dark">
-       <%= render "partials/topbar" %>
-    </header>
-
-    <div class="container-fluid">
-      <div class="row">
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-          <%= render 'partials/left_side_bar' %>
-        </nav>
-
-        <main class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-          <%= yield %> </main>
-      </div>
-    </div>
-
-    <footer class="text-dark">
-      <%= render "partials/footer" %>
-    </footer>
-    <!-- div class="container-fluid">
-      <div class="row">
-        <div class="col-md-2">
-          <%= render 'partials/left_side_bar' %>
-        </div>
-        <div class="col-md-10">
-          <%= render "partials/topbar" %>
-          <div class="content-page">
-            <%= yield %>   
+  <body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+      <%= render "base/header"%>
+      <%= render "base/sidebar"%>
+      <div class="content-wrapper">
+        <div class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2">
+              <div class="col-sm-6">
+                <h1 class="m-0"></h1>
+              </div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><%= link_to "Home", admin_users_path %></li>
+                  <li class="breadcrumb-item active">Users</li>
+                </ol>
+              </div>
+            </div>
           </div>
-         
+        </div>
+        <div class="content container-fluid">
+          <div class="container-fluid">
+              <%= yield %>
+          </div>
         </div>
       </div>
+      <%= render "base/footer" %>
+      <%# <%= render "base/control_sidebar"%> 
     </div>
-   <%= render "partials/footer" % -->
+    <script src="plugins/jquery/jquery.min.js"></script>
+  
+    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+ 
+    <script src="dist/js/adminlte.min.js"></script>
   </body>
 </html>

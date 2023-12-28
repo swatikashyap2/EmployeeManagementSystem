@@ -1,0 +1,58 @@
+<aside class="main-sidebar bg-color elevation-0">
+    <!-- Brand Logo -->
+    <div class="position-relative" style="border-bottom: 2px solid black; padding-bottom: 10px;">
+    <%= image_tag("logo.png", :size => "200x100", class: "position-absolute top logo-image", alt: "Sample image") %>
+</div>
+
+    <!-- Sidebar -->
+    <div class="sidebar mt-5">
+        <nav class="mt-5">
+					<ul class="nav nav-pills flex-column mb-auto">
+						<li class="nav-item">
+							<%= link_to admin_users_path, class: "nav-link"  do%>
+								Users
+							<%end%>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="#about">Role</a>
+						</li>
+            <li class="nav-item">
+							<a class="nav-link" href="#events">Leaves</a>
+						</li>
+            <li class="nav-item">
+							<a class="nav-link" href="#team">Teams</a>
+						</li>
+            <li class="nav-item">
+							<a class="nav-link" href="#policy">Policy</a>
+						</li>
+						<!-- li class="nav-item dropdown">
+							<a href="#works" class="nav-link dropdown-toggle" data-toggle="dropdown">Works <span
+								class="caret"></span>
+							</a>
+							< Add your dropdown menu items here >
+							<div class="dropdown-menu">
+								< Example dropdown items >
+								<a class="dropdown-item" href="#">Item 1</a>
+								<a class="dropdown-item" href="#">Item 2</a>
+								<a class="dropdown-item" href="#">Item 3</a>
+							</div>
+						</li-->
+					</ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>
+
+
+<style>
+	.top{
+		top: -10px;
+		width: 100%;
+		height: 100px;
+	}
+	.logo-image {
+    border-bottom: 1px solid #000; /* Change #000 to the color you want for the border */
+	}
+
+</style>

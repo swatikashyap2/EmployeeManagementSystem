@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+	layout :layout
 	protect_from_forgery with: :exception
   include Pundit::Authorization
 	rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
@@ -29,15 +30,22 @@ class ApplicationController < ActionController::Base
 			end
 		end
 	end
-
+	
+	def layout
+		if devise_controller?
+			'devise'
+		else
+			'application'
+		end
+  end
+	
 	protected
+	
 
 	def configure_permitted_parameters
 		devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:email, :password, :password_confirmation, :role_id)}
-		devise_parameter_sanitizer.permit(:account_update) { |u| u.permit(:email, :password, :current_password, :role_id)}
+		devise_parameter_sanitizer.permit(:account_update) { |u| u.permit(:email, :password, :password_confirmation, :role_id)}
 	end
-
-	
 
 end
 
