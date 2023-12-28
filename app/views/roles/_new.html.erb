@@ -1,0 +1,20 @@
+<div id="new_role" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				<h3 class="modal-title" id="myModalLabel">New Role</h3>
+				<%= form_for Role.new do|f|%>
+					<div class="row">
+						<div class="col">
+							<%= f.label :name %><br/>
+							<%= f.text_field :name,  autocomplete: "name", class: "form-control", placeholder: "Enter name", required: true %>
+						</div>
+						<div class="field mt-2">
+							<%= f.submit "save", class: "btn btn-sm btn-primary" %>
+						</div>	
+					</div>
+				<% end %>
+			</div>
+		</div>
+	</div>
+</div>

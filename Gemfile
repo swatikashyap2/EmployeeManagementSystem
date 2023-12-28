@@ -70,3 +70,4 @@ gem 'spring'
 gem 'spring-watcher-listen'
 gem 'pundit'
 gem "paperclip"
+gem 'will_paginate-bootstrap4'

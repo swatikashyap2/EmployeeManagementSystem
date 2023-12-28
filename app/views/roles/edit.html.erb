@@ -1,0 +1,32 @@
+<div class="content-header">
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				<h1 class="m-0"></h1>
+			</div>
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-right">
+					<li class="breadcrumb-item"><%= link_to "Role", roles_path %></li>
+					<li class="breadcrumb-item active">Edit role</li>
+				</ol>
+			</div>
+		</div>
+	</div>
+</div>
+<h2>Edit Role</h2>
+	<div class="card">
+		<div class="card-body">
+			<%= form_for @role do|f|%>
+				<div class="row">
+					<div class="col-md-6">
+						<%= f.label :name %><br/>
+						<%= f.text_field :name,  autocomplete: "name", class: "form-control", placeholder: "Enter name", required: true %>
+					</div>
+					<div class="field mt-2">
+						<%= f.submit "save", class: "btn btn-primary" %>
+					</div>	
+				</div>
+			<% end %>
+		</div>
+	</div>
+</div>

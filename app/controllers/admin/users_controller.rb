@@ -2,7 +2,7 @@ class Admin::UsersController <  ApplicationController
 	before_action :authenticate_user!
 	
 	def index
-		@users = User.all
+		@users = User.all.paginate(page: params[:page], per_page: 3)
 	end
 
 	def new
@@ -13,6 +13,7 @@ class Admin::UsersController <  ApplicationController
 		@user = User.new(user_params)
 		if @user.save
 			redirect_to admin_users_path
+			flash[:notice] = "User Created Successfully."
 		else
 			render 'new'
 		end
@@ -28,6 +29,7 @@ class Admin::UsersController <  ApplicationController
 		if params[:user][:password].blank? && params[:user][:password_confirmation].blank?
 			if @user.update_without_password(user_params)
 				redirect_to admin_users_path
+				flash[:notice] = "User Updated Successfully."
 			else
 				render 'edit'
 			end
@@ -45,6 +47,7 @@ class Admin::UsersController <  ApplicationController
 		@user=User.find(params[:id])
 		@user.destroy
 		redirect_to admin_users_path
+		flash[:notice] = "User Deleted Successfully."
 	end
 
 	private

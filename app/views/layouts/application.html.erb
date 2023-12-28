@@ -10,25 +10,11 @@
   </head>
 
   <body class="hold-transition skin-blue sidebar-mini">
+   <%= render 'shared/flashes' %>
     <div class="wrapper">
       <%= render "base/header"%>
       <%= render "base/sidebar"%>
       <div class="content-wrapper">
-        <div class="content-header">
-          <div class="container-fluid">
-            <div class="row mb-2">
-              <div class="col-sm-6">
-                <h1 class="m-0"></h1>
-              </div>
-              <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                  <li class="breadcrumb-item"><%= link_to "Home", admin_users_path %></li>
-                  <li class="breadcrumb-item active">Users</li>
-                </ol>
-              </div>
-            </div>
-          </div>
-        </div>
         <div class="content container-fluid">
           <div class="container-fluid">
               <%= yield %>

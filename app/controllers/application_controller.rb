@@ -1,11 +1,13 @@
 class ApplicationController < ActionController::Base
 	layout :layout
 	protect_from_forgery with: :exception
+
   include Pundit::Authorization
 	rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
 	before_action :configure_permitted_parameters, if: :devise_controller?
 	before_action :set_default_role, only: [:create]
+	add_flash_types :info, :error, :success
 
 	private
 
@@ -38,6 +40,7 @@ class ApplicationController < ActionController::Base
 			'application'
 		end
   end
+	
 	
 	protected
 	

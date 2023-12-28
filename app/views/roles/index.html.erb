@@ -1,0 +1,56 @@
+<div class="content-header">
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				<h1 class="m-0"></h1>
+			</div>
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-right">
+					<li class="breadcrumb-item"><%= link_to "Home", admin_users_path %></li>
+					<li class="breadcrumb-item active">Roles</li>
+				</ol>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="d-flex justify-content-between">
+	<div>
+		<h2>Roles</h2>
+	</div>
+	<div>
+    <%= link_to "New", "#", class: "btn btn-primary btn-sm", "data-bs-toggle": "modal", "data-bs-target": "#new_role" %>
+	</div>
+</div>
+<div class="card">
+	<div class="card-body">
+		<table class='table'>
+			<thead> 
+				<th>Name</th>
+				<th>Actions</th>
+			</thead>
+			<tbody>
+				<% @roles.each do|role|%>
+					<tr>
+						<td>
+							<%= role.name%>
+						</td>
+						<td>
+							<div class="d-flex">
+								<%= button_to "Edit", edit_role_path(role), method: :get, class: "btn btn-sm btn-primary" %>
+								<%= button_to "Delete", role_path(role), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger mx-1" %> 
+							</div>
+						</td>
+					</tr>
+				<%end%>
+			</tbody>
+		</table>
+	</div>
+	<div class="p-4">
+		<%= will_paginate @roles %>
+	</div>
+</div>
+<%= render 'roles/new'%>
+
+
+
+  

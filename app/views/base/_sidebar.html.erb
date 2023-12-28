@@ -10,20 +10,28 @@
 					<ul class="nav nav-pills flex-column mb-auto">
 						<li class="nav-item">
 							<%= link_to admin_users_path, class: "nav-link"  do%>
-								Users
+								<i class="bi bi-people-fill p-2"></i>Users
 							<%end%>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="#about">Role</a>
+							<%= link_to roles_path, class: "nav-link"  do%>
+								<i class="bi bi-person-fill-up p-2"></i>Role							
+							<%end%>
 						</li>
             <li class="nav-item">
-							<a class="nav-link" href="#events">Leaves</a>
+							<%= link_to roles_path, class: "nav-link"  do%>
+								<i class="bi bi-person-fill-up p-2"></i>Leaves
+							<%end%>
 						</li>
             <li class="nav-item">
-							<a class="nav-link" href="#team">Teams</a>
+							<%= link_to roles_path, class: "nav-link"  do%>
+								<i class="bi bi-people p-2"></i>Teams
+							<%end%>
 						</li>
             <li class="nav-item">
-							<a class="nav-link" href="#policy">Policy</a>
+							<%= link_to roles_path, class: "nav-link"  do%>
+								<i class="bi bi-file-earmark-text-fill p-2"></i>Policy
+							<%end%>
 						</li>
 						<!-- li class="nav-item dropdown">
 							<a href="#works" class="nav-link dropdown-toggle" data-toggle="dropdown">Works <span
@@ -42,7 +50,7 @@
         <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
-</aside>
+</aside>  
 
 
 <style>
