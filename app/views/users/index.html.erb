@@ -1,23 +1,92 @@
-<div class="container-fluid">
-  <h2>Users</h2>
-  
-  <table class = 'table'>
-    <thead> 
-      <th>name</th>
-      <th>email</th>
-    </thead>
-    <tbody>
-      <% @users.each do|user|%>
-        <tr>
-          <td>
-            <%# <%= user.name%> 
-          </td>
-          <td>
-            <%= user.email%>
-          </td>
-        </tr>
-      <%end%>
-    </tbody>
-  </table>
+<div class="content-header">
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				<h1 class="m-0"></h1>
+			</div>
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-right">
+					<li class="breadcrumb-item"><%= link_to "Home", users_path %></li>
+					<li class="breadcrumb-item active">users</li>
+				</ol>
+			</div>
+		</div>
+	</div>
 </div>
+<div class="d-flex justify-content-between">
+	<div>
+		<h2>Users</h2>
+	</div>
+	<div>
+		<% if current_user.is_admin?%>
+			<%= button_to "New",new_user_path, method: :get, class: "btn btn-sm btn-primary"%>
+		<%end%>
+	</div>
+</div>
+<div class="card">
+	<div class="card-body">
+		<table class='table'>
+			<thead> 
+				<th>First Name</th>
+				<th>Last Name</th>
+				<th>Email</th>
+				<th>Phone No</th>
+				<th>Employee Code</th>
+				<th>Dob</th>
+				<th>Role</th>
+				<th>Zip Code</th>
+				<th>Address</th>
+				<th>Actions</th>
+			</thead>
+			<tbody>
+				<% @users.each do|user|%>
+					<tr>
+						<td>
+							<%= user.first_name.present? ?  user.first_name : "N/A"%>
+						</td>
+						<td>
+							<%= user.last_name.present? ?  user.last_name : "N/A"%>
+						</td>
+						<td>
+							<%= user.email.present? ?  user.email : "N/A"%>
+						</td>
+						<td>
+							<%= user.phone.present? ?  user.phone : "N/A"%>
+						</td>
+						<td>
+							<%= user.employee_code.present? ?  user.employee_code : "N/A"%>
+						</td>
+						<td>
+							<%= user.dob.present? ?  user.dob : "N/A"%>
+						</td>
+						<td>
+							<%= user.role.name.present? ?  user.role.name : "N/A"%>
+						</td>
+						<td>
+							<%= user.zip_code.present? ?  user.zip_code : "N/A"%>
+						</td>
+						<td>
+							<%= user.address.present? ?  user.address : "N/A"%>
+						</td>
+						<td>
+							<div class="d-flex">
+							 		<%= button_to "Edit", edit_user_path(user), method: :get, class: "btn btn-sm btn-primary" %> 
+									<% if current_user.is_admin? || current_user.is_manager? %>
+										<%= button_to "Delete", user_path(user), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger mx-1" %> 
+									<%end%>
+							</div>
+						</td>
+					</tr>
+				<%end%>
+			</tbody>
+		</table>
+	</div>
+	<div class="p-4">
+		<% if current_user.is_admin? || current_user.is_manager? %>
+			<%= will_paginate @users %>
+		<%end%>
+	</div>
+</div>
+
+
   

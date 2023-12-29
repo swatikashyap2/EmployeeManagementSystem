@@ -7,21 +7,20 @@ class User < ApplicationRecord
   belongs_to :role
 
 
-  scope :admin, -> {includes(:role).where(roles: {name: "Admin"})}
   scope :manager, -> {includes(:role).where(roles: {name: "Manager"})}
-  scope :employee, -> {includes(:role).where(roles: {name: "Employee"})}
-  scope :manager_employee, -> {includes(:role).where(roles: {name: ["Admin","Employee"]})}
+  scope :employees, -> {includes(:role).where(roles: {name: "Employee"})}
+  
   
 
   def is_admin?
-    User.includes(:role).where(roles: {name: "Admin"})
-  end
+		self.role.name == "Admin" ? true : false
+	end
 
-  def is_manager?
-    User.includes(:role).where(roles: {name: "Manager"})
-  end
+	def is_manager?
+		self.role.name == "Manager" ? true : false
+	end
 
-  def is_employee?
-    User.includes(:role).where(roles: {name: "Employee"})
-  end
+	def is_employee?
+		self.role.name == "Employee" ? true : false
+	end
 end

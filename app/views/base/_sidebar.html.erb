@@ -1,51 +1,53 @@
 <aside class="main-sidebar bg-color elevation-0">
     <!-- Brand Logo -->
     <div class="position-relative" style="border-bottom: 2px solid black; padding-bottom: 10px;">
-    <%= image_tag("logo.png", :size => "200x100", class: "position-absolute top logo-image", alt: "Sample image") %>
-</div>
+    	<%= image_tag("logo.png", :size => "200x100", class: "position-absolute top logo-image", alt: "Sample image") %>
+	</div>
 
     <!-- Sidebar -->
     <div class="sidebar mt-5">
         <nav class="mt-5">
-					<ul class="nav nav-pills flex-column mb-auto">
-						<li class="nav-item">
-							<%= link_to admin_users_path, class: "nav-link"  do%>
-								<i class="bi bi-people-fill p-2"></i>Users
-							<%end%>
-						</li>
-						<li class="nav-item">
-							<%= link_to roles_path, class: "nav-link"  do%>
-								<i class="bi bi-person-fill-up p-2"></i>Role							
-							<%end%>
-						</li>
-            <li class="nav-item">
-							<%= link_to roles_path, class: "nav-link"  do%>
-								<i class="bi bi-person-fill-up p-2"></i>Leaves
-							<%end%>
-						</li>
-            <li class="nav-item">
-							<%= link_to roles_path, class: "nav-link"  do%>
-								<i class="bi bi-people p-2"></i>Teams
-							<%end%>
-						</li>
-            <li class="nav-item">
-							<%= link_to roles_path, class: "nav-link"  do%>
-								<i class="bi bi-file-earmark-text-fill p-2"></i>Policy
-							<%end%>
-						</li>
-						<!-- li class="nav-item dropdown">
-							<a href="#works" class="nav-link dropdown-toggle" data-toggle="dropdown">Works <span
-								class="caret"></span>
-							</a>
-							< Add your dropdown menu items here >
-							<div class="dropdown-menu">
-								< Example dropdown items >
-								<a class="dropdown-item" href="#">Item 1</a>
-								<a class="dropdown-item" href="#">Item 2</a>
-								<a class="dropdown-item" href="#">Item 3</a>
-							</div>
-						</li-->
-					</ul>
+			<ul class="nav nav-pills flex-column mb-auto">
+				<li class="nav-item">
+					<%= link_to users_path, class: "nav-link"  do%>
+						<i class="bi bi-people-fill p-2"></i>Users
+					<%end%>
+				</li>
+				<% if current_user.is_admin?%>
+					<li class="nav-item">
+						<%= link_to roles_path, class: "nav-link"  do%>
+							<i class="bi bi-person-fill-up p-2"></i>Role							
+						<%end%>
+					</li>
+				<%end%>
+				<li class="nav-item">
+					<%= link_to roles_path, class: "nav-link"  do%>
+						<i class="bi bi-journal-text p-2"></i>Leaves
+					<%end%>
+				</li>
+				<li class="nav-item">
+					<%= link_to roles_path, class: "nav-link"  do%>
+						<i class="bi bi-people p-2"></i>Teams
+					<%end%>
+				</li>
+				<li class="nav-item">
+					<%= link_to roles_path, class: "nav-link"  do%>
+						<i class="bi bi-file-earmark-text-fill p-2"></i>Policy
+					<%end%>
+				</li>
+				<!-- li class="nav-item dropdown">
+					<a href="#works" class="nav-link dropdown-toggle" data-toggle="dropdown">Works <span
+						class="caret"></span>
+					</a>
+					< Add your dropdown menu items here >
+					<div class="dropdown-menu">
+						< Example dropdown items >
+						<a class="dropdown-item" href="#">Item 1</a>
+						<a class="dropdown-item" href="#">Item 2</a>
+						<a class="dropdown-item" href="#">Item 3</a>
+					</div>
+				</li-->
+			</ul>
         </nav>
         <!-- /.sidebar-menu -->
     </div>
@@ -60,7 +62,7 @@
 		height: 100px;
 	}
 	.logo-image {
-    border-bottom: 1px solid #000; /* Change #000 to the color you want for the border */
+    	border-bottom: 1px solid #000; /* Change #000 to the color you want for the border */
 	}
 
 </style>

@@ -1,15 +1,29 @@
 class ApplicationController < ActionController::Base
+	before_action :authenticate_user! 
 	layout :layout
 	protect_from_forgery with: :exception
 
-  include Pundit::Authorization
-	rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+  	
 
 	before_action :configure_permitted_parameters, if: :devise_controller?
 	before_action :set_default_role, only: [:create]
 	add_flash_types :info, :error, :success
 
+	
+	def is_admin?
+		current_user.role.name == "Admin" ? true : false
+	end
+
+	def is_manager?
+		current_user.role.name == "Manager" ? true : false
+	end
+
+	def is_employee?
+		current_user.role.name == "Employee" ? true : false
+	end
+		
 	private
+	
 
 	def set_default_role
 		params[:user] ||= {}
@@ -21,17 +35,17 @@ class ApplicationController < ActionController::Base
 		redirect_to root_path
 	end
 
-	def after_sign_in_path_for(resource)
-		if resource.is_a?(User)
-			if current_user.role.name.eql?("Admin")
-				admin_users_path
-			elsif current_user.role.name.eql?("Manager")
-				manager_users_path
-			else
-				users_path
-			end
-		end
-	end
+	# def after_sign_in_path_for(resource)
+	# 	if resource.is_a?(User)
+	# 		if current_user.role.name.eql?("Admin")
+	# 			users_path
+	# 		elsif current_user.role.name.eql?("Manager")
+	# 			manager_users_path
+	# 		else
+	# 			users_path
+	# 		end
+	# 	end
+	# end
 	
 	def layout
 		if devise_controller?
@@ -39,13 +53,14 @@ class ApplicationController < ActionController::Base
 		else
 			'application'
 		end
-  end
-	
+ 	end
+
 	
 	protected
 	
 
 	def configure_permitted_parameters
+		debugger
 		devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:email, :password, :password_confirmation, :role_id)}
 		devise_parameter_sanitizer.permit(:account_update) { |u| u.permit(:email, :password, :password_confirmation, :role_id)}
 	end

@@ -1,27 +1,48 @@
 class UserPolicy < ApplicationPolicy
+
+
   def index?
-    user.is_admin? || user.is_employee? || user.is_manager?
+    true
   end
   
   def new?
-    user.is_admin? ||  user.is_manager?
+   true
   end
 
   def create?
-    user.is_admin? ||  user.is_manager?
+   true
   end
 
-  def edit_user?
-    user.is_admin? ||  user.is_manager?
+  def edit?
+    if user.is_admin?
+      User.all
+    elsif user.is_employee?
+      User.where(id: user.id)
+    else user.is_manager?
+      User.employees
+    end
   end
 
   def update?
-    user.is_admin? ||  user.is_manager?
+    if user.is_admin?
+      User.all
+    elsif user.is_employee?
+      user
+    else user.is_manager?
+      User.employees
+    end
   end
 
   def destroy?
-    user.is_admin? ||  user.is_manager?
+    if user.is_admin?
+      User.all
+    elsif user.is_employee?
+      user
+    else user.is_manager?
+      User.employees
+    end
   end
+
   class Scope < Scope
     # NOTE: Be explicit about which records you allow access to!
     # def resolve

@@ -6,17 +6,17 @@
 			</div>
 			<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-right">
-					<li class="breadcrumb-item"><%= link_to "Users", admin_users_path %></li>
-					<li class="breadcrumb-item active">Create user</li>
+					<li class="breadcrumb-item"><%= link_to "Profile", users_path %></li>
+					<li class="breadcrumb-item active">Edit</li>
 				</ol>
 			</div>
 		</div>
 	</div>
 </div>
-<h2>New User</h2>
+<h2>Edit User</h2>
 	<div class="card">
 		<div class="card-body">
-			<%= form_for [:admin, @user] do|f|%>
+			<%= form_for @user, controller: 'admin/users', action: :edit do|f|%>
 				<div class="row">
 					<div class="col-md-6 col-md-6 field mb-2">
 						<%= f.label :first_name %><br />
@@ -29,7 +29,7 @@
 					
 					<div class="col-md-6 field mb-2">
 						<%= f.label :email %><br />
-						<%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", placeholder: "Enter email",required: true, uniq: true %>
+						<%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", placeholder: "Enter email",required: true %>
 					</div>
 
 					<% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
@@ -43,19 +43,24 @@
 
 					<div class="col-md-6 field mb-2">
 						<%= f.label :employee_code %><br />
-						<%= f.text_field :employee_code, autofocus: true, autocomplete: "employee_code",  class: "form-control", placeholder: "Enter employee code",required: true %>
+						<%= f.text_field :employee_code, autofocus: true, autocomplete: "employee_code",  class: "form-control", placeholder: "Enter employee code",disabled: true %>
 					</div>
 
 					<div class="col-md-6 field mb-2">
 						<%= f.label :dob %><br />
 						<%= f.text_field :dob, autofocus: true, autocomplete: "dob",  class: "form-control", placeholder: "Enter date of birth"  %>
 					</div>
-
-					<div class="col-md-6 field mb-2">
-						<%= f.label :role %><br />
-						<%= f.select :role_id, options_for_select(Role.all.collect{|role|[role.name, role.id]}),{include_blank: '--Select role--'}, {class: "form-control",required: true } %>
-					</div>
-
+					<% if current_user.is_admin?%>
+						<div class="col-md-6 field mb-2">
+							<%= f.label :role %><br />
+							<%= f.select :role_id, options_for_select(Role.all.collect{|role|[role.name, role.id]}, selected: @user.role_id),{include_blank: '--Select role--'}, {class: "form-control",required: true } %>
+						</div>
+					<%else%>
+						<div class="col-md-6 field mb-2">
+							<%= f.label :role %><br />
+							<%= f.select :role_id, options_for_select(Role.all.collect{|role|[role.name, role.id]}, selected: @user.role_id),{include_blank: '--Select role--'}, {class: "form-control",disabled: true } %>
+						</div>
+					<%end%>
 					<div class=" col-md-6 field mb-2">
 						<%= f.label :zip_code %><br />
 						<%= f.text_field :zip_code, autofocus: true, autocomplete: "zip_code", class: "form-control", placeholder: "Enter zip-code"   %>
@@ -69,7 +74,7 @@
 
 					<div class="field mb-2">
 						<%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
-						<%= f.password_field :password, autocomplete: "new-password", class: "form-control", placeholder: "Create password",required: true %>
+						<%= f.password_field :password, autocomplete: "new-password", class: "form-control", placeholder: "Create password" %>
 						<% if @minimum_password_length %>
 							<br />
 							<em><%= @minimum_password_length %> characters minimum</em>
@@ -78,11 +83,11 @@
 
 					<div class="field mb-2">
 						<%= f.label :password_confirmation %><br />
-						<%= f.password_field :password_confirmation, autocomplete: "new-password",  class: "form-control", placeholder: "Confirm password",required: true%>
+						<%= f.password_field :password_confirmation, autocomplete: "new-password",  class: "form-control", placeholder: "Confirm password"%>
 					</div>
 
 					<div class="field mt-2">
-						<%= f.submit "save", class: "btn btn-sm btn-primary" %>
+						<%= f.submit "Update", class: "btn btn-sm btn-primary" %>
 					</div>	
 				</div>
 			<% end %>
