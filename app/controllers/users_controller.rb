@@ -1,12 +1,12 @@
 class UsersController < ApplicationController
-	before_action :set_user, except: [:index, :new, :create]
-	before_action :authenticate_user!, except: [:new, :create]
+	before_action :set_user, only: [:show, :edit, :update, :destroy]
+	before_action :authenticate_user!
 	
-  	def index
-		if current_user.is_employee? 
+	def index
+		if is_employee? 
 			@users = [current_user]
-		elsif current_user.is_manager?
-			@users = User.employees.paginate(page: params[:page], per_page: 10)
+		elsif is_manager?
+			@users = User.manager_employees.paginate(page: params[:page], per_page: 10)
 		else
 			@users = User.all.paginate(page: params[:page], per_page: 10)
 		end
@@ -15,13 +15,13 @@ class UsersController < ApplicationController
 
 	def new
 		@user = User.new()
-		authorize @user
+		authorize @user, :new?
 	end
 
 	def create
 		@user = User.new(user_params)
+		authorize @user, :create?
 		if @user.save
-			# redirect_to {usl., noticer: "dsfsd"}
 			redirect_to users_path
 			flash[:notice] = "User Created Successfully."
 		else
@@ -30,8 +30,9 @@ class UsersController < ApplicationController
 	end
 
 	def show
-		authorize @user
+		authorize @user 
 	end
+	
 
 	def edit 
 		authorize @user
@@ -75,6 +76,7 @@ class UsersController < ApplicationController
 		end
 
 		def set_user
-			@user = User.find(params[:id])
- 		end
+			@user = User.find_by(id: params[:id])
+		end	
+		
 end

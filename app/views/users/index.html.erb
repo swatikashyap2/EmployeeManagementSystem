@@ -18,9 +18,9 @@
 		<h2>Users</h2>
 	</div>
 	<div>
-		<% if current_user.is_admin?%>
+		
 			<%= button_to "New",new_user_path, method: :get, class: "btn btn-sm btn-primary"%>
-		<%end%>
+		
 	</div>
 </div>
 <div class="card">
@@ -71,9 +71,9 @@
 						<td>
 							<div class="d-flex">
 							 		<%= button_to "Edit", edit_user_path(user), method: :get, class: "btn btn-sm btn-primary" %> 
-									<% if current_user.is_admin? || current_user.is_manager? %>
+									
 										<%= button_to "Delete", user_path(user), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger mx-1" %> 
-									<%end%>
+									
 							</div>
 						</td>
 					</tr>
@@ -82,9 +82,8 @@
 		</table>
 	</div>
 	<div class="p-4">
-		<% if current_user.is_admin? || current_user.is_manager? %>
-			<%= will_paginate @users %>
-		<%end%>
+	
+		
 	</div>
 </div>
 

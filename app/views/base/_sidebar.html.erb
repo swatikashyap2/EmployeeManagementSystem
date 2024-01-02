@@ -1,7 +1,7 @@
 <aside class="main-sidebar bg-color elevation-0">
     <!-- Brand Logo -->
     <div class="position-relative" style="border-bottom: 2px solid black; padding-bottom: 10px;">
-    	<%= image_tag("logo.png", :size => "200x100", class: "position-absolute top logo-image", alt: "Sample image") %>
+    	<%= image_tag("logo.png", :size => "200x100", class: "position-absolute top", alt: "Sample image") %>
 	</div>
 
     <!-- Sidebar -->
@@ -13,13 +13,13 @@
 						<i class="bi bi-people-fill p-2"></i>Users
 					<%end%>
 				</li>
-				<% if current_user.is_admin?%>
+			
 					<li class="nav-item">
 						<%= link_to roles_path, class: "nav-link"  do%>
 							<i class="bi bi-person-fill-up p-2"></i>Role							
 						<%end%>
 					</li>
-				<%end%>
+				
 				<li class="nav-item">
 					<%= link_to roles_path, class: "nav-link"  do%>
 						<i class="bi bi-journal-text p-2"></i>Leaves
@@ -61,8 +61,4 @@
 		width: 100%;
 		height: 100px;
 	}
-	.logo-image {
-    	border-bottom: 1px solid #000; /* Change #000 to the color you want for the border */
-	}
-
 </style>

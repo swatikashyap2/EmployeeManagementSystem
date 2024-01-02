@@ -1,12 +1,13 @@
 class ApplicationController < ActionController::Base
 	before_action :authenticate_user! 
-	layout :layout
+	
+	include Pundit::Authorization
 	protect_from_forgery with: :exception
-
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   	
 
 	before_action :configure_permitted_parameters, if: :devise_controller?
-	before_action :set_default_role, only: [:create]
+	# before_action :set_default_role, only: [:create]
 	add_flash_types :info, :error, :success
 
 	
@@ -21,14 +22,15 @@ class ApplicationController < ActionController::Base
 	def is_employee?
 		current_user.role.name == "Employee" ? true : false
 	end
-		
+	
+
 	private
 	
 
-	def set_default_role
-		params[:user] ||= {}
-		params[:user][:role_id] = 3
-	end
+	# def set_default_role
+	# 	params[:user] ||= {}
+	# 	params[:user][:role_id] = 3
+	# end
 
 	def user_not_authorized
 		flash[:alert] = 'You are not authorized to perform this action.'
@@ -60,7 +62,6 @@ class ApplicationController < ActionController::Base
 	
 
 	def configure_permitted_parameters
-		debugger
 		devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:email, :password, :password_confirmation, :role_id)}
 		devise_parameter_sanitizer.permit(:account_update) { |u| u.permit(:email, :password, :password_confirmation, :role_id)}
 	end

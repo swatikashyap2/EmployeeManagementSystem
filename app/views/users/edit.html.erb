@@ -16,7 +16,7 @@
 <h2>Edit User</h2>
 	<div class="card">
 		<div class="card-body">
-			<%= form_for @user, controller: 'admin/users', action: :edit do|f|%>
+			<%= form_for @user do|f|%>
 				<div class="row">
 					<div class="col-md-6 col-md-6 field mb-2">
 						<%= f.label :first_name %><br />
@@ -50,17 +50,16 @@
 						<%= f.label :dob %><br />
 						<%= f.text_field :dob, autofocus: true, autocomplete: "dob",  class: "form-control", placeholder: "Enter date of birth"  %>
 					</div>
-					<% if current_user.is_admin?%>
+					
 						<div class="col-md-6 field mb-2">
 							<%= f.label :role %><br />
 							<%= f.select :role_id, options_for_select(Role.all.collect{|role|[role.name, role.id]}, selected: @user.role_id),{include_blank: '--Select role--'}, {class: "form-control",required: true } %>
-						</div>
-					<%else%>
+						</div>	
 						<div class="col-md-6 field mb-2">
 							<%= f.label :role %><br />
 							<%= f.select :role_id, options_for_select(Role.all.collect{|role|[role.name, role.id]}, selected: @user.role_id),{include_blank: '--Select role--'}, {class: "form-control",disabled: true } %>
 						</div>
-					<%end%>
+					
 					<div class=" col-md-6 field mb-2">
 						<%= f.label :zip_code %><br />
 						<%= f.text_field :zip_code, autofocus: true, autocomplete: "zip_code", class: "form-control", placeholder: "Enter zip-code"   %>
