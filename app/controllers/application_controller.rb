@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
 	before_action :authenticate_user! 
+	helper_method :is_admin?, :is_manager?, :is_employee?
 	
 	include Pundit::Authorization
 	protect_from_forgery with: :exception
@@ -10,7 +11,6 @@ class ApplicationController < ActionController::Base
 	# before_action :set_default_role, only: [:create]
 	add_flash_types :info, :error, :success
 
-	
 	def is_admin?
 		current_user.role.name == "Admin" ? true : false
 	end
@@ -22,7 +22,8 @@ class ApplicationController < ActionController::Base
 	def is_employee?
 		current_user.role.name == "Employee" ? true : false
 	end
-	
+
+
 
 	private
 	

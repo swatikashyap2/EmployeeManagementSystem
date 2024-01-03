@@ -13,13 +13,13 @@
 						<i class="bi bi-people-fill p-2"></i>Users
 					<%end%>
 				</li>
-			
+				<% if is_admin? %>
 					<li class="nav-item">
 						<%= link_to roles_path, class: "nav-link"  do%>
 							<i class="bi bi-person-fill-up p-2"></i>Role							
 						<%end%>
 					</li>
-				
+				<%end%>
 				<li class="nav-item">
 					<%= link_to roles_path, class: "nav-link"  do%>
 						<i class="bi bi-journal-text p-2"></i>Leaves

@@ -6,7 +6,7 @@
 			</div>
 			<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-right">
-					<li class="breadcrumb-item"><%= link_to "Profile", users_path %></li>
+					<li class="breadcrumb-item"><%= link_to "Home", users_path %></li>
 					<li class="breadcrumb-item active">Edit</li>
 				</ol>
 			</div>
@@ -40,26 +40,32 @@
 						<%= f.label :phone %><br />
 						<%= f.text_field :phone, autofocus: true, autocomplete: "phone", class: "form-control", placeholder: "Enter phone no",required: true %>
 					</div>
-
-					<div class="col-md-6 field mb-2">
-						<%= f.label :employee_code %><br />
-						<%= f.text_field :employee_code, autofocus: true, autocomplete: "employee_code",  class: "form-control", placeholder: "Enter employee code",disabled: true %>
-					</div>
-
+					<%if is_admin?%>
+						<div class="col-md-6 field mb-2">
+							<%= f.label :employee_code %><br />
+							<%= f.text_field :employee_code, autofocus: true, autocomplete: "employee_code",  class: "form-control", placeholder: "Enter employee code",required: true %>
+						</div>
+					<%else%>
+						<div class="col-md-6 field mb-2">
+							<%= f.label :employee_code %><br />
+							<%= f.text_field :employee_code, autofocus: true, autocomplete: "employee_code",  class: "form-control", placeholder: "Enter employee code",disabled: true %>
+						</div>
+					<%end%>
 					<div class="col-md-6 field mb-2">
 						<%= f.label :dob %><br />
 						<%= f.text_field :dob, autofocus: true, autocomplete: "dob",  class: "form-control", placeholder: "Enter date of birth"  %>
 					</div>
-					
+					<% if is_admin?%>
 						<div class="col-md-6 field mb-2">
 							<%= f.label :role %><br />
 							<%= f.select :role_id, options_for_select(Role.all.collect{|role|[role.name, role.id]}, selected: @user.role_id),{include_blank: '--Select role--'}, {class: "form-control",required: true } %>
 						</div>	
+					<%else%>
 						<div class="col-md-6 field mb-2">
 							<%= f.label :role %><br />
 							<%= f.select :role_id, options_for_select(Role.all.collect{|role|[role.name, role.id]}, selected: @user.role_id),{include_blank: '--Select role--'}, {class: "form-control",disabled: true } %>
 						</div>
-					
+					<%end%>
 					<div class=" col-md-6 field mb-2">
 						<%= f.label :zip_code %><br />
 						<%= f.text_field :zip_code, autofocus: true, autocomplete: "zip_code", class: "form-control", placeholder: "Enter zip-code"   %>

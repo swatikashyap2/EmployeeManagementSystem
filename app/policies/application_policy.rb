@@ -35,6 +35,18 @@ class ApplicationPolicy
   def destroy?
     false
   end
+  
+  def is_admin?
+		current_user.role.name == "Admin" ? true : false
+	end
+
+	def is_manager?
+		current_user.role.name == "Manager" ? true : false
+	end
+
+	def is_employee?
+		current_user.role.name == "Employee" ? true : false
+	end
 
   class Scope
     def initialize(user, scope)

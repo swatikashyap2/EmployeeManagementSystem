@@ -1,14 +1,14 @@
 class UsersController < ApplicationController
+
 	before_action :set_user, only: [:show, :edit, :update, :destroy]
 	before_action :authenticate_user!
-	
 	def index
 		if is_employee? 
 			@users = [current_user]
 		elsif is_manager?
-			@users = User.manager_employees.paginate(page: params[:page], per_page: 10)
+			@users = User.manager_employees.order(created_at: :desc).paginate(page: params[:page], per_page: 3)
 		else
-			@users = User.all.paginate(page: params[:page], per_page: 10)
+			@users = User.all.order(created_at: :desc).paginate(page: params[:page], per_page: 3)
 		end
 		authorize @users
 	end
@@ -21,13 +21,49 @@ class UsersController < ApplicationController
 	def create
 		@user = User.new(user_params)
 		authorize @user, :create?
-		if @user.save
-			redirect_to users_path
-			flash[:notice] = "User Created Successfully."
-		else
-			render 'new'
+		if user_params[:password].blank? && user_params[:password_confirmation].blank?
+			@user.password= 'admin@123'
+			@user.password_confirmation = 'admin@123'
+			@user = User.new(user_params)
+			if @user.save(validate: false)
+				redirect_to users_path
+				flash[:notice] = "User Created Successfully."
+			else
+				render 'new'
+			end
+		else 
+			if @user.save
+				redirect_to users_path
+				flash[:notice] = "User Created Successfully."
+			else
+				render 'new'
+			end
 		end
 	end
+
+	# class UsersController < ApplicationController
+	# 	def create
+	# 		user_params = params.require(:user).permit(:username, :email, :password, :password_confirmation)
+	
+	# 		# Check if both password fields are blank
+	# 		if user_params[:password].blank? && user_params[:password_confirmation].blank?
+	# 			# Set a default password
+	# 			user_params[:password] = 'default_password'
+	# 			user_params[:password_confirmation] = 'default_password'
+	# 		end
+	
+	# 		@user = User.new(user_params)
+	
+	# 		if @user.save
+	# 			# Handle successful user creation
+	# 			redirect_to @user
+	# 		else
+	# 			# Handle validation errors or other issues
+	# 			render 'new'
+	# 		end
+	# 	end
+	# end
+	
 
 	def show
 		authorize @user 
@@ -67,7 +103,6 @@ class UsersController < ApplicationController
 			redirect_to root_path
 		end
 	end
-	
 
 	private
 
