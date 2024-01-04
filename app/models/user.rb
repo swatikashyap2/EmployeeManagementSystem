@@ -7,9 +7,9 @@ class User < ApplicationRecord
   belongs_to :role
 
 
-  scope :manager, -> {includes(:role).where(roles: {name: "Manager"})}
-  scope :employees, -> {includes(:role).where(roles: {name: "Employee"})}
-  scope :manager_employees, -> {includes(:role).where(roles: {name: ["Manager","Employee"]})}
+  scope :manager, -> {includes(:role).where(roles: {name: "manager"})}
+  scope :employees, -> {includes(:role).where(roles: {name: "employee"})}
+  scope :manager_employees, -> {includes(:role).where(roles: {name: ["manager","employee"]})}
   
 
 end
