@@ -18,16 +18,16 @@
 		<div class="card-body">
 			<%= form_for @user do|f|%>
 				<div class="row">
-					<div class="col-md-6 col-md-6 field mb-2">
+					<div class="form-group col-md-6 mb-2">
 						<%= f.label :first_name %><br />
 						<%= f.text_field :first_name,  autocomplete: "first_name", class: "form-control", placeholder: "Enter first name", required: true %>
 					</div>
-					<div class="col-md-6 col-md-6 field mb-2">
+					<div class="form-group col-md-6 mb-2">
 						<%= f.label :last_name %><br />
 						<%= f.text_field :last_name,  autocomplete: "last_name", class: "form-control", placeholder: "Enter last name" %>
 					</div>
 					
-					<div class="col-md-6 field mb-2">
+					<div class="form-group col-md-6 field mb-2">
 						<%= f.label :email %><br />
 						<%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", placeholder: "Enter email",required: true %>
 					</div>
@@ -36,17 +36,17 @@
 						<div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
 					<% end %>
 
-					<div class="col-md-6 field mb-2">
+					<div class="form-group col-md-6 mb-2">
 						<%= f.label :phone %><br />
 						<%= f.text_field :phone, autofocus: true, autocomplete: "phone", class: "form-control", placeholder: "Enter phone no",required: true %>
 					</div>
 					<%if is_admin?%>
-						<div class="col-md-6 field mb-2">
+						<div class="col-md-6 mb-2">
 							<%= f.label :employee_code %><br />
 							<%= f.text_field :employee_code, autofocus: true, autocomplete: "employee_code",  class: "form-control", placeholder: "Enter employee code",required: true %>
 						</div>
 					<%else%>
-						<div class="col-md-6 field mb-2">
+						<div class="col-md-6 mb-2">
 							<%= f.label :employee_code %><br />
 							<%= f.text_field :employee_code, autofocus: true, autocomplete: "employee_code",  class: "form-control", placeholder: "Enter employee code",disabled: true %>
 						</div>

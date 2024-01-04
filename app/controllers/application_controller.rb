@@ -12,15 +12,15 @@ class ApplicationController < ActionController::Base
 	add_flash_types :info, :error, :success
 
 	def is_admin?
-		current_user.role.name == "Admin" ? true : false
+		current_user.role.name == "admin" ? true : false
 	end
 
 	def is_manager?
-		current_user.role.name == "Manager" ? true : false
+		current_user.role.name == "manager" ? true : false
 	end
 
 	def is_employee?
-		current_user.role.name == "Employee" ? true : false
+		current_user.role.name == "employee" ? true : false
 	end
 
 
@@ -40,7 +40,7 @@ class ApplicationController < ActionController::Base
 
 	# def after_sign_in_path_for(resource)
 	# 	if resource.is_a?(User)
-	# 		if current_user.role.name.eql?("Admin")
+	# 		if current_user.role.name.eql?("admin")
 	# 			users_path
 	# 		elsif current_user.role.name.eql?("Manager")
 	# 			manager_users_path
@@ -60,12 +60,10 @@ class ApplicationController < ActionController::Base
 
 	
 	protected
-	
-
-	def configure_permitted_parameters
-		devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:email, :password, :password_confirmation, :role_id)}
-		devise_parameter_sanitizer.permit(:account_update) { |u| u.permit(:email, :password, :password_confirmation, :role_id)}
-	end
+		def configure_permitted_parameters
+			devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:email, :password, :password_confirmation, :role_id)}
+			devise_parameter_sanitizer.permit(:account_update) { |u| u.permit(:email, :password, :password_confirmation, :role_id)}
+		end
 
 end
 

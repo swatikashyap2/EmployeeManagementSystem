@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   root 'users#index'
   resources :users
   resources :roles
+  resources :holidays
   # namespace :admin do
   #   resources :users
   # end

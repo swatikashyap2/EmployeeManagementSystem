@@ -11,9 +11,11 @@
 		<li class="nav-item d-none d-sm-inline-block">
 			<%# <a href="#" class="nav-link">Contact</a> %>
 		</li -->
-			<li class="nav-item">
-				
-			<%= button_to "logout", destroy_user_session_path, method: :delete %>
+		<li class="nav-item">
+			<%= current_user.role.name %>
+		</li>
+		<li class="nav-item mx-1">	
+			<%= button_to "logout", destroy_user_session_path, method: :delete, class: "btn btn-warning" %>
 		</li>
 	</ul>
 

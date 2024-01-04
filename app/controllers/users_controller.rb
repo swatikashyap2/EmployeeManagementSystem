@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-
 	before_action :set_user, only: [:show, :edit, :update, :destroy]
 	before_action :authenticate_user!
+
 	def index
 		if is_employee? 
 			@users = [current_user]
@@ -21,49 +21,16 @@ class UsersController < ApplicationController
 	def create
 		@user = User.new(user_params)
 		authorize @user, :create?
-		if user_params[:password].blank? && user_params[:password_confirmation].blank?
-			@user.password= 'admin@123'
-			@user.password_confirmation = 'admin@123'
-			@user = User.new(user_params)
-			if @user.save(validate: false)
-				redirect_to users_path
-				flash[:notice] = "User Created Successfully."
-			else
-				render 'new'
-			end
-		else 
-			if @user.save
-				redirect_to users_path
-				flash[:notice] = "User Created Successfully."
-			else
-				render 'new'
-			end
+		@user.password = 'admin@123' if user_params[:password].blank? 
+		@user.password_confirmation = 'admin@123' if user_params[:password].blank? 
+		if @user.save
+			redirect_to users_path
+			flash[:notice] = "User Created Successfully."
+		else
+			render 'new'
 		end
+		
 	end
-
-	# class UsersController < ApplicationController
-	# 	def create
-	# 		user_params = params.require(:user).permit(:username, :email, :password, :password_confirmation)
-	
-	# 		# Check if both password fields are blank
-	# 		if user_params[:password].blank? && user_params[:password_confirmation].blank?
-	# 			# Set a default password
-	# 			user_params[:password] = 'default_password'
-	# 			user_params[:password_confirmation] = 'default_password'
-	# 		end
-	
-	# 		@user = User.new(user_params)
-	
-	# 		if @user.save
-	# 			# Handle successful user creation
-	# 			redirect_to @user
-	# 		else
-	# 			# Handle validation errors or other issues
-	# 			render 'new'
-	# 		end
-	# 	end
-	# end
-	
 
 	def show
 		authorize @user 

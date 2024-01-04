@@ -37,15 +37,15 @@ class ApplicationPolicy
   end
   
   def is_admin?
-		current_user.role.name == "Admin" ? true : false
+		current_user.role.name == "admin" ? true : false
 	end
 
 	def is_manager?
-		current_user.role.name == "Manager" ? true : false
+		current_user.role.name == "manager" ? true : false
 	end
 
 	def is_employee?
-		current_user.role.name == "Employee" ? true : false
+		current_user.role.name == "employee" ? true : false
 	end
 
   class Scope
