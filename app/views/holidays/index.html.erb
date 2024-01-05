@@ -1,24 +1,20 @@
 <div class="content-header">
 	<div class="container-fluid">
-		<div class="row mb-2">
-			<div class="col-sm-6">
-				<h1 class="m-0"></h1>
-			</div>
-			<div class="col-sm-6">
-				<ol class="breadcrumb float-sm-right">
-					<li class="breadcrumb-item"><%= link_to "Home", users_path %></li>
-					<li class="breadcrumb-item active">Leaves</li>
-				</ol>
+		<div class="row">
+			<div class="col">
+				<div class="d-flex justify-content-between">
+					<div>
+						<ol class="breadcrumb float-sm-right">
+							<li class="breadcrumb-item"><%= link_to "Dashboard", home_index_path %></li>
+							<li class="breadcrumb-item active">Leaves</li>
+						</ol>
+					</div>
+					<div>
+						<%= button_to "New",new_holiday_path, method: :get, class: "btn btn-sm btn-primary"%>
+					</div>
+				</div>
 			</div>
 		</div>
-	</div>
-</div>
-<div class="d-flex justify-content-between">
-	<div>
-		<h2>Leaves</h2>
-	</div>
-	<div>
-   <%= link_to "New", new_holiday_path, class: "btn btn-primary"%>
 	</div>
 </div>
 <div class="card">
@@ -26,14 +22,14 @@
 		<table class='table'>
 			<thead> 
 				<th>Type</th>
-				<th>No Of Leaves</th>
+				<th>no. of Leaves</th>
 				<th>Actions</th>
 			</thead>
 			<tbody>
 				<% @holidays.each do|holiday|%>
 					<tr>
 						<td>
-							<%= holiday.name%>
+							<%= holiday.name.titleize%>
 						</td>
 						<td>
 							<%= holiday.no_of_holidays%>

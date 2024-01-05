@@ -1,26 +1,22 @@
 <div class="content-header">
 	<div class="container-fluid">
-		<div class="row mb-2">
-			<div class="col-sm-6">
-				<h1 class="m-0"></h1>
-			</div>
-			<div class="col-sm-6">
-				<ol class="breadcrumb float-sm-right">
-					<li class="breadcrumb-item"><%= link_to "Home", users_path %></li>
-					<li class="breadcrumb-item active">users</li>
-				</ol>
+		<div class="row">
+			<div class="col">
+				<div class="d-flex justify-content-between">
+					<div>
+						<ol class="breadcrumb float-sm-right">
+							<li class="breadcrumb-item"><%= link_to "Dashboard", home_index_path %></li>
+							<li class="breadcrumb-item active">users</li>
+						</ol>
+					</div>
+					<div>
+						<% if is_admin?%>
+							<%= button_to "New",new_user_path, method: :get, class: "btn btn-sm btn-primary"%>
+						<%end%>
+					</div>
+				</div>
 			</div>
 		</div>
-	</div>
-</div>
-<div class="d-flex justify-content-between">
-	<div>
-		<h2>Users</h2>
-	</div>
-	<div>
-		<% if is_admin?%>
-			<%= button_to "New",new_user_path, method: :get, class: "btn btn-sm btn-primary"%>
-		<%end%>
 	</div>
 </div>
 <div class="card">
@@ -42,10 +38,10 @@
 				<% @users.each do|user|%>
 					<tr>
 						<td>
-							<%= user.first_name.present? ?  user.first_name : "N/A"%>
+							<%= user.first_name.present? ?  user.first_name.titleize : "N/A"%>
 						</td>
 						<td>
-							<%= user.last_name.present? ?  user.last_name : "N/A"%>
+							<%= user.last_name.present? ?  user.last_name.titleize : "N/A"%>
 						</td>
 						<td>
 							<%= user.email.present? ?  user.email : "N/A"%>
@@ -60,7 +56,7 @@
 							<%= user.dob.present? ?  user.dob : "N/A"%>
 						</td>
 						<td>
-							<%= user.role.name.present? ?  user.role.name : "N/A"%>
+							<%= user.role.name.present? ?  user.role.name.titleize : "N/A"%>
 						</td>
 						<td>
 							<%= user.zip_code.present? ?  user.zip_code : "N/A"%>
@@ -72,7 +68,7 @@
 							<div class="d-flex">
 							 		<%= button_to "Edit", edit_user_path(user), method: :get, class: "btn btn-sm btn-primary" %> 
 								<%if is_admin?%>	
-									<%= button_to "Delete", user_path(user), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "btn btn-sm btn-danger mx-1" %> 	
+									<%= button_to "Delete", user_path(user),method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-sm btn-danger mx-1" %> 	
 								<%end%>
 							</div>
 						</td>
@@ -87,6 +83,7 @@
 		<%end%>
 	</div>
 </div>
+
 
 
   

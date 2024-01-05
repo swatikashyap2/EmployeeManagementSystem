@@ -1,30 +1,30 @@
 <div class="content-header">
 	<div class="container-fluid">
-		<div class="row mb-2">
-			<div class="col-sm-6">
-				<h1 class="m-0"></h1>
-			</div>
-			<div class="col-sm-6">
-				<ol class="breadcrumb float-sm-right">
-					<li class="breadcrumb-item"><%= link_to "Home", users_path %></li>
-					<li class="breadcrumb-item"><%= link_to "Leaves", holidays_path %></li>
-					<li class="breadcrumb-item active">Add Leave</li>
-				</ol>
+		<div class="row">
+			<div class="col">
+				<div class="d-flex justify-content-between">
+					<div>
+						<ol class="breadcrumb float-sm-right">
+							<li class="breadcrumb-item"><%= link_to "Dashboard", home_index_path %></li>
+							<li class="breadcrumb-item"><%= link_to "Leaves", holidays_path %></li>
+							<li class="breadcrumb-item active">Add Leave</li>
+						</ol>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
-<h2>Add Leave</h2>
 <div class="card">
 	<div class="card-body">
 		<%= form_for @holiday do |f| %>
 			<div class="row">
 				<div class="form-group col-md-6">
-					<%= f.label :name %><br/>
+					<%= f.label :name, class: "required-field" %><br/>
 					<%= f.text_field :name, class: "form-control", placeholder: "Enter name of holiday", required: true %>
 				</div>
 				<div class="form-group col-md-6">
-					<%= f.label :no_of_holidays %><br/>
+					<%= f.label :no_of_holidays, class: "required-field" %><br/>
 					<%= f.text_field :no_of_holidays,  autocomplete: "no of holidays", class: "form-control", placeholder: "Enter no of leaves", required: true %>
 				</div>
 				<div class="form-group mt-2">

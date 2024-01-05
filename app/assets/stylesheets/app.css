@@ -4,3 +4,7 @@
 .bg-color{
     background: #80808045;
 }
+.required-field::after {
+    content: "*";
+    color: red;
+}

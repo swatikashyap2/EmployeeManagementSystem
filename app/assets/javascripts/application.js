@@ -16,4 +16,8 @@
 //= require_tree .
 //= require popper
 //= require bootstrap
-import 'bootstrap-icons/font/bootstrap-icons.css'
+//= require bootstrap-datepicker
+//= require bootstrap-datepicker/core
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import "@hotwired/turbo-rails"
+Turbo.session.drive = false
