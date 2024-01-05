@@ -10,8 +10,9 @@ class User < ApplicationRecord
   validates :role, presence: true
   validates :employee_code, presence: true
   validates :phone, uniqueness: true
-  validates :role, uniqueness: true
   validates :employee_code, uniqueness: true
+  validates :phone, numericality: { only_integer: true }
+  validates :phone,length: { maximum: 12}
 
   scope :manager, -> {includes(:role).where(roles: {name: "manager"})}
   scope :employees, -> {includes(:role).where(roles: {name: "employee"})}

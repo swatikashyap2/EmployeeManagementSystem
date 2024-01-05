@@ -24,7 +24,6 @@ class UsersController < ApplicationController
 		authorize @user, :create?
 		@user.password = 'admin@123' if user_params[:password].blank? 
 		@user.password_confirmation = 'admin@123' if user_params[:password].blank? 
-		@user.valid?
 		if @user.save
 			redirect_to users_path
 			flash[:notice] = "User Created Successfully."
