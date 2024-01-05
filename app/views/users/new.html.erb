@@ -1,11 +1,15 @@
-<% if @user.errors.any? %>
-  <h3>The following errors prevented the article from being saved:</h3>
-  <ul>
-    <% @user.errors.full_messages.each do |msg| %>
-     <li><%= msg %></li> 
-    <% end %>
-  </ul>
+<!-- app/views/users/new.html.erb -->
+<% if flash[:message].present? %>
+  <div id="error_explanation">
+    <h3>The following errors prevented the user from being saved:</h3>
+    <ul>
+      <% flash[:message].each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
 <% end %>
+
 <div class="content-header">
 	<div class="container-fluid">
 		<div class="row">
@@ -26,16 +30,16 @@
 		<%= form_for @user do |f| %>
 			<div class="row">
 				<div class="form-group col-md-6 mb-2">
-					<%= f.label :first_name, class: "required-field" %><br />
+					<%= f.label :first_name, class: "required-field" %>
 					<%= f.text_field :first_name,  autocomplete: "first_name", class: "form-control", placeholder: "Enter first name",required: true %>
 				</div>
 				<div class="form-group col-md-6 mb-2">
-					<%= f.label :last_name %><br />
+					<%= f.label :last_name %>
 					<%= f.text_field :last_name,  autocomplete: "last_name", class: "form-control", placeholder: "Enter last name" %>
 				</div>
 				
 				<div class="form-group col-md-6 mb-2">
-					<%= f.label :email, class: "required-field" %><br />
+					<%= f.label :email, class: "required-field" %>
 					<%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", placeholder: "Enter email",required: true, uniq: true %>
 				</div>
 
@@ -44,47 +48,47 @@
 				<% end %>
 
 				<div class="form-group col-md-6 mb-2">
-					<%= f.label :phone %><br />
+					<%= f.label :phone %>
 					<%= f.text_field :phone, autofocus: true,autocomplete: "phone", class: "form-control", placeholder: "Enter phone no" %>
 				</div>
 
 				<div class="form-group col-md-6 mb-2">
-					<%= f.label :employee_code, class: "required-field" %><br />
+					<%= f.label :employee_code, class: "required-field" %>
 					<%= f.text_field :employee_code, autofocus: true, autocomplete: "employee_code",  class: "form-control", placeholder: "Enter employee code",required: true %>
 				</div>
 
 				<div class="form-group col-md-6 mb-2">
-					<%= f.label :DOB %><br />
+					<%= f.label :DOB %>
 					<%= f.text_field :dob, autofocus: true, autocomplete: "dob",  class: "form-control datepicker ", placeholder: "Enter date of birth"  %>
 				</div>
 
 				<div class="form-group col-md-6 mb-2">
-					<%= f.label :role, class: "required-field" %><br />
+					<%= f.label :role, class: "required-field" %>
 					<%= f.select :role_id, options_for_select(Role.all.collect{|role|[role.name, role.id]}),{include_blank: '--Select role--'}, {class: "form-control",required: true } %>
 				</div>
 
 				<div class="form-group col-md-6 mb-2">
-					<%= f.label :zip_code %><br />
+					<%= f.label :zip_code %>
 					<%= f.text_field :zip_code, autofocus: true, autocomplete: "zip_code", class: "form-control", placeholder: "Enter zip-code"   %>
 				</div>
 
 				<div class="form-group mb-2">
-					<%= f.label :address %><br />
+					<%= f.label :address %>
 					<%= f.text_area :address, autofocus: true, autocomplete: "address", class: "form-control", placeholder: "Enter address" %>
 				</div>
 
 
 				<div class="form-group mb-2">
-					<%= f.label :password %> <i>(create password)</i><br />
+					<%= f.label :password %> <i>(create password)</i>
 					<%= f.password_field :password, autocomplete: "new-password", class: "form-control", placeholder: "Create password" %>
 					<% if @minimum_password_length %>
-						<br />
+						
 						<em><%= @minimum_password_length %> characters minimum</em>
 					<% end %>
 				</div>
 
 				<div class="form-group mb-2">
-					<%= f.label :password_confirmation %> <i>(confirm password)</i><br />
+					<%= f.label :password_confirmation %> <i>(confirm password)</i>
 					<%= f.password_field :password_confirmation, autocomplete: "new-password",  class: "form-control", placeholder: "Confirm password"%>
 				</div>
 

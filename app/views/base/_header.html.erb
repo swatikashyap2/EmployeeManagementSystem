@@ -12,7 +12,7 @@
 			<%# <a href="#" class="nav-link">Contact</a> %>
 		</li -->
 		<li class="nav-item">
-			<%= current_user.role.name %>
+			<strong><%= current_user.role.name.titleize %></strong>
 		</li>
 		<li class="nav-item mx-1">	
 			<%= button_to "logout", destroy_user_session_path, method: :delete, class: "btn btn-warning" %>

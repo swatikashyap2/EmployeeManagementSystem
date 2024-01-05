@@ -22,16 +22,18 @@ class UsersController < ApplicationController
 	def create
 		@user = User.new(user_params)
 		authorize @user, :create?
-		@user.password = 'admin@123' if user_params[:password].blank? 
-		@user.password_confirmation = 'admin@123' if user_params[:password].blank? 
-		if @user.save
-			redirect_to users_path
-			flash[:notice] = "User Created Successfully."
-		else
-			render 'new'
-		end
+		@user.password = 'admin@123' if user_params[:password].blank?
+		@user.password_confirmation = 'admin@123' if user_params[:password].blank?
 		
-	end
+		if @user.save
+		  redirect_to users_path
+		  flash[:notice] = "User Created Successfully."
+		else
+		  flash[:message] = @user.errors.full_messages
+		  render 'new'
+		end
+	  end
+	  
 
 	def show
 		authorize @user 

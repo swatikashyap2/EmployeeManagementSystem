@@ -33,27 +33,27 @@
 				<%end%>
 				<% if is_admin? ||  is_manager? %>
 					<li class="nav-item">
-						<%= link_to new_home_path, class: "nav-link"  do%>
+						<div class= "nav-link">
 							<i class="bi bi-journal-text p-2"></i>Leave Requests
-						<%end%>
+						</div>
 					</li>
 				<%end%>
 				<% if is_manager? ||  is_employee? %>
 					<li class="nav-item">
-						<%= link_to new_home_path, class: "nav-link"  do%>
+						<div class= "nav-link"> 
 							<i class="bi bi-arrow-bar-right p-2"></i>Apply Leaves
-						<%end%>
+						</div>
 					</li>
 				<% end %>
 				<li class="nav-item">
-					<%= link_to new_home_path, class: "nav-link"  do%>
+					<div class= "nav-link">
 						<i class="bi bi-people p-2"></i>Teams
-					<%end%>
+					</div>
 				</li>
 				<li class="nav-item">
-					<%= link_to new_home_path, class: "nav-link"  do%>
+					<div class= "nav-link">
 						<i class="bi bi-file-earmark-text-fill p-2"></i>Policy
-					<%end%>
+					</div>
 				</li>
 				<!-- li class="nav-item dropdown">
 					<a href="#works" class="nav-link dropdown-toggle" data-toggle="dropdown">Works <span
@@ -79,13 +79,22 @@
 		width: 100%;
 		height: 100px;
 	}
+	.active{
+		color: red;
+	}
 	
 </style>
 <script>
-	$(document).ready(function(){ 
-		$('.nav .nav-link').click(function(){
-			$('.nav .nav-link').removeClass('active');
-			$(this).addClass('active');
-		})
-	})
+	document.addEventListener("DOMContentLoaded", function () {
+		var currentPath = window.location.pathname;
+		currentPath = currentPath.substr(1);
+		var links = document.querySelectorAll(".nav-link");
+		links.forEach(function (link) {
+			var linkPath = link.getAttribute("href").substr(1);
+			if (currentPath === linkPath) {
+				link.classList.add("active");
+			}
+		});
+	});
+  
 </script>
