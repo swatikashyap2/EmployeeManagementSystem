@@ -72,4 +72,4 @@ gem 'pundit'
 gem "paperclip"
 gem 'will_paginate-bootstrap4'
 gem 'turbo-rails'
-gem 'bootstrap-datepicker-rails'
+# gem 'bootstrap-datepicker-rails'

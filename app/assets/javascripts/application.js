@@ -16,8 +16,7 @@
 //= require_tree .
 //= require popper
 //= require bootstrap
-//= require bootstrap-datepicker
-//= require bootstrap-datepicker/core
+//= require rails-ujs
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import "@hotwired/turbo-rails"
 Turbo.session.drive = false

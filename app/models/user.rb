@@ -18,5 +18,6 @@ class User < ApplicationRecord
   scope :employees, -> {includes(:role).where(roles: {name: "employee"})}
   scope :manager_employees, -> {includes(:role).where(roles: {name: ["manager","employee"]})}
   
-
+  enum :designation, [ :developer, :frontend_developer, :designer ]
+  enum :gender, [:male, :female, :other]
 end

@@ -9,7 +9,7 @@ class UsersController < ApplicationController
 		elsif is_manager?
 			@users = User.manager_employees.order(created_at: :desc).paginate(page: params[:page], per_page: 3)
 		else
-			@users = User.all.order(created_at: :desc).paginate(page: params[:page], per_page: 3)
+			@users = User.where.not(id: current_user.id).order(created_at: :desc).paginate(page: params[:page], per_page: 3)
 		end
 		authorize @users
 	end
@@ -26,11 +26,12 @@ class UsersController < ApplicationController
 		@user.password_confirmation = 'admin@123' if user_params[:password].blank?
 		
 		if @user.save
-		  redirect_to users_path
-		  flash[:notice] = "User Created Successfully."
+			redirect_to users_path
+			flash[:notice] = "User Created Successfully."
 		else
-		  flash[:message] = @user.errors.full_messages
-		  render 'new'
+			flash.now[:error] = "Failed to create user. Please fix the following issues:"
+    		flash.now[:message] = @user.errors.full_messages
+			render 'new'
 		end
 	  end
 	  
@@ -77,7 +78,7 @@ class UsersController < ApplicationController
 	private
 
 		def user_params
-			params.require(:user).permit(:email, :password, :password_confirmation, :current_password, :first_name, :last_name, :phone, :address, :zip_code, :employee_code, :dob, :role_id)
+			params.require(:user).permit(:email, :password, :password_confirmation, :current_password, :first_name, :last_name, :phone, :address, :zip_code, :employee_code, :dob, :role_id, :designation, :gender,)
 		end
 
 		def set_user
