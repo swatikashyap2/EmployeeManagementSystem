@@ -1,11 +1,18 @@
-<% if @user.errors.any? %>
-  <h3>The following errors prevented the article from being saved:</h3>
-  <ul>
-    <% @user.errors.full_messages.each do |msg| %>
-     <li><%= flash[:msg] %></li> 
-    <% end %>
-  </ul>
-<% end %>
+<div>
+	<% if flash.now[:error].present? %>
+		<div class="alert alert-danger alert-dismissible fade show" role="alert">
+			<%= flash.now[:error] %>
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<ul>
+				<% flash.now[:message].each do |msg| %>
+					<li><%= msg %></li>
+				<% end %>
+			</ul>
+		</div>
+	<% end %>
+</div>
 <div class="content-header">
 	<div class="container-fluid">
 		<div class="row">
@@ -35,7 +42,7 @@
 				</div>
 				
 				<div class="form-group col-md-6 mb-2">
-					<%= f.label :email, class: "required-field" %><br />
+					<%= f.label :email, class: "required-field" %>
 					<%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", placeholder: "Enter email",required: true, uniq: true %>
 				</div>
 
@@ -44,8 +51,8 @@
 				<% end %>
 
 				<div class="form-group col-md-6 mb-2">
-					<%= f.label :phone %><br />
-					<%= f.text_field :phone, autofocus: true, autocomplete: "phone", class: "form-control", placeholder: "Enter phone no",required: true %>
+					<%= f.label :phone %>
+					<%= f.text_field :phone, autofocus: true, autocomplete: "phone", class: "form-control", placeholder: "Enter phone no" %>
 				</div>
 				<%if is_admin?%>
 					<div class="form-group col-md-6 mb-2">
@@ -91,7 +98,7 @@
 
 				<div class="field mb-2">
 					<%= f.label :address %>
-					<%= f.text_area :address, autofocus: true, autocomplete: "address", class: "form-control", placeholder: "Enter address",required: true %>
+					<%= f.text_area :address, autofocus: true, autocomplete: "address", class: "form-control", placeholder: "Enter address" %>
 				</div>
 
 

@@ -53,12 +53,16 @@ class UsersController < ApplicationController
 				redirect_to users_path
 				flash[:notice] = "User Updated Successfully."
 			else
+				flash.now[:error] = "Failed to update user. Please fix the following issues:"
+    			flash.now[:message] = @user.errors.full_messages
 				render 'edit'
 			end
 		else
 			if @user.update(user_params)
 				redirect_to users_path
 			else
+				flash.now[:error] = "Failed to update user. Please fix the following issues:"
+    			flash.now[:message] = @user.errors.full_messages
 				render 'edit'
 			end
 		end
