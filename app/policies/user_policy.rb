@@ -33,6 +33,6 @@ class UserPolicy < ApplicationPolicy
   end
 
   def destroy?
-    is_admin? 
+     is_admin?
   end
 end

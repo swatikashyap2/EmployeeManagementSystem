@@ -57,12 +57,12 @@
 				<%if is_admin?%>
 					<div class="form-group col-md-6 mb-2">
 						<%= f.label :employee_code, class: "required-field" %>
-						<%= f.text_field :employee_code, autofocus: true, autocomplete: "employee_code",  class: "form-control", placeholder: "Enter employee code",required: true %>
+						<%= f.text_field :employee_code, autofocus: true, autocomplete: "employee_code",  class: "form-control", placeholder: "Enter employee code",readonly: true %>
 					</div>
 				<%else%>
 					<div class="form-group col-md-6 mb-2">
 						<%= f.label :employee_code, class: "required-field" %>
-						<%= f.text_field :employee_code, autofocus: true, autocomplete: "employee_code",  class: "form-control", placeholder: "Enter employee code",disabled: true %>
+						<p class="field-value"><span class="mx-1"><%= @user.employee_code %></span></p>
 					</div>
 				<%end%>
 				<div class="col-md-6 field mb-2">
@@ -77,7 +77,7 @@
 				<%else%>
 					<div class="col-md-6 field mb-2">
 						<%= f.label :role, class: "required-field" %>
-						<%= f.select :role_id, options_for_select(Role.all.collect{|role|[role.name, role.id]}, selected: @user.role_id),{include_blank: '--Select role--'}, {class: "form-control",disabled: true } %>
+						<p class="field-value"><span class="mx-1"><%= @user.role.name%></span></p>
 					</div>
 				<%end%>
 
@@ -123,4 +123,11 @@
 		<% end %>
 	</div>
 </div>
-	
+<style>
+	.field-value{
+		border-radius: 4px;
+		padding: 6px;
+		border: 1px solid #cedae7;
+		color: #495057
+	}  
+</style>

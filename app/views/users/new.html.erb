@@ -44,7 +44,8 @@
 				
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :email, class: "required-field" %>
-					<%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", placeholder: "Enter email",required: true, uniq: true %>
+					<%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control ",id: "user_email", placeholder: "Enter email",required: true, uniq: true %>
+					<span id="email-error-message"></span>
 				</div>
 
 				<% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
@@ -73,12 +74,12 @@
 
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :designation %>
-					<%= f.select :designation, User.designations.keys.map { |d| [d.humanize, d] },{include_blank: "Select Designation"},{class: "form-control" }%>
+					<%= f.select :designation,options_for_select(User.designations.keys.map { |d| [d.humanize, d] }),{include_blank: "Select Designation"},{class: "form-control" }%>
 				</div>
 
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :gender %>
-					<%= f.select :gender, User.genders.keys.map { |g| [g.humanize, g] }, {include_blank: "Select Gender"},{class: "form-control"}%>
+					<%= f.select :gender,options_for_select(User.genders.keys.map { |g| [g.humanize, g] }), {include_blank: "Select Gender"},{class: "form-control"}%>
 				</div>
 
 				<div class="form-group col-md-6 mb-2">
@@ -113,9 +114,68 @@
 		<% end %>
 	</div>
 </div>
+<style>
+
+</style>
 <script>
     $('.datepicker').datepicker(){
 	        format: 'mm-dd-yyyy'
 	}
-  
+  // Wait for the document to be ready
+  $( document ).ready(function() {
+    // Attach keyup event to the email input field
+    $('#user_email').on('keyup', function() {
+      // Get the entered email
+      var email = $(this).val();
+
+      // Perform an AJAX request to check for duplication
+      $.ajax({
+        url: '/users/check_email_duplication',
+        type: 'GET',
+        data: { email: email },
+        success: function(response) {
+          // Handle the response from the server
+          if (response.exists) {
+            // Display an error message for duplicate email
+            $('#email-error-message').text('Email is already taken');
+          } else {
+            // Clear the error message if the email is not duplicate
+            $('#email-error-message').text('');
+          }
+        },
+        error: function(error) {
+          console.log('Error checking email duplication:', error);
+        }
+      });
+    });
+
+    // Attach a click event to the submit button
+    $('form').on('submit', function(event) {
+      // Get the entered email
+      var email = $('#user_email').val();
+
+      // Perform an AJAX request to check for duplication before form submission
+      $.ajax({
+        url: '/users/check_email_duplication',
+        type: 'GET',
+        data: { email: email },
+        success: function(response) {
+          // Handle the response from the server
+          if (response.exists) {
+            // Display an error message for duplicate email
+            $('#email-error-message').text('Email is already taken');
+            // Prevent the form submission
+            event.preventDefault();
+          } else {
+            // Clear the error message if the email is not duplicate
+            $('#email-error-message').text('');
+          }
+        },
+        error: function(error) {
+          console.log('Error checking email duplication:', error);
+        }
+      });
+    });
+  });
+
 </script>

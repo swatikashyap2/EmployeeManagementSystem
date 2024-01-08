@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   root 'home#index'
   resources :home
   resources :users
+  get '/check_email_duplication', to: 'users#check_email_duplication'
   resources :roles
   resources :holidays
   # namespace :admin do

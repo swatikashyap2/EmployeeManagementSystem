@@ -31,3 +31,13 @@
 		</div>
 	</div>
 </div>
+<script>
+	const boxs = document.querySelectorAll('.nav-link');
+	$('.nav-link').click(function(){
+		boxs.forEach(box => {
+			box.classList.remove('active');
+		});
+
+		$(this).classList.add('active');
+	})
+</script>

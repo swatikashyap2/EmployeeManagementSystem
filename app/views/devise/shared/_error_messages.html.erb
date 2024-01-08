@@ -1,5 +1,8 @@
 <% if resource.errors.any? %>
-  <div id="error_explanation" data-turbo-cache="false">
+   <div class="alert alert-danger alert-dismissible fade show m-1"  id ="flash" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
     <h2>
       <%= I18n.t("errors.messages.not_saved",
                  count: resource.errors.count,
@@ -13,3 +16,14 @@
     </ul>
   </div>
 <% end %>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var closeButtons = document.querySelectorAll(".alert .close");
+    closeButtons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        var alert = this.closest(".alert");
+        alert.classList.add("d-none");
+      });
+    });
+  });
+</script>

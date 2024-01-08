@@ -9,7 +9,8 @@ class UsersController < ApplicationController
 		elsif is_manager?
 			@users = User.manager_employees.order(created_at: :desc).paginate(page: params[:page], per_page: 3)
 		else
-			@users = User.where.not(id: current_user.id).order(created_at: :desc).paginate(page: params[:page], per_page: 3)
+			@users = User.all.order(created_at: :desc).paginate(page: params[:page], per_page: 3)
+			# @users = User.where.not(id: current_user.id).order(created_at: :desc).paginate(page: params[:page], per_page: 3)
 		end
 		authorize @users
 	end
@@ -18,6 +19,7 @@ class UsersController < ApplicationController
 		@user = User.new()
 		authorize @user, :new?
 	end
+
 
 	def create
 		@user = User.new(user_params)
@@ -33,7 +35,14 @@ class UsersController < ApplicationController
     		flash.now[:message] = @user.errors.full_messages
 			render 'new'
 		end
-	  end
+	end
+
+	def check_email_duplication
+		email = params[:email]
+		user = User.find_by(email: email)
+	
+		render json: { exists: !user.nil? }
+	end
 	  
 
 	def show
@@ -71,7 +80,7 @@ class UsersController < ApplicationController
 
 	def destroy
 		authorize @user
-		if @user.destroy
+		if @user.destroy!
 			redirect_to users_path
 			flash[:notice] = "User Deleted Successfully."
 		else
@@ -82,7 +91,7 @@ class UsersController < ApplicationController
 	private
 
 		def user_params
-			params.require(:user).permit(:email, :password, :password_confirmation, :current_password, :first_name, :last_name, :phone, :address, :zip_code, :employee_code, :dob, :role_id, :designation, :gender,)
+			params.require(:user).permit(:email, :password, :password_confirmation, :current_password, :first_name, :last_name, :phone, :address, :zip_code, :employee_code, :dob, :role_id, :designation, :gender)
 		end
 
 		def set_user

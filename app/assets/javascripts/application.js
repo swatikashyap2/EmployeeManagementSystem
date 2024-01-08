@@ -11,7 +11,7 @@
 // about supported directives.
 //= require jquery
 //= require rails-ujs
-// require turbolinks
+
 //= require activestorage
 //= require_tree .
 //= require popper
@@ -19,4 +19,3 @@
 //= require rails-ujs
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import "@hotwired/turbo-rails"
-Turbo.session.drive = false
