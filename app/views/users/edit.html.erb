@@ -43,7 +43,7 @@
 				
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :email, class: "required-field" %>
-					<%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", placeholder: "Enter email",required: true, uniq: true %>
+					<%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control",id: "user_email", placeholder: "Enter email",required: true, uniq: true %>
 				</div>
 
 				<% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
@@ -57,17 +57,17 @@
 				<%if is_admin?%>
 					<div class="form-group col-md-6 mb-2">
 						<%= f.label :employee_code, class: "required-field" %>
-						<%= f.text_field :employee_code, autofocus: true, autocomplete: "employee_code",  class: "form-control", placeholder: "Enter employee code",readonly: true %>
+						<%= f.text_field :employee_code, autofocus: true, autocomplete: "employee_code",  class: "form-control", placeholder: "Enter employee code", required: true %>
 					</div>
 				<%else%>
 					<div class="form-group col-md-6 mb-2">
-						<%= f.label :employee_code, class: "required-field" %>
+						<%= f.label :employee_code %>
 						<p class="field-value"><span class="mx-1"><%= @user.employee_code %></span></p>
 					</div>
 				<%end%>
 				<div class="col-md-6 field mb-2">
 					<%= f.label :dob %>
-					<%= f.text_field :dob, autofocus: true, autocomplete: "dob",  class: "form-control", placeholder: "Enter date of birth"  %>
+					<%= f.text_field :dob, autofocus: true, autocomplete: "dob",  class: "form-control datepicker", placeholder: "Enter date of birth"  %>
 				</div>
 				<% if is_admin?%>
 					<div class="col-md-6 field mb-2">
@@ -76,7 +76,7 @@
 					</div>	
 				<%else%>
 					<div class="col-md-6 field mb-2">
-						<%= f.label :role, class: "required-field" %>
+						<%= f.label :role %>
 						<p class="field-value"><span class="mx-1"><%= @user.role.name%></span></p>
 					</div>
 				<%end%>
@@ -131,3 +131,42 @@
 		color: #495057
 	}  
 </style>
+<script>
+	var emails = [];
+
+	$.ajax({
+		type: "GET",
+		url: "/users/checkemail",
+		dataType: "json",
+		data: { key1: true },
+		success: function(response) {
+			emails = response.emails; 
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			console.error("Error fetching emails:", errorThrown);
+		}
+	});
+
+	$("#user_email").on("keyup", function() {
+		var userEmail = $(this).val();
+		if (userEmail !== "") {
+			var emailRegex = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-Z0-9]{2,4}$/;
+			if (!emailRegex.test(userEmail)) {
+				$("#user_email").addClass("error");
+				$("#user_email_error").text("Invalid email format").css("color", "red");
+			} else {
+				if (emails.indexOf(userEmail) !== -1) {
+					$("#user_email").addClass("error");
+					$("#user_email_error").text("Email already exists please enter a another email").css("color", "red");
+				} else {
+					$("#user_email").removeClass("error");
+					$("#user_email_error").text("");
+				}
+			}
+  		} else {
+			$("#user_email").removeClass("error");
+			$("#user_email_error").text("");
+  		}
+	});
+
+</script>

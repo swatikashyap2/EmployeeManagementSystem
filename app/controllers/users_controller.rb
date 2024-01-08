@@ -37,11 +37,10 @@ class UsersController < ApplicationController
 		end
 	end
 
-	def check_email_duplication
-		email = params[:email]
-		user = User.find_by(email: email)
-	
-		render json: { exists: !user.nil? }
+	def checkemail
+		@emails = User.pluck(:email)
+		# .map { |d| d.split("@")[0]}
+		render json: {emails: @emails}
 	end
 	  
 
