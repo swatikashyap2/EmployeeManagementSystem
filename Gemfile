@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.2.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 7.0.1'
+gem 'rails', '~> 7.0.0'
 # Use sqlite3 as the database for Active Record
 # gem 'sqlite3'
 # Use Puma as the app server
@@ -72,4 +72,6 @@ gem 'pundit'
 gem "paperclip"
 gem 'will_paginate-bootstrap4'
 gem 'turbo-rails'
+gem 'stimulus-rails'
 # gem 'bootstrap-datepicker-rails'
+gem "importmap-rails", "~> 2.0"

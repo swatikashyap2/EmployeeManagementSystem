@@ -74,10 +74,10 @@
 						</td>
 						<td>
 							<div class="d-flex">
-							 		<%= button_to "Edit", edit_user_path(user), method: :get, class: "btn btn-sm btn-primary" %> 
+								<%= link_to "Edit", edit_user_path(user), method: :get, class: "btn btn-sm btn-primary" %> 
 								<%if is_admin?%>	
 									<% if current_user != user %>
-										<%= link_to "Delete", user_path(user), data: { 'turbo-method': :delete, 'turbo_confirm': "Are you sure?" }, class: "btn btn-sm btn-danger mx-1" %> 
+										<%= link_to "Delete", user_path(user), data: { turbo_method: :delete, turbo_confirm: "Are you sure?"}, class: "btn btn-sm btn-danger mx-1" %> 
 									<%end%>	
 								<%end%>
 							</div>
