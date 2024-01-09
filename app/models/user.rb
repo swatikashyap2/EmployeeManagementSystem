@@ -10,11 +10,23 @@ class User < ApplicationRecord
   validates :role, presence: true
   validates :employee_code, presence: true, uniqueness: true
   validates :phone, uniqueness: true,numericality: { only_integer: true },length: { maximum: 12}, allow_blank: true
+  validates :email, format: { with: /(\A([a-z]*\s*)*\<*([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\>*\Z)/i }
 
   scope :manager, -> {includes(:role).where(roles: {name: "manager"})}
   scope :employees, -> {includes(:role).where(roles: {name: "employee"})}
   scope :manager_employees, -> {includes(:role).where(roles: {name: ["manager","employee"]})}
+ 
   
-  enum :designation, {developer: "developer", frontend_developer: "frontend_developer", designer: "designer" }
+
+  has_many :user_leave_types
+  has_many :leave_types, through: :user_leave_types
+
+
+
+
+  
+  enum :designation, {backend_developer: "backend_developer", frontend_developer: "frontend_developer", designer: "designer" }
   enum :gender, {male: "male", female: "female", other: "other"}
+
+  
 end

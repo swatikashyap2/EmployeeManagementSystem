@@ -33,7 +33,7 @@
 		<%= form_for @user do|f|%>
 			<div class="row">
 				<div class="form-group col-md-6 mb-2">
-					<%= f.label :first_name %>
+					<%= f.label :first_name, class: "required-field" %>
 					<%= f.text_field :first_name,  autocomplete: "first_name", class: "form-control", placeholder: "Enter first name", required: true %>
 				</div>
 				<div class="form-group col-md-6 mb-2">
@@ -44,6 +44,7 @@
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :email, class: "required-field" %>
 					<%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control",id: "user_email", placeholder: "Enter email",required: true, uniq: true %>
+					<span id="user_email_error" class="error-message"></span>
 				</div>
 
 				<% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
@@ -67,7 +68,7 @@
 				<%end%>
 				<div class="col-md-6 field mb-2">
 					<%= f.label :dob %>
-					<%= f.text_field :dob, autofocus: true, autocomplete: "dob",  class: "form-control datepicker", placeholder: "Enter date of birth"  %>
+					<%= f.date_field :dob, autofocus: true, autocomplete: "dob",  class: "form-control datepicker", placeholder: "Enter date of birth"  %>
 				</div>
 				<% if is_admin?%>
 					<div class="col-md-6 field mb-2">
@@ -128,24 +129,36 @@
 		border-radius: 4px;
 		padding: 6px;
 		border: 1px solid #cedae7;
-		color: #495057
+		color: #495057;
+		margin: 0px;
 	}  
 </style>
 <script>
 	var emails = [];
+	var itsemail;
 
 	$.ajax({
 		type: "GET",
 		url: "/users/checkemail",
 		dataType: "json",
 		data: { key1: true },
-		success: function(response) {
-			emails = response.emails; 
+		success: function (response) {
+			emails = response.emails;
+			// Use the user's email here or perform any other actions
+			itsemail = response.itsemail;
+			console.log("User's email:", itsemail);
+
+			// Now you can use the emails array and itsemail variable
+			$("#user_email").on("keyup", function () {
+				var userEmail = $(this).val();
+				// Your email validation logic here, using emails and itsemail
+			});
 		},
-		error: function(jqXHR, textStatus, errorThrown) {
+		error: function (jqXHR, textStatus, errorThrown) {
 			console.error("Error fetching emails:", errorThrown);
 		}
 	});
+  
 
 	$("#user_email").on("keyup", function() {
 		var userEmail = $(this).val();
@@ -167,6 +180,6 @@
 			$("#user_email").removeClass("error");
 			$("#user_email_error").text("");
   		}
-	});
+	}); 
 
 </script>

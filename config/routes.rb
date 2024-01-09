@@ -14,7 +14,9 @@ Rails.application.routes.draw do
   end
    
   resources :roles
-  resources :holidays
+  resources :leave_types
+  resources :user_leave_types
+  resources :leave_requests
   # namespace :admin do
   #   resources :users
   # end

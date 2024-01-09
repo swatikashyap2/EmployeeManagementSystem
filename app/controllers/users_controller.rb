@@ -39,7 +39,6 @@ class UsersController < ApplicationController
 
 	def checkemail
 		@emails = User.pluck(:email)
-		# .map { |d| d.split("@")[0]}
 		render json: {emails: @emails}
 	end
 	  
@@ -50,6 +49,9 @@ class UsersController < ApplicationController
 	
 
 	def edit 
+		if @user.dob.present? && @user.dob.is_a?(Date)
+			@user.dob = @user.dob.strftime("%Y-%m-%d")
+		end
 		authorize @user
 	end
 

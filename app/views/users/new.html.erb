@@ -44,9 +44,8 @@
 				
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :email, class: "required-field" %>
-					<span id="user_email_error" class="error-message"></span>
 					<%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control ",id: "user_email", placeholder: "Enter email",required: true, uniq: true %>
-					
+					<span id="user_email_error" class="error-message"></span>
 				</div>
 
 				<% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
@@ -117,7 +116,6 @@
 </div>
 <script>
   	var emails = [];
-
 	$.ajax({
 		type: "GET",
 		url: "/users/checkemail",
@@ -140,8 +138,8 @@
 				$("#user_email_error").text("Invalid email format").css("color", "red");
 			} else {
 				if (emails.indexOf(userEmail) !== -1) {
-					$("#user_email").addClass("error");
-					$("#user_email_error").text("Email already exists please enter a another email").css("color", "red");
+					$("#user_email").addClass("error error-border-color");
+					$("#user_email_error").text("Email already exists please enter a another email").css("color", "red", )
 				} else {
 					$("#user_email").removeClass("error");
 					$("#user_email_error").text("");
@@ -152,5 +150,6 @@
 			$("#user_email_error").text("");
   		}
 	});
+
 
 </script>
