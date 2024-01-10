@@ -10,7 +10,7 @@
 		<nav class="mt-5">
 			<ul class="nav nav-pills flex-column mb-auto">
 				<li class="nav-item">
-					<%= link_to home_index_path, class: "nav-link"  do%>
+					<%= link_to home_index_path, class: "nav-link active "  do%>
 						<i class="bi bi-box p-2"></i>Dashboard
 					<%end%>
 				</li>
@@ -85,16 +85,20 @@
 	
 </style>
 <script>
-	document.addEventListener("DOMContentLoaded", function () {
-		var currentPath = window.location.pathname;
-		currentPath = currentPath.substr(1);
-		var links = document.querySelectorAll(".nav-link");
-		links.forEach(function (link) {
-			var linkPath = link.getAttribute("href").substr(1);
-			if (currentPath === linkPath) {
-				link.classList.add("active");
+	document.addEventListener('DOMContentLoaded', function() {
+		const sidebar = document.querySelector('.sidebar');
+		sidebar.addEventListener('click', function(event) {
+			const navLink = event.target.closest('.nav-link');
+
+			if (navLink) {
+				event.preventDefault(); 
+				const navItems = document.querySelectorAll('.nav-link');
+				navItems.forEach(navItem => {
+					navItem.classList.remove('active');
+				});
+				navLink.classList.add('active');
+				window.location.href = navLink.getAttribute('href');
 			}
 		});
 	});
-  
 </script>

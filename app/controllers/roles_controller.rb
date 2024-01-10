@@ -2,7 +2,7 @@ class RolesController < ApplicationController
 	before_action :authenticate_user!
 
 	def index
-		@roles = Role.all.order(created_at: :desc).paginate(page: params[:page], per_page: 2)
+		@roles = Role.all.order(created_at: :desc)
 		authorize @roles
 	end
 

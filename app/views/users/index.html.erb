@@ -58,7 +58,7 @@
 							<%= user.employee_code.present? ?  user.employee_code : "N/A"%>
 						</td>
 						<td>
-							<%= user.dob.present? ?  user.dob : "N/A"%>
+							<%= user.dob.present? ? user.dob.strftime("%B %d, %Y") : 'N/A' %>			
 						</td>
 						<td>
 							<%= user.role.name.present? ?  user.role.name.titleize : "N/A"%>

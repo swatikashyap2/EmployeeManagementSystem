@@ -1,6 +1,6 @@
 class LeaveTypesController < ApplicationController
     def index
-        @leave_types = LeaveType.all.order(created_at: :desc).paginate(page: params[:page], per_page: 2)
+        @leave_types = LeaveType.all.order(created_at: :desc)
         authorize @leave_types
     end
 

@@ -69,7 +69,7 @@
 
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :role, class: "required-field" %>
-					<%= f.select :role_id, options_for_select(Role.all.collect{|role|[role.name, role.id]}),{include_blank: '--Select role--'}, {class: "form-control",required: true } %>
+					<%= f.select :role_id, options_for_select(Role.where.not(name: 'admin').collect { |role| [role.name, role.id] }), { include_blank: '--Select role--' }, { class: "form-control", required: true } %>
 				</div>
 
 				<div class="form-group col-md-6 mb-2">
@@ -95,7 +95,7 @@
 
 				<div class="form-group mb-2">
 					<%= f.label :password %> <i>(create password)</i>
-					<%= f.password_field :password, autocomplete: "new-password", class: "form-control", placeholder: "Create password" %>
+					<%= f.password_field :password, autocomplete: "new-password", class: " pass form-control", id: "pass", placeholder: "Create password" %>
 					<% if @minimum_password_length %>
 						
 						<em><%= @minimum_password_length %> characters minimum</em>
@@ -104,7 +104,7 @@
 
 				<div class="form-group mb-2">
 					<%= f.label :password_confirmation %> <i>(confirm password)</i>
-					<%= f.password_field :password_confirmation, autocomplete: "new-password",  class: "form-control", placeholder: "Confirm password"%>
+					<%= f.password_field :password_confirmation, autocomplete: "new-password",  class: " form-control",id: "confirm-pass", placeholder: "Confirm password"%>
 				</div>
 
 				<div class="form-group mt-2">
@@ -151,5 +151,13 @@
   		}
 	});
 
-
+	$("#user_email").on("keyup", function() {
+            let pass = document.getElementById('pass').value;
+            let confirm_pass = document.getElementById('confirm_pass').value;
+            if (pass != confirm_pass) {
+                document.getElementById('wrong_pass_alert').style.color = 'red';
+                document.getElementById('wrong_pass_alert').innerHTML
+                    = '☒ Use same password';
+            }
+    });
 </script>

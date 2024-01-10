@@ -71,10 +71,10 @@
 					<%= f.date_field :dob, autofocus: true, autocomplete: "dob",  class: "form-control datepicker", placeholder: "Enter date of birth"  %>
 				</div>
 				<% if is_admin?%>
-					<div class="col-md-6 field mb-2">
+					<div class="form-group col-md-6 mb-2">
 						<%= f.label :role, class: "required-field" %>
-						<%= f.select :role_id, options_for_select(Role.all.collect{|role|[role.name, role.id]}, selected: @user.role_id),{include_blank: '--Select role--'}, {class: "form-control",required: true } %>
-					</div>	
+						<%= f.select :role_id, options_for_select(Role.where.not(name: 'admin').collect { |role| [role.name, role.id] },selected: @user.role_id),{include_blank: '--Select role--'}, {class: "form-control",required: true } %>
+					</div>
 				<%else%>
 					<div class="col-md-6 field mb-2">
 						<%= f.label :role %>
