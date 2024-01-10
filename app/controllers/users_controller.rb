@@ -33,7 +33,7 @@ class UsersController < ApplicationController
 		else
 			flash.now[:error] = "Failed to create user. Please fix the following issues:"
     		flash.now[:message] = @user.errors.full_messages
-			render 'new'
+			render :action => "new"
 		end
 	end
 
@@ -65,7 +65,7 @@ class UsersController < ApplicationController
 			else
 				flash.now[:error] = "Failed to update user. Please fix the following issues:"
     			flash.now[:message] = @user.errors.full_messages
-				render 'edit'
+				render :action => "edit"
 			end
 		else
 			if @user.update(user_params)
@@ -73,7 +73,7 @@ class UsersController < ApplicationController
 			else
 				flash.now[:error] = "Failed to update user. Please fix the following issues:"
     			flash.now[:message] = @user.errors.full_messages
-				render 'edit'
+				render :action => "edit"
 			end
 		end
 	

@@ -18,7 +18,7 @@ class RolesController < ApplicationController
 			redirect_to roles_path
 			flash[:notice] = "Role Created Successfully."
 		else
-			render 'new'
+			render :action => "new"
 		end
 	end
 
@@ -38,7 +38,7 @@ class RolesController < ApplicationController
 			redirect_to roles_path
 			flash[:notice] = "Role Updated Successfully."
 		else
-			render 'edit'
+			render :action => "edit"
 		end
 	end
 

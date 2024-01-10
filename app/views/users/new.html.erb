@@ -64,7 +64,7 @@
 
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :DOB %>
-					<%= f.date_field :dob, autofocus: true, autocomplete: "dob",  class: "form-control datepicker ", placeholder: "Enter date of birth"  %>
+					<%= f.date_field :dob, autofocus: true, autocomplete: "dob",id: "date-valid",  class: "form-control datepicker ", placeholder: "Enter date of birth"  %>
 				</div>
 
 				<div class="form-group col-md-6 mb-2">
@@ -95,7 +95,7 @@
 
 				<div class="form-group mb-2">
 					<%= f.label :password %> <i>(create password)</i>
-					<%= f.password_field :password, autocomplete: "new-password", class: " pass form-control", id: "pass", placeholder: "Create password" %>
+					<%= f.password_field :password, autocomplete: "new-password", class: "form-control", id: "pass", placeholder: "Create password" %>
 					<% if @minimum_password_length %>
 						
 						<em><%= @minimum_password_length %> characters minimum</em>
@@ -104,11 +104,12 @@
 
 				<div class="form-group mb-2">
 					<%= f.label :password_confirmation %> <i>(confirm password)</i>
-					<%= f.password_field :password_confirmation, autocomplete: "new-password",  class: " form-control",id: "confirm-pass", placeholder: "Confirm password"%>
+					<%= f.password_field :password_confirmation, autocomplete: "new-password",  class: "con_pass form-control",id: "con_pass confirm-pass", placeholder: "Confirm password"%>
+					<span id="user_pass_error" class="error-pass"></span>
 				</div>
 
 				<div class="form-group mt-2">
-					<%= f.submit "save", class: "btn btn-sm btn-primary" %>
+					<%= f.submit "save", class: "btn btn-sm btn-primary", id: "sb" %>
 				</div>	
 			</div>
 		<% end %>
@@ -151,13 +152,18 @@
   		}
 	});
 
-	$("#user_email").on("keyup", function() {
-            let pass = document.getElementById('pass').value;
-            let confirm_pass = document.getElementById('confirm_pass').value;
-            if (pass != confirm_pass) {
-                document.getElementById('wrong_pass_alert').style.color = 'red';
-                document.getElementById('wrong_pass_alert').innerHTML
-                    = '☒ Use same password';
-            }
-    });
+	$(document).on('turbolinks:load', function() {
+		$('#date-valid').change(function() {
+			var selectedDate = new Date($(this).val());
+			var currentDate = new Date();
+
+			if (selectedDate > currentDate) {
+			alert("Cannot select a future date.");
+			$(this).val(""); 
+			}
+		});
+	});
+
+
+
 </script>

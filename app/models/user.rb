@@ -11,6 +11,11 @@ class User < ApplicationRecord
   validates :employee_code, presence: true, uniqueness: true
   validates :phone, uniqueness: true,numericality: { only_integer: true },length: { maximum: 12}, allow_blank: true
   validates :email, format: { with: /(\A([a-z]*\s*)*\<*([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\>*\Z)/i }
+  validate :dob_on_or_before_current_date
+  
+   
+  
+  
 
   scope :manager, -> {includes(:role).where(roles: {name: "manager"})}
   scope :employees, -> {includes(:role).where(roles: {name: "employee"})}
@@ -28,5 +33,11 @@ class User < ApplicationRecord
   enum :designation, {backend_developer: "backend_developer", frontend_developer: "frontend_developer", designer: "designer" }
   enum :gender, {male: "male", female: "female", other: "other"}
 
+
+  def dob_on_or_before_current_date
+    if dob.present? && dob > Date.current
+      errors.add(:dob, "must be on or before the current date")
+    end
+  end
   
 end

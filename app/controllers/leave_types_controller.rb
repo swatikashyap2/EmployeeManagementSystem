@@ -16,7 +16,7 @@ class LeaveTypesController < ApplicationController
             redirect_to leave_types_path
             flash[:notice] = "Leave Created Successfully."
         else
-            render 'new'
+            render :action => "new"
         end
     end
     
@@ -37,7 +37,7 @@ class LeaveTypesController < ApplicationController
             redirect_to leave_types_path
             flash[:notice] = "Leave Updated Successfully."
         else
-            render 'edit'
+            render :action => "edit"
         end
     end
 
