@@ -54,7 +54,8 @@
 
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :phone %>
-					<%= f.text_field :phone, autofocus: true,autocomplete: "phone", class: "form-control", placeholder: "Enter phone no" %>
+					<%= f.text_field :phone, autofocus: true,autocomplete: "phone", class: "form-control",id: "user_phone", placeholder: "Enter phone no" %>
+					<span id="user_phone_error" class="error-phone"></span>
 				</div>
 
 				<div class="form-group col-md-6 mb-2">
@@ -164,6 +165,23 @@
 		});
 	});
 
+	document.addEventListener('DOMContentLoaded', function () {
+		var phoneField = document.getElementById('user_phone');
+		var errorSpan = document.getElementById('user_phone_error');
+		var maxPhoneNumberLength = 10;
 
+		phoneField.addEventListener('keyup', function () {
+		var phoneNumber = phoneField.value;
 
+		if (phoneNumber.length > maxPhoneNumberLength) {
+			phoneField.classList.add('error');
+			errorSpan.textContent = 'Phone number cannot exceed ' + maxPhoneNumberLength + ' characters';
+			errorSpan.style.color = 'red';
+		} else {
+			phoneField.classList.remove('error');
+			errorSpan.textContent = '';
+		}
+		});
+	});
 </script>
+

@@ -5,7 +5,7 @@ class LeaveTypesController < ApplicationController
     end
 
     def new
-        @leave_type = LeaveType.new
+        @leave_type = LeaveType.new()
         authorize @leave_type
     end
     
