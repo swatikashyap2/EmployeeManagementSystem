@@ -26,9 +26,6 @@ class User < ApplicationRecord
   enum :gender, {male: "male", female: "female", other: "other"}
 
 
-  
-
-  
   def dob_on_or_before_current_date
     if dob.present? && dob > Date.current
       errors.add(:dob, "must be on or before the current date")

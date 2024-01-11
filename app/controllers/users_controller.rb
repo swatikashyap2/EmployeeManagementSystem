@@ -7,7 +7,7 @@ class UsersController < ApplicationController
 		if is_employee? 
 			@users = [current_user]
 		elsif is_manager?
-			@users = User.manager_employees.order(created_at: :desc).paginate(page: params[:page], per_page: 10)
+			@users = User.employees.order(created_at: :desc).paginate(page: params[:page], per_page: 10)
 		else
 			@users = User.all.order(created_at: :desc).paginate(page: params[:page], per_page: 10)
 			# @users = User.where.not(id: current_user.id).order(created_at: :desc).paginate(page: params[:page], per_page: 3)

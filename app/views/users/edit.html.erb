@@ -71,22 +71,34 @@
 					<%= f.date_field :dob, autofocus: true, autocomplete: "dob",  class: "form-control datepicker", placeholder: "Enter date of birth"  %>
 				</div>
 				<% if is_admin?%>
-					<div class="form-group col-md-6 mb-2">
-						<%= f.label :role, class: "required-field" %>
-						<%= f.select :role_id, options_for_select(Role.where.not(name: 'admin').collect { |role| [role.name, role.id] },selected: @user.role_id),{include_blank: '--Select role--'}, {class: "form-control",required: true } %>
-					</div>
+					<%if @user.eql?(current_user)%>
+						<div class="form-group col-md-6 mb-2">
+							<%= f.label :role %>
+							<p class="field-value"><span class="mx-1"><%= @user.role.name%></span></p>
+						</div>
+					<%else%>
+						<div class="form-group col-md-6 mb-2">
+							<%= f.label :role, class: "required-field" %>
+							<%= f.select :role_id, options_for_select(Role.where.not(name: 'admin').collect { |role| [role.name, role.id] },selected: @user.role_id),{include_blank: '--Select role--'}, {class: "form-control",required: true } %>
+						</div>
+					<%end%>
 				<%else%>
 					<div class="col-md-6 field mb-2">
 						<%= f.label :role %>
 						<p class="field-value"><span class="mx-1"><%= @user.role.name%></span></p>
 					</div>
 				<%end%>
-
-				<div class="form-group col-md-6 mb-2">
-					<%= f.label :designation %>
-					<%= f.select :designation, User.designations.keys.map { |d| [d.humanize, d] },{include_blank: "Select Designation"},{class: "form-control" }%>
-				</div>
-
+				<% if is_employee?%>
+					<div class="col-md-6 field mb-2">
+						<%= f.label :designation %>
+						<p class="field-value"><span class="mx-1"><%= @user.designation%></span></p>
+					</div>
+				<%else%>
+					<div class="form-group col-md-6 mb-2">
+						<%= f.label :designation %>
+						<%= f.select :designation, User.designations.keys.map { |d| [d.humanize, d] },{include_blank: "Select Designation"},{class: "form-control" }%>
+					</div>
+				<%end%>
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :gender %>
 					<%= f.select :gender, User.genders.keys.map { |g| [g.humanize, g] }, {nclude_blank: "Select Gender"},{class: "form-control"}%>
@@ -102,21 +114,21 @@
 					<%= f.text_area :address, autofocus: true, autocomplete: "address", class: "form-control", placeholder: "Enter address" %>
 				</div>
 
+				<% if is_admin? || is_employee? %>
+					<div class="field mb-2">
+						<%= f.label :password %> <i>(leave blank if you don't want to change it)</i>
+						<%= f.password_field :password, autocomplete: "new-password", class: "form-control", placeholder: "Create password" %>
+						<% if @minimum_password_length %>
+							
+							<em><%= @minimum_password_length %> characters minimum</em>
+						<% end %>
+					</div>
 
-				<div class="field mb-2">
-					<%= f.label :password %> <i>(leave blank if you don't want to change it)</i>
-					<%= f.password_field :password, autocomplete: "new-password", class: "form-control", placeholder: "Create password" %>
-					<% if @minimum_password_length %>
-						
-						<em><%= @minimum_password_length %> characters minimum</em>
-					<% end %>
-				</div>
-
-				<div class="field mb-2">
-					<%= f.label :password_confirmation %>
-					<%= f.password_field :password_confirmation, autocomplete: "new-password",  class: "form-control", placeholder: "Confirm password"%>
-				</div>
-
+					<div class="field mb-2">
+						<%= f.label :password_confirmation %>
+						<%= f.password_field :password_confirmation, autocomplete: "new-password",  class: "form-control", placeholder: "Confirm password"%>
+					</div>
+				<%end%>
 				<div class="field mt-2">
 					<%= f.submit "Update", class: "btn btn-sm btn-primary" %>
 				</div>	
@@ -144,14 +156,11 @@
 		data: { key1: true },
 		success: function (response) {
 			emails = response.emails;
-			// Use the user's email here or perform any other actions
 			itsemail = response.itsemail;
 			console.log("User's email:", itsemail);
 
-			// Now you can use the emails array and itsemail variable
 			$("#user_email").on("keyup", function () {
 				var userEmail = $(this).val();
-				// Your email validation logic here, using emails and itsemail
 			});
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
