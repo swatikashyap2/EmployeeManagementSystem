@@ -44,7 +44,7 @@
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :email, class: "required-field" %>
 					<%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control",id: "user_email", placeholder: "Enter email",required: true, uniq: true %>
-					<span id="user_email_error" class="error-message"></span>
+					<span id="user_email_error"></span>
 				</div>
 
 				<% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
@@ -53,7 +53,8 @@
 
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :phone %>
-					<%= f.text_field :phone, autofocus: true, autocomplete: "phone", class: "form-control", placeholder: "Enter phone no" %>
+					<%= f.text_field :phone, autofocus: true, autocomplete: "phone",id: "user_phone", class: "form-control", placeholder: "Enter phone no" %>
+					<span id="user_phone_error"></span>
 				</div>
 				<%if is_admin?%>
 					<div class="form-group col-md-6 mb-2">
@@ -68,7 +69,8 @@
 				<%end%>
 				<div class="col-md-6 field mb-2">
 					<%= f.label :dob %>
-					<%= f.date_field :dob, autofocus: true, autocomplete: "dob",  class: "form-control datepicker", placeholder: "Enter date of birth"  %>
+					<%= f.date_field :dob, autofocus: true, autocomplete: "dob", id:"date_valid", class: "form-control datepicker", placeholder: "Enter date of birth"  %>
+					<span id="user_date_error"></span>
 				</div>
 				<% if is_admin?%>
 					<%if @user.eql?(current_user)%>
@@ -117,7 +119,7 @@
 				<% if is_admin? || is_employee? %>
 					<div class="field mb-2">
 						<%= f.label :password %> <i>(leave blank if you don't want to change it)</i>
-						<%= f.password_field :password, autocomplete: "new-password", class: "form-control", placeholder: "Create password" %>
+						<%= f.password_field :password, autocomplete: "new-password",id: "pass", class: "form-control", placeholder: "Create password" %>
 						<% if @minimum_password_length %>
 							
 							<em><%= @minimum_password_length %> characters minimum</em>
@@ -126,7 +128,8 @@
 
 					<div class="field mb-2">
 						<%= f.label :password_confirmation %>
-						<%= f.password_field :password_confirmation, autocomplete: "new-password",  class: "form-control", placeholder: "Confirm password"%>
+						<%= f.password_field :password_confirmation, autocomplete: "new-password",  class: " con_pass form-control", placeholder: "Confirm password"%>
+						<span id="user_pass_error"></span>
 					</div>
 				<%end%>
 				<div class="field mt-2">
@@ -146,49 +149,125 @@
 	}  
 </style>
 <script>
-	var emails = [];
-	var itsemail;
+	document.addEventListener("turbo:load", function() {
+		var emails = [];
+		var itsemail;
 
-	$.ajax({
-		type: "GET",
-		url: "/users/checkemail",
-		dataType: "json",
-		data: { key1: true },
-		success: function (response) {
-			emails = response.emails;
-			itsemail = response.itsemail;
-			console.log("User's email:", itsemail);
+		$.ajax({
+			type: "GET",
+			url: "/users/checkemail",
+			dataType: "json",
+			data: { key1: true },
+			success: function (response) {
+				emails = response.emails;
+				itsemail = response.itsemail;
+				console.log("User's email:", itsemail);
 
-			$("#user_email").on("keyup", function () {
-				var userEmail = $(this).val();
-			});
-		},
-		error: function (jqXHR, textStatus, errorThrown) {
-			console.error("Error fetching emails:", errorThrown);
-		}
-	});
-  
+				$("#user_email").on("keyup", function () {
+					var userEmail = $(this).val();
+				});
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				console.error("Error fetching emails:", errorThrown);
+			}
+		});
+	
 
-	$("#user_email").on("keyup", function() {
-		var userEmail = $(this).val();
-		if (userEmail !== "") {
-			var emailRegex = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-Z0-9]{2,4}$/;
-			if (!emailRegex.test(userEmail)) {
-				$("#user_email").addClass("error");
-				$("#user_email_error").text("Invalid email format").css("color", "red");
-			} else {
-				if (emails.indexOf(userEmail) !== -1) {
+		$("#user_email").on("keyup", function() {
+			var userEmail = $(this).val();
+			if (userEmail !== "") {
+				var emailRegex = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-Z0-9]{2,4}$/;
+				if (!emailRegex.test(userEmail)) {
 					$("#user_email").addClass("error");
-					$("#user_email_error").text("Email already exists please enter a another email").css("color", "red");
+					$("#user_email_error").text("Invalid email format").css("color", "red");
 				} else {
-					$("#user_email").removeClass("error");
-					$("#user_email_error").text("");
+					if (emails.indexOf(userEmail) !== -1) {
+						$("#user_email").addClass("error");
+						$("#user_email_error").text("Email already exists please enter a another email").css("color", "red");
+					} else {
+						$("#user_email").removeClass("error");
+						$("#user_email_error").text("");
+					}
+				}
+			} else {
+				$("#user_email").removeClass("error");
+				$("#user_email_error").text("");
+			}
+		}); 
+	});
+	document.addEventListener("turbo:load", function() {
+		var phoneField = document.getElementById('user_phone');
+		var errorSpan = document.getElementById('user_phone_error');
+		var maxPhoneNumberLength = 10;
+
+		phoneField.addEventListener('keyup', function () {
+			var phoneNumber = phoneField.value;
+			if (/[^0-9]/.test(phoneNumber)) {
+				phoneField.classList.add('error');
+				errorSpan.textContent = 'Phone number must contain only numeric characters';
+				errorSpan.style.color = 'red';
+			} else if (phoneNumber.length > maxPhoneNumberLength) {
+				phoneField.classList.add('error');
+				errorSpan.textContent = 'Phone number cannot exceed ' + maxPhoneNumberLength + ' characters';
+				errorSpan.style.color = 'red';
+			} else {
+				phoneField.classList.remove('error');
+				errorSpan.textContent = '';
+			}
+		});
+	});
+
+	document.addEventListener("turbo:load", function() {
+		var passwordField = $('#pass');
+		var confirmationField = $('.con_pass');
+		var confirmationErrorSpan = $('#user_pass_error');
+
+		passwordField.on('input', function () {
+			var password = passwordField.val();
+			var confirmation = confirmationField.val();
+			if (password !== "" && confirmation === "") {
+				confirmationField.addClass('error');
+				confirmationErrorSpan.text('Please confirm password').css('color', 'red');
+			} else if (confirmation !== "") {
+				if (password !== confirmation) {
+					confirmationField.addClass('error');
+					confirmationErrorSpan.text('Passwords do not match').css('color', 'red');
+				} else {
+					confirmationField.removeClass('error');
+					confirmationErrorSpan.text('');
 				}
 			}
-  		} else {
-			$("#user_email").removeClass("error");
-			$("#user_email_error").text("");
-  		}
-	}); 
+		});
+
+		confirmationField.on('input', function () {
+			var password = passwordField.val();
+			var confirmation = confirmationField.val();
+
+			if (confirmation !== "" && password !== confirmation) {
+				confirmationField.addClass('error');
+				confirmationErrorSpan.text('Passwords do not match').css('color', 'red');
+			} else {
+				confirmationField.removeClass('error');
+				confirmationErrorSpan.text('');
+			}
+		});
+	});
+	
+	document.addEventListener("turbo:load", function() {
+		var dateField = $('#date_valid');
+		var dateErrorSpan = $('#user_date_error');
+
+		dateField.on('input', function () {
+			var selectedDate = new Date(dateField.val());
+			var currentDate = new Date();
+			if (selectedDate > currentDate) {
+				dateField.addClass('error');
+				dateErrorSpan.text('You cannot select a future date').css('color', 'red');
+			} else {
+				dateField.removeClass('error');
+				dateErrorSpan.text('');
+			}
+		});
+	});
 
 </script>

@@ -18,23 +18,20 @@
 
 <script>
   
- document.addEventListener("DOMContentLoaded", function () {
-  setTimeout(function () {
-    var successFlash = document.getElementById("success-flash");
-    var dangerFlash = document.getElementById("danger-flash");
+ 	document.addEventListener("turbo:load", function() {
+    setTimeout(function () {
+      var successFlash = document.getElementById("success-flash");
+      var dangerFlash = document.getElementById("danger-flash");
 
-    if (successFlash) {
-      successFlash.remove();
-    }
+      if (successFlash) {
+        successFlash.remove();
+      }
 
-    if (dangerFlash) {
-      dangerFlash.remove();
-    }
-  }, 10000);
-});
+      if (dangerFlash) {
+        dangerFlash.remove();
+      }
+    }, 10000);
 
-
-  document.addEventListener("DOMContentLoaded", function () {
     var closeButtons = document.querySelectorAll(".alert .close");
     closeButtons.forEach(function (button) {
       button.addEventListener("click", function () {
