@@ -34,7 +34,9 @@
 				<th>Gender</th>
 				<th>Zip Code</th>
 				<th>Address</th>
-				<th>Actions</th>
+				<% if is_admin? || is_manager? %>
+					<th>Actions</th>
+				<%end%>
 			</thead>
 			<tbody>
 				<% @users.each do|user|%>
@@ -74,7 +76,9 @@
 						</td>
 						<td>
 							<div class="d-flex">
-								<%= link_to "Edit", edit_user_path(user), method: :get, class: "btn btn-sm btn-primary" %> 
+								<% if is_admin? || is_manager? %>
+									<%= link_to "Edit", edit_user_path(user), method: :get, class: "btn btn-sm btn-primary" %> 
+								<%end%>
 								<%if is_admin?%>	
 									<% if current_user != user %>
 										<%= link_to "Delete", user_path(user), data: { turbo_method: :delete, turbo_confirm: "Are you sure?"}, class: "btn btn-sm btn-danger mx-1" %> 
