@@ -10,7 +10,7 @@
 		<nav class="mt-5">
 			<ul class="nav nav-pills flex-column mb-auto">
 				<li class="nav-item">
-					<%= link_to home_index_path, class: "nav-link active "  do%>
+					<%= link_to home_index_path, class: "nav-link active"  do%>
 						<i class="bi bi-box p-2"></i>Dashboard
 					<%end%>
 				</li>
@@ -46,14 +46,14 @@
 					</li>
 				<% end %>
 				<li class="nav-item">
-					<%= link_to new_leave_request_path, class: "nav-link"  do%> 
+					<%= link_to teams_path, class: "nav-link" do%> 
 						<i class="bi bi-people p-2"></i>Teams
 					<%end%>
 				</li>
 				<li class="nav-item">
-					<div class= "nav-link">
+					<%= link_to policies_path, class: "nav-link" do%> 
 						<i class="bi bi-file-earmark-text-fill p-2"></i>Policy
-					</div>
+					<%end%>
 				</li>
 				<!-- li class="nav-item dropdown">
 					<a href="#works" class="nav-link dropdown-toggle" data-toggle="dropdown">Works <span

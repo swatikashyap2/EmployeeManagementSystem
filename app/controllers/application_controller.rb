@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
 	before_action :authenticate_user! 
 	helper_method :is_admin?, :is_manager?, :is_employee?
+	helper_method :current_user
 	
 	include Pundit::Authorization
 	protect_from_forgery with: :exception
@@ -20,9 +21,7 @@ class ApplicationController < ActionController::Base
 	def is_employee?
 		current_user.role.name == "employee" ? true : false
 	end
-
-
-
+	
 	private
 
 		def user_not_authorized
@@ -42,7 +41,7 @@ class ApplicationController < ActionController::Base
 	protected
 		def configure_permitted_parameters
 			devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:email, :password, :password_confirmation, :role_id)}
-			devise_parameter_sanitizer.permit(:account_update) { |u| u.permit(:email, :password, :password_confirmation, :role_id)}
+			
 		end
 
 end

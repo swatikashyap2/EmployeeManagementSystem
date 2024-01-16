@@ -1,43 +1,44 @@
 <% if notice %>
-  <div class="alert alert-success alert-dismissible fade show m-1" id="success-flash" role="alert">
-    <%= notice %>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
+	<div class="alert alert-success alert-dismissible fade show m-1" id="success-flash" role="alert">
+		<%= notice %>
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
 <% end %>
 
 <% if alert %>
-  <div class="alert alert-danger alert-dismissible fade show m-1"  id="danger-flash" role="alert">
-    <%= alert %>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
+  	<div class="alert alert-danger alert-dismissible fade show m-1"  id="danger-flash" role="alert">
+    	<%= alert %>
+    	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      		<span aria-hidden="true">&times;</span>
+    	</button>
+  	</div>
 <% end %>
-
 <script>
-  
- 	document.addEventListener("turbo:load", function() {
-    setTimeout(function () {
-      var successFlash = document.getElementById("success-flash");
-      var dangerFlash = document.getElementById("danger-flash");
+ 	document.addEventListener("turbo:load", function () {
+    	var closeButtons = document.querySelectorAll(".alert .close");
+      	closeButtons.forEach(function (button) {
+        	button.addEventListener("click", function () {
+				var alert = this.closest(".alert");
+				alert.classList.add("d-none");
+        	});
+  		});
 
-      if (successFlash) {
-        successFlash.remove();
-      }
+		var successFlash = document.getElementById("success-flash");
+		var dangerFlash = document.getElementById("danger-flash");
 
-      if (dangerFlash) {
-        dangerFlash.remove();
-      }
-    }, 10000);
+		if (successFlash) {
+			setTimeout(function () {
+			successFlash.remove();
+			}, 10000);
+		}
 
-    var closeButtons = document.querySelectorAll(".alert .close");
-    closeButtons.forEach(function (button) {
-      button.addEventListener("click", function () {
-        var alert = this.closest(".alert");
-        alert.classList.add("d-none");
-      });
-    });
-  });
+		if (dangerFlash) {
+			setTimeout(function () {
+			dangerFlash.remove();
+			}, 10000);
+		}
+	});
+
 </script>

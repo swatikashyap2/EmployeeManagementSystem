@@ -15,8 +15,7 @@ class RolesController < ApplicationController
 		@role = Role.new(role_params)
 		authorize @role
 		if @role.save
-			redirect_to roles_path
-			flash[:notice] = "Role Created Successfully."
+			redirect_to roles_path, notice: "User Created Successfully."
 		else
 			render :action => "new"
 		end
@@ -35,8 +34,7 @@ class RolesController < ApplicationController
 		@role = Role.find(params[:id])
 		authorize @role
 		if @role.update(role_params)
-			redirect_to roles_path
-			flash[:notice] = "Role Updated Successfully."
+			redirect_to roles_path, notice: "Role Updated Successfully."
 		else
 			render :action => "edit"
 		end
@@ -46,8 +44,7 @@ class RolesController < ApplicationController
 		@role = Role.find(params[:id])
 		authorize @role
 		@role.destroy
-		redirect_to roles_path
-		flash[:notice] = "Role Deleted Successfully."
+		redirect_to roles_path, notice: "Role Deleted Successfully."
 	end
 
 	private

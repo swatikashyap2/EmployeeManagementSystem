@@ -1,17 +1,5 @@
 <div>
-	<% if flash.now[:error].present? %>
-		<div class="alert alert-danger alert-dismissible fade show" role="alert">
-			<%= flash.now[:error] %>
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-			</button>
-			<ul>
-				<% flash.now[:message].each do |msg| %>
-					<li><%= msg %></li>
-				<% end %>
-			</ul>
-		</div>
-	<% end %>
+	<%= render "shared/error_messages"%>
 </div>
 
 <div class="content-header">
@@ -183,7 +171,7 @@
 		var confirmationField = $('.con_pass');
 		var confirmationErrorSpan = $('#user_pass_error');
 
-		passwordField.on('input', function () {
+		passwordField.on('keyup', function () {
 			var password = passwordField.val();
 			var confirmation = confirmationField.val();
 			if (password !== "" && confirmation === "") {
@@ -197,6 +185,9 @@
 					confirmationField.removeClass('error');
 					confirmationErrorSpan.text('');
 				}
+			} else {
+				confirmationField.removeClass('error');
+					confirmationErrorSpan.text('');
 			}
 		});
 

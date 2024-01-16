@@ -17,6 +17,7 @@ class User < ApplicationRecord
   validate :dob_on_or_before_current_date
 
   after_create :assign_all_leave_types
+  before_validation :set_default_password, on: :create
 
   scope :manager, -> {includes(:role).where(roles: {name: "manager"})}
   scope :employees, -> {includes(:role).where(roles: {name: "employee"})}
@@ -29,6 +30,15 @@ class User < ApplicationRecord
   def dob_on_or_before_current_date
     if dob.present? && dob > Date.current
       errors.add(:dob, "must be on or before the current date")
+    end
+  end 
+
+  
+
+  def set_default_password
+    if password.blank?
+      self.password = "admin@123"
+      self.password_confirmation = "admin@123"
     end
   end
   

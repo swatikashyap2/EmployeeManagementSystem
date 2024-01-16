@@ -13,8 +13,7 @@ class LeaveTypesController < ApplicationController
         @leave_type = LeaveType.new(leave_type_params)
         authorize @leave_type
         if @leave_type.save
-            redirect_to leave_types_path
-            flash[:notice] = "Leave Created Successfully."
+            redirect_to leave_types_path, notice: "Leave Created Successfully."
         else
             render :action => "new"
         end
@@ -34,8 +33,7 @@ class LeaveTypesController < ApplicationController
         @leave_type = LeaveType.find(params[:id])
         authorize @leave_type
         if @leave_type.update(leave_type_params)
-            redirect_to leave_types_path
-            flash[:notice] = "Leave Updated Successfully."
+            redirect_to leave_types_path, notice: "Leave Updated Successfully."
         else
             render :action => "edit"
         end
@@ -45,8 +43,7 @@ class LeaveTypesController < ApplicationController
         @leave_type = LeaveType.find(params[:id])
         authorize @leave_type
         @leave_type.destroy
-        redirect_to leave_types_path
-        flash[:notice] = "Leave Deleted Successfully."
+        redirect_to leave_types_path, notice: "Leave Deleted Successfully."
     end
 
     private

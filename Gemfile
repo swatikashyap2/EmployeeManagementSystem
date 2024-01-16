@@ -74,3 +74,4 @@ gem 'will_paginate-bootstrap4'
 gem 'turbo-rails'
 gem 'stimulus-rails'
 gem "importmap-rails", "~> 2.0"
+gem 'devise-security'

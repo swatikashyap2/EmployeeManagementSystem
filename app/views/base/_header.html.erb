@@ -11,14 +11,14 @@
 		<li class="nav-item d-none d-sm-inline-block">
 			<%# <a href="#" class="nav-link">Contact</a> %>
 		</li -->
-		<!-- li class="nav-item">
-			<strong><%= button_to "My Profile", edit_user_path( current_user) %></strong>
-		</li-->
 		<li class="nav-item">
 			<strong><%= current_user.role.name.titleize %></strong>
 		</li>
 		<li class="nav-item mx-1">	
-			<%= button_to "logout", destroy_user_session_path, method: :delete, class: "btn btn-warning" %>
+			<%= link_to "logout", destroy_user_session_path, method: :delete, class: "btn btn-warning" %>
+		</li>
+		<li class="nav-item">
+			<strong><%= link_to "My Profile", edit_user_path(current_user), class: "btn btn-primary" %></strong>
 		</li>
 	</ul>
 
