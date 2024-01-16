@@ -1,0 +1,26 @@
+<div class="content-header">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<div class="d-flex justify-content-between">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><%= link_to "Dashboard", home_index_path %></li>
+						<li class="breadcrumb-item"><%= link_to "Users", users_path %></li>
+						<li class="breadcrumb-item active">Edit user leave type</li>
+					</ol>
+				</div>
+			</div>
+		</div>	
+	</div>
+</div>
+<div class="card">
+	<div class="card-body">
+		<%= form_for @user_leave_type do|f|%>
+			<div class="row">
+				<div class="form-group col-md-6 mb-2">
+					<%= @user_leave_type.first.leave_type.name%>
+				</div>
+            </div>
+        <%end%>
+    </div>
+</div>

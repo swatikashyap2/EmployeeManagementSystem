@@ -83,6 +83,7 @@
 									<% if current_user != user %>
 										<%= link_to "Delete", user_path(user), data: { turbo_method: :delete, turbo_confirm: "Are you sure?"}, class: "btn btn-sm btn-danger mx-1" %> 
 									<%end%>	
+									<%= link_to "Edit Leave", edit_user_leave_type_path(user), class: "btn btn-primary"%>
 								<%end%>
 							</div>
 						</td>
