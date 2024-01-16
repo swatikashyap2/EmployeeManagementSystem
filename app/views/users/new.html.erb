@@ -84,7 +84,7 @@
 
 
 				<div class="form-group mb-2">
-					<%= f.label :password %> <i>(create password)</i>
+					<%= f.label :password %> <i>(create your password)</i>
 					<%= f.password_field :password, autocomplete: "new-password", class: "form-control", id: "pass", placeholder: "Create password" %>
 					<% if @minimum_password_length %>
 						
@@ -93,7 +93,7 @@
 				</div>
 
 				<div class="form-group mb-2">
-					<%= f.label :password_confirmation %> <i>(confirm password)</i>
+					<%= f.label :password_confirmation %> <i>(please confirm your password)</i>
 					<%= f.password_field :password_confirmation, autocomplete: "new-password",  class: "con_pass form-control",id: "con_pass confirm-pass", placeholder: "Confirm password"%>
 					<span id="user_pass_error"></span>
 				</div>

@@ -10,7 +10,7 @@
 		<nav class="mt-5">
 			<ul class="nav nav-pills flex-column mb-auto">
 				<li class="nav-item">
-					<%= link_to home_index_path, class: "nav-link active"  do%>
+					<%= link_to home_index_path, class: "nav-link "  do%>
 						<i class="bi bi-box p-2"></i>Dashboard
 					<%end%>
 				</li>
@@ -85,7 +85,39 @@
 	
 </style>
 <script>
-	document.addEventListener('DOMContentLoaded', function() {
+		document.addEventListener("turbo:load", function () {
+		function setActiveLink(link) {
+			link.classList.add("active");
+			localStorage.setItem("activeLink", link.getAttribute("href").substr(1));
+		}
+
+		var links = document.querySelectorAll(".nav-link");
+		var storedActiveLink = localStorage.getItem("activeLink");
+
+		links.forEach(function (link) {
+			link.addEventListener("click", function (event) {
+				event.preventDefault();
+				links.forEach(function (otherLink) {
+					otherLink.classList.remove("active");
+				});
+				setActiveLink(link);
+				window.location.href = link.getAttribute("href");
+			});
+
+			if (storedActiveLink === link.getAttribute("href").substr(1)) {
+				setActiveLink(link);
+			}
+		});
+
+		
+		document.getElementById("logout-button").addEventListener("click", function () {
+			localStorage.removeItem("activeLink");
+		});
+	});
+
+
+
+	<%# document.addEventListener('DOMContentLoaded', function() {
 		const sidebar = document.querySelector('.sidebar');
 		sidebar.addEventListener('click', function(event) {
 			const navLink = event.target.closest('.nav-link');
@@ -100,5 +132,6 @@
 				window.location.href = navLink.getAttribute('href');
 			}
 		});
-	});
+	
+	}); %>
 </script>
