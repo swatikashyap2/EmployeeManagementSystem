@@ -1,0 +1,30 @@
+<div id="ppc_manager_modal_<%= @user.id%>" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<h3 class="mx-2">Edit user leave type</h3>
+			<div class="modal-body">
+				<div class="text-left">
+					<div class="row">
+						<div class="col">
+							<%= form_for @user, url: user_leave_type_path(@user) do |f| %>
+								<% @user_leave_types.each do |user_leave_type| %>
+									<%= fields_for "user_leave_types[]", user_leave_type do |leave_type_form| %>
+									<div>
+										<%= leave_type_form.label :leave_type_name, user_leave_type.leave_type.name %>
+										<%= leave_type_form.text_field :count, value: user_leave_type.count, class: "form-control" %>
+									</div>
+									<% end %>
+								<% end %>
+								<div class="mt-3">
+									<%= f.submit "Update", class: "btn btn-primary" %>
+								</div>
+							<% end %>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
