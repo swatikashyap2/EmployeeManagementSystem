@@ -1,5 +1,43 @@
-<div class="text-center">
-    <div>
-        <h1>Comming soon......<i class="bi bi-emoji-laughing-fill"></i></h1>
-    </div>
+<div class="content-header">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<div class="d-flex justify-content-between">
+					<div>
+						<ol class="breadcrumb float-sm-right">
+							<li class="breadcrumb-item"><%= link_to "Dashboard", home_index_path %></li>
+							<li class="breadcrumb-item active">Assignes Leaves</li>
+						</ol>
+					</div>
+                    <div>
+						<% if is_manager? || is_employee?%>
+							<%= button_to "Apply Leaves",new_leave_request_path, method: :get, class: "btn btn-sm btn-primary"%>
+						<%end%>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="card">
+	<div class="card-body">
+		<table class='table'>
+			<thead> 
+				<th>Leaves</th>
+                <th>count</th>
+			</thead>
+			<tbody>
+				<% @leave_requests.each do|leave_req|%>
+					<tr>
+						<td>
+							<%= leave_req.name%>
+						</td>
+                        <td>
+							<%= leave_req.count%>
+						</td>
+					</tr>
+				<%end%>
+			</tbody>
+		</table>
+	</div>
 </div>

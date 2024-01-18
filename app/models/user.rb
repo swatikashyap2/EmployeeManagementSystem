@@ -6,6 +6,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   has_many :user_leave_types
   has_many :leave_types, through: :user_leave_types
+  has_many :leave_requests
 
   belongs_to :role
   validates :first_name, presence: true

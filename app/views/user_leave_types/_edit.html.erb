@@ -10,7 +10,7 @@
 								<% @user_leave_types.each do |user_leave_type| %>
 									<%= fields_for "user_leave_types[]", user_leave_type do |leave_type_form| %>
 									<div>
-										<%= leave_type_form.label :leave_type_name, user_leave_type.leave_type.name %>
+										<%= leave_type_form.label :leave_type_name, user_leave_type.name %>
 										<%= leave_type_form.text_field :count, value: user_leave_type.count, class: "form-control" %>
 									</div>
 									<% end %>
@@ -27,4 +27,4 @@
 		</div>
 	</div>
 </div>
-
+            

@@ -31,20 +31,18 @@
 						<%end%>
 					</li>
 				<%end%>
-				<% if is_admin? ||  is_manager? %>
-					<li class="nav-item">
-						<%= link_to leave_requests_path, class: "nav-link"  do%>
-							<i class="bi bi-journal-text p-2"></i>Leave Requests
-						<%end%>
-					</li>
-				<%end%>
-				<% if is_manager? ||  is_employee? %>
+				<li class="nav-item">
+					<%= link_to leave_requests_path, class: "nav-link"  do%>
+						<i class="bi bi-journal-text p-2"></i>Leave Requests
+					<%end%>
+				</li>
+				<!-- <% if is_manager? ||  is_employee? %>
 					<li class="nav-item">
 						<%= link_to new_home_path, class: "nav-link"  do%> 
 							<i class="bi bi-arrow-bar-right p-2"></i>Apply Leaves
 						<%end%>
 					</li>
-				<% end %>
+				<% end %> -->
 				<li class="nav-item">
 					<%= link_to teams_path, class: "nav-link" do%> 
 						<i class="bi bi-people p-2"></i>Teams

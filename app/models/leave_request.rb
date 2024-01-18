@@ -1,7 +1,5 @@
 class LeaveRequest < ApplicationRecord
-    def index
-    end
-
-    def new
-    end
+    belongs_to :user
+    belongs_to :leave_type
 end
+
