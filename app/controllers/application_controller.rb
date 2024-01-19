@@ -29,13 +29,6 @@ class ApplicationController < ActionController::Base
 			redirect_to root_path
 		end
 		
-		def layout
-			if devise_controller?
-				'devise'
-			else
-				'application'
-			end
-		end
 
 	
 	protected

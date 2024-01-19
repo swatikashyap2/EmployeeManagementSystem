@@ -42,7 +42,7 @@
 
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :phone %>
-					<%= f.text_field :phone, autofocus: true,autocomplete: "phone", class: "form-control",id: "user_phone", placeholder: "Enter phone no" %>
+					<%= f.text_field :phone, autofocus: true,autocomplete: "phone", class: "form-control",id: "user_phone",onkeyup: "phone()", placeholder: "Enter phone no" %>
 					<span id="user_phone_error"></span>
 				</div>
 
@@ -144,10 +144,12 @@
 		});
 	});
 
-	document.addEventListener("turbo:load", function() {
+	function phone() { 
+		
 		var phoneField = document.getElementById('user_phone');
 		var errorSpan = document.getElementById('user_phone_error');
 		var maxPhoneNumberLength = 10;
+		var minPhoneNumberLength = 10;
 
 		phoneField.addEventListener('keyup', function () {
 			var phoneNumber = phoneField.value;
@@ -159,12 +161,16 @@
 				phoneField.classList.add('error');
 				errorSpan.textContent = 'Phone number cannot exceed ' + maxPhoneNumberLength + ' characters';
 				errorSpan.style.color = 'red';
+			} else if (phoneNumber.length < minPhoneNumberLength) {
+				phoneField.classList.add('error');
+				errorSpan.textContent = 'Phone number should be ' + minPhoneNumberLength + ' characters';
+				errorSpan.style.color = 'red';
 			} else {
 				phoneField.classList.remove('error');
 				errorSpan.textContent = '';
 			}
 		});
-	});
+	};
 
 	document.addEventListener("turbo:load", function() {
 		var passwordField = $('#pass');
@@ -176,7 +182,7 @@
 			var confirmation = confirmationField.val();
 			if (password !== "" && confirmation === "") {
 				confirmationField.addClass('error');
-				confirmationErrorSpan.text('Please confirm password').css('color', 'red');
+				confirmationErrorSpan.text('Please enter password to confirm password').css('color', 'red');
 			} else if (confirmation !== "") {
 				if (password !== confirmation) {
 					confirmationField.addClass('error');
@@ -212,17 +218,20 @@
 		dateField.on('input', function () {
 			var selectedDate = new Date(dateField.val());
 			var currentDate = new Date();
+			var minBirthDate = new Date();
+			minBirthDate.setFullYear(currentDate.getFullYear() - 18);
+
 			if (selectedDate > currentDate) {
 				dateField.addClass('error');
 				dateErrorSpan.text('You cannot select a future date').css('color', 'red');
+			} else if (selectedDate > minBirthDate) {
+				dateField.addClass('error');
+				dateErrorSpan.text('You must be at least 18 years old').css('color', 'red');
 			} else {
 				dateField.removeClass('error');
 				dateErrorSpan.text('');
 			}
 		});
 	});
-
-
-
 </script>
 

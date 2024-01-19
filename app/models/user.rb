@@ -17,6 +17,7 @@ class User < ApplicationRecord
   validates :email, format: { with: /(\A([a-z]*\s*)*\<*([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\>*\Z)/i }
   validate :dob_on_or_before_current_date
 
+
   after_create :assign_all_leave_types
   before_validation :set_default_password, on: :create
 
@@ -31,6 +32,9 @@ class User < ApplicationRecord
   def dob_on_or_before_current_date
     if dob.present? && dob > Date.current
       errors.add(:dob, "must be on or before the current date")
+    end
+    if dob.present? && dob > 18.years.ago.to_date
+      errors.add(:dob, "Please enter a valid date of birth. it should be greater then 18 years.")
     end
   end 
 

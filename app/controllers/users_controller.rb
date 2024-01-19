@@ -35,12 +35,7 @@ class UsersController < ApplicationController
 		render json: {emails: @emails}
 	end
 	  
-
-	def show
-		authorize @user 
-	end
 	
-
 	def edit 
 		if @user.dob.present? && @user.dob.is_a?(Date)
 			@user.dob = @user.dob.strftime("%Y-%m-%d")

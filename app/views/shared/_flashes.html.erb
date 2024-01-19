@@ -16,30 +16,25 @@
   	</div>
 <% end %>
 <script>
- 	document.addEventListener("turbo:load", function () {
-    	var closeButtons = document.querySelectorAll(".alert .close");
-      	closeButtons.forEach(function (button) {
-        	button.addEventListener("click", function () {
-				var alert = this.closest(".alert");
-				alert.classList.add("d-none");
-        	});
-  		});
-		
-
-		var successFlash = document.getElementById("success-flash");
-		var dangerFlash = document.getElementById("danger-flash");
-
-		if (successFlash) {
-			setTimeout(function () {
-			successFlash.remove();
-			}, 10000);
-		}
-
-		if (dangerFlash) {
-			setTimeout(function () {
-			dangerFlash.remove();
-			}, 10000);
-		}
+	var closeButtons = document.querySelectorAll(".alert .close");
+	closeButtons.forEach(function (button) {
+		button.addEventListener("click", function () {
+			var alert = this.closest(".alert");
+			alert.classList.add("d-none");
+		});
 	});
+	
+	var successFlash = document.getElementById("success-flash");
+	if (successFlash) {
+		setTimeout(function () {
+			successFlash.remove();
+		}, 10000);
+	}
 
+	var dangerFlash = document.getElementById("danger-flash");
+	if (dangerFlash) {
+		setTimeout(function () {
+		dangerFlash.remove();
+		}, 10000);
+	}
 </script>

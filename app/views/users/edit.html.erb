@@ -30,9 +30,8 @@
 				</div>
 				
 				<div class="form-group col-md-6 mb-2">
-					<%= f.label :email, class: "required-field" %>
-					<%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control",id: "user_email", placeholder: "Enter email",required: true, uniq: true %>
-					<span id="user_email_error"></span>
+					<%= f.label :email %>
+					<p class="field-value"><span class="mx-1"><%= @user.email%></span></p>
 				</div>
 
 				<% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
@@ -41,7 +40,7 @@
 
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :phone %>
-					<%= f.text_field :phone, autofocus: true, autocomplete: "phone",id: "user_phone", class: "form-control", placeholder: "Enter phone no" %>
+					<%= f.text_field :phone, autofocus: true, autocomplete: "phone",id: "user_phone",onkeyup: "phone()", class: "form-control", placeholder: "Enter phone no" %>
 					<span id="user_phone_error"></span>
 				</div>
 				<%if is_admin?%>
@@ -135,62 +134,49 @@
 	}  
 </style>
 <script>
-	document.addEventListener("turbo:load", function () {
+	document.addEventListener("turbo:load", function() {
 		var emails = [];
 		$.ajax({
 			type: "GET",
 			url: "/users/checkemail",
 			dataType: "json",
 			data: { key1: true },
-			success: function (response) {
-				emails = response.emails;
+			success: function(response) {
+				emails = response.emails; 
 			},
-			error: function (jqXHR, textStatus, errorThrown) {
+			error: function(jqXHR, textStatus, errorThrown) {
 				console.error("Error fetching emails:", errorThrown);
 			}
 		});
-		var userEmail = document.getElementById('user_email');
-		var errorEmail = document.getElementById('user_email_error');
-		var emailRegex = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-Z0-9]{2,4}$/;
-		var previousEmailValue = userEmail.value;
 
-		userEmail.addEventListener('input', function () {
-			var emailUser = userEmail.value;
-
-			if (emailUser === previousEmailValue) {
-				if (!emailRegex.test(emailUser)) {
-					userEmail.classList.add('error');
-					errorEmail.textContent = 'Invalid email format';
-					errorEmail.style.color = 'red';
-				}  else {
-					userEmail.classList.remove('error');
-					errorEmail.textContent = '';
-				}
-				return; 
-			} else if (emails.indexOf(emailUser) !== -1) {
-				userEmail.classList.add('error');
-				errorEmail.textContent = 'Email already exists. Please enter another email.';
-				errorEmail.style.color = 'red';
-			 	if (!emailRegex.test(emailUser)) {
-					userEmail.classList.add('error');
-					errorEmail.textContent = 'Invalid email format';
-					errorEmail.style.color = 'red';
+		$("#user_email").on("keyup", function() {
+			var userEmail = $(this).val();
+			if (userEmail !== "") {
+				var emailRegex = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-Z0-9]{2,4}$/;
+				if (!emailRegex.test(userEmail)) {
+					$("#user_email").addClass("error");
+					$("#user_email_error").text("Invalid email format").css("color", "red");
 				} else {
-					userEmail.classList.remove('error');
-					errorEmail.textContent = '';
+					if (emails.indexOf(userEmail) !== -1) {
+						$("#user_email").addClass("error error-border-color");
+						$("#user_email_error").text("Email already exists please enter a another email").css("color", "red", )
+					} else {
+						$("#user_email").removeClass("error");
+						$("#user_email_error").text("");
+					}
 				}
+			} else {
+				$("#user_email").removeClass("error");
+				$("#user_email_error").text("");
 			}
-				previousEmailValue = emailUser;
 		});
-
 	});
-	
-		
-	document.addEventListener("turbo:load", function() {
-		
+
+	function phone() { 
 		var phoneField = document.getElementById('user_phone');
 		var errorSpan = document.getElementById('user_phone_error');
 		var maxPhoneNumberLength = 10;
+		var minPhoneNumberLength = 10;
 
 		phoneField.addEventListener('keyup', function () {
 			var phoneNumber = phoneField.value;
@@ -202,12 +188,16 @@
 				phoneField.classList.add('error');
 				errorSpan.textContent = 'Phone number cannot exceed ' + maxPhoneNumberLength + ' characters';
 				errorSpan.style.color = 'red';
+			} else if (phoneNumber.length < minPhoneNumberLength) {
+				phoneField.classList.add('error');
+				errorSpan.textContent = 'Phone number should be ' + minPhoneNumberLength + ' characters';
+				errorSpan.style.color = 'red';
 			} else {
 				phoneField.classList.remove('error');
 				errorSpan.textContent = '';
 			}
 		});
-	});
+	};
 
 	document.addEventListener("turbo:load", function() {
 		var passwordField = $('#pass');
@@ -219,18 +209,31 @@
 			var confirmation = confirmationField.val();
 			if (password !== "" && confirmation === "") {
 				confirmationField.addClass('error');
-				confirmationErrorSpan.text('Please confirm password').css('color', 'red');
+				confirmationErrorSpan.text('Please enter password to confirm password').css('color', 'red');
 			} else if (confirmation !== "") {
 				if (password !== confirmation) {
 					confirmationField.addClass('error');
 					confirmationErrorSpan.text('Passwords do not match').css('color', 'red');
-				}else {
+				} else {
 					confirmationField.removeClass('error');
 					confirmationErrorSpan.text('');
 				}
 			} else {
 				confirmationField.removeClass('error');
 					confirmationErrorSpan.text('');
+			}
+		});
+
+		confirmationField.on('input', function () {
+			var password = passwordField.val();
+			var confirmation = confirmationField.val();
+
+			if (confirmation !== "" && password !== confirmation) {
+				confirmationField.addClass('error');
+				confirmationErrorSpan.text('Passwords do not match').css('color', 'red');
+			} else {
+				confirmationField.removeClass('error');
+				confirmationErrorSpan.text('');
 			}
 		});
 	});
@@ -242,14 +245,20 @@
 		dateField.on('input', function () {
 			var selectedDate = new Date(dateField.val());
 			var currentDate = new Date();
+			var minBirthDate = new Date();
+			minBirthDate.setFullYear(currentDate.getFullYear() - 18);
+
 			if (selectedDate > currentDate) {
 				dateField.addClass('error');
 				dateErrorSpan.text('You cannot select a future date').css('color', 'red');
+			} else if (selectedDate > minBirthDate) {
+				dateField.addClass('error');
+				dateErrorSpan.text('You must be at least 18 years old').css('color', 'red');
 			} else {
 				dateField.removeClass('error');
 				dateErrorSpan.text('');
 			}
 		});
 	});
-
 </script>
+
