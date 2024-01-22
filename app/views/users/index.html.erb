@@ -74,7 +74,7 @@
 						<td>
 							<%= user.address.present? ?  user.address : "N/A"%>
 						</td>
-						<td>
+						<td class="p-2">
 							<div class="d-flex">
 								<% if is_admin? || is_manager? %>
 									<%= link_to "Edit", edit_user_path(user), method: :get, class: "btn btn-sm btn-primary" %> 
