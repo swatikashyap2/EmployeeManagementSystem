@@ -106,7 +106,6 @@
 	</div>
 </div>
 <script>
-	document.addEventListener("turbo:load", function() {
 		var emails = [];
 		$.ajax({
 			type: "GET",
@@ -142,7 +141,7 @@
 				$("#user_email_error").text("");
 			}
 		});
-	});
+	
 
 	function phone() { 
 		

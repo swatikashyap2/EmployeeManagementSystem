@@ -134,43 +134,43 @@
 	}  
 </style>
 <script>
-	document.addEventListener("turbo:load", function() {
-		var emails = [];
-		$.ajax({
-			type: "GET",
-			url: "/users/checkemail",
-			dataType: "json",
-			data: { key1: true },
-			success: function(response) {
-				emails = response.emails; 
-			},
-			error: function(jqXHR, textStatus, errorThrown) {
-				console.error("Error fetching emails:", errorThrown);
-			}
-		});
+	
+	// var emails = [];
+	// $.ajax({
+	// 	type: "GET",
+	// 	url: "/users/checkemail",
+	// 	dataType: "json",
+	// 	data: { key1: true },
+	// 	success: function(response) {
+	// 		emails = response.emails; 
+	// 	},
+	// 	error: function(jqXHR, textStatus, errorThrown) {
+	// 		console.error("Error fetching emails:", errorThrown);
+	// 	}
+	// });
 
-		$("#user_email").on("keyup", function() {
-			var userEmail = $(this).val();
-			if (userEmail !== "") {
-				var emailRegex = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-Z0-9]{2,4}$/;
-				if (!emailRegex.test(userEmail)) {
-					$("#user_email").addClass("error");
-					$("#user_email_error").text("Invalid email format").css("color", "red");
-				} else {
-					if (emails.indexOf(userEmail) !== -1) {
-						$("#user_email").addClass("error error-border-color");
-						$("#user_email_error").text("Email already exists please enter a another email").css("color", "red", )
-					} else {
-						$("#user_email").removeClass("error");
-						$("#user_email_error").text("");
-					}
-				}
-			} else {
-				$("#user_email").removeClass("error");
-				$("#user_email_error").text("");
-			}
-		});
-	});
+	// $("#user_email").on("keyup", function() {
+	// 	var userEmail = $(this).val();
+	// 	if (userEmail !== "") {
+	// 		var emailRegex = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-Z0-9]{2,4}$/;
+	// 		if (!emailRegex.test(userEmail)) {
+	// 			$("#user_email").addClass("error");
+	// 			$("#user_email_error").text("Invalid email format").css("color", "red");
+	// 		} else {
+	// 			if (emails.indexOf(userEmail) !== -1) {
+	// 				$("#user_email").addClass("error error-border-color");
+	// 				$("#user_email_error").text("Email already exists please enter a another email").css("color", "red", )
+	// 			} else {
+	// 				$("#user_email").removeClass("error");
+	// 				$("#user_email_error").text("");
+	// 			}
+	// 		}
+	// 	} else {
+	// 		$("#user_email").removeClass("error");
+	// 		$("#user_email_error").text("");
+	// 	}
+	// });
+	
 
 	function phone() { 
 		var phoneField = document.getElementById('user_phone');
@@ -200,6 +200,7 @@
 	};
 
 	document.addEventListener("turbo:load", function() {
+		debugger
 		var passwordField = $('#pass');
 		var confirmationField = $('.con_pass');
 		var confirmationErrorSpan = $('#user_pass_error');
