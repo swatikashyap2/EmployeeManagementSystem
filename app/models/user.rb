@@ -7,8 +7,8 @@ class User < ApplicationRecord
   has_many :user_leave_types
   has_many :leave_types, through: :user_leave_types
   has_many :leave_requests
-
   belongs_to :role
+
   validates :first_name, presence: true
   validates :email, presence: true
   validates :role, presence: true
@@ -50,8 +50,8 @@ class User < ApplicationRecord
   private
 
   def assign_all_leave_types
-    LeaveType.all.each do |leave_type|
-      user_leave_types.create(leave_type: leave_type)
+    LeaveType.all.each do |leave|
+      user_leave_types.create(leave_type_id: leave.id, leave_count: leave.count)
     end
   end
 end

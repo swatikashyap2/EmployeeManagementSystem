@@ -21,16 +21,33 @@
 			<div class="row">
 				<div class="form-group col-md-6">
 					<%= f.label :leave_type %>
-					<%= f.select :leave_type_id, options_for_select(LeaveType.all.collect { |leave_type| [leave_type.name, leave_type.id] }), { include_blank: '--Select leave--' }, { class: "form-control", required: true } %>
+					<%= f.select :user_leave_type_id, options_for_select(@user_leave_types), { include_blank: '--Select leave--' }, { class: "form-control", required: true, id: "user_leave_type_id" } %>
+					<div id="show_count" class="text-success"></div>
 				</div>
 				<div class="form-group col-md-6">
-					<%= f.label :selected_from %>
-					<%= f.date_field :selected_from,  autocomplete: "select_from", class: "form-control", placeholder: "choose starting date", required: true %>
+					<%= f.label :day_type %>
+					<%= f.select :day_type,options_for_select(["half day", "full day"]),{include_blank: "choose day type"}, {class: "form-control", id: "day_type" } %>
+				</div>
+				
+				<div class="form-group col-md-6">
+					<%= f.label :leave_from %>
+					<%= f.date_field :leave_from,  autocomplete: "select_from", class: "form-control", placeholder: "choose starting date"%>
 				</div>
 
-                <div class="form-group col-md-6">
-					<%= f.label :selected_to %>
-					<%= f.date_field :selected_to,  autocomplete: "select_to", class: "form-control", placeholder: "choose end date", required: true %>
+				 <div class="form-group col-md-6 ">
+					<%= f.label :leave_to %>
+					<%= f.date_field :leave_to,  autocomplete: "select_to", class: "form-control", placeholder: "choose end date" %>
+				</div>
+
+				<div class="form-group col-md-6 d-none" id="time_field_from">
+					<%= f.label :time_from %>
+					<%= f.time_field :time_from,  autocomplete: "select_from", class: "form-control", placeholder: "choose time" %>
+				</div>
+
+
+				<div class="form-group col-md-6 d-none" id="time_field_to">
+					<%= f.label :time_to %>
+					<%= f.time_field :time_to,  autocomplete: "select_from", class: "form-control", placeholder: "choose time" %>
 				</div>
                  
 				<div class="form-group mt-2">
@@ -41,3 +58,47 @@
 		<%end%>
 	</div>
 </div>
+<script>
+	var selectedItem = [];
+	document.getElementById('user_leave_type_id').addEventListener('change', function() {
+		var selectedLeaveTypeId = this.value;
+
+		$.ajax({
+			type: "GET",
+			url: '/user_leave_types/' + selectedLeaveTypeId,
+			dataType: 'json',
+			data: { id: selectedLeaveTypeId },
+			success: function(response) {
+				$('#show_count').html('Leave Count: ' + response.leave_counts);
+			},
+			error: function() {
+				console.error('Error fetching leave count.');
+			}
+		});
+
+		let leaveTypeName = $("#user_leave_type_id option:selected").text();
+		let dayType = $("#day_type option:selected").text();
+
+		if (leaveTypeName === 'Short Leave') {
+			$('#day_type').prop('disabled', true);
+		} else {
+			$('#day_type').prop('disabled', false);
+		}
+	});
+
+	document.getElementById('day_type').addEventListener('change', function() {
+		let dayType = $("#day_type option:selected").text();
+		if (dayType === 'half day') {
+			$("#time_field_from").removeClass('d-none');
+			$("#time_field_to").removeClass('d-none');
+		} else if ( dayType === 'half day') {
+			$("#time_field_from").removeClass('d-none');
+			$("#time_field_to").removeClass('d-none');
+		} else {
+			$("#time_field_from").addClass('d-none');
+			$("#time_field_to").addClass('d-none');
+		}
+	});
+	
+</script>
+

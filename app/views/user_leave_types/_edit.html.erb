@@ -8,10 +8,10 @@
 						<div class="col">
 							<%= form_for @user, url: user_leave_type_path(@user) do |f| %>
 								<% @user_leave_types.each do |user_leave_type| %>
-									<%= fields_for "user_leave_types[]", user_leave_type do |leave_type_form| %>
+									<%= fields_for "user_leave_types[#{user_leave_type.leave_type_id}]", user_leave_type do |leave_type_form| %>
 									<div>
-										<%= leave_type_form.label :leave_type_name, user_leave_type.name %>
-										<%= leave_type_form.text_field :count, value: user_leave_type.count, class: "form-control" %>
+										<%= leave_type_form.label :leave_type_name, user_leave_type.leave_type.name %>
+										<%= leave_type_form.text_field :leave_count, value: user_leave_type.leave_count, class: "form-control" %>
 									</div>
 									<% end %>
 								<% end %>
