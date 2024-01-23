@@ -6,8 +6,8 @@
 					<div>
 						<ol class="breadcrumb float-sm-right">
 							<li class="breadcrumb-item"><%= link_to "Dashboard", home_index_path %></li>
-							<li class="breadcrumb-item"><%= link_to "Leaves", holidays_path %></li>
-							<li class="breadcrumb-item active">Add Leave</li>
+							<li class="breadcrumb-item"><%= link_to "Leaves", leave_types_path %></li>
+							<li class="breadcrumb-item active">Add Leave_type</li>
 						</ol>
 					</div>
 				</div>
@@ -17,15 +17,15 @@
 </div>
 <div class="card">
 	<div class="card-body">
-		<%= form_for @holiday do |f| %>
+		<%= form_for @leave_type do |f| %>
 			<div class="row">
 				<div class="form-group col-md-6">
 					<%= f.label :name, class: "required-field" %>
 					<%= f.text_field :name, class: "form-control", placeholder: "Enter name of holiday", required: true %>
 				</div>
 				<div class="form-group col-md-6">
-					<%= f.label :no_of_holidays, class: "required-field" %>
-					<%= f.text_field :no_of_holidays,  autocomplete: "no of holidays", class: "form-control", placeholder: "Enter no of leaves", required: true %>
+					<%= f.label :count, class: "required-field" %>
+					<%= f.text_field :count,  autocomplete: "no of holidays", class: "form-control", placeholder: "Enter no of leaves", required: true %>
 				</div>
 				<div class="form-group mt-2">
 					<%= f.submit "save", class: "btn btn-sm btn-primary" %>
@@ -35,4 +35,3 @@
 		<%end%>
 	</div>
 </div>
-

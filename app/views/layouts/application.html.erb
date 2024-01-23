@@ -5,10 +5,8 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-    <%# <%= javascript_include_tag "turbo", type: "module" %> 
-    <script src="/assets/jquery.min.js"></script>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_importmap_tags %>
   </head>
 
   <body class="hold-transition skin-blue sidebar-mini">
@@ -26,10 +24,5 @@
       <%= render "base/footer" %>
       <%# <%= render "base/control_sidebar"%> 
     </div>
-    <script src="plugins/jquery/jquery.min.js"></script>
-  
-    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
- 
-    <script src="dist/js/adminlte.min.js"></script>
   </body>
 </html>

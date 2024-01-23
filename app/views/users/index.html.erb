@@ -34,7 +34,9 @@
 				<th>Gender</th>
 				<th>Zip Code</th>
 				<th>Address</th>
-				<th>Actions</th>
+				<% if is_admin? || is_manager? %>
+					<th>Actions</th>
+				<%end%>
 			</thead>
 			<tbody>
 				<% @users.each do|user|%>
@@ -49,7 +51,7 @@
 							<%= user.email.present? ?  user.email : "N/A"%>
 						</td>
 						<td>
-							<%= user.designation.present? ?  user.designation : "N/A"%>
+							<%= user.designation.present? ?  user.designation.titleize : "N/A"%>
 						</td>
 						<td>
 							<%= user.phone.present? ?  user.phone : "N/A"%>
@@ -58,13 +60,13 @@
 							<%= user.employee_code.present? ?  user.employee_code : "N/A"%>
 						</td>
 						<td>
-							<%= user.dob.present? ?  user.dob : "N/A"%>
+							<%= user.dob.present? ? user.dob.strftime("%B %d, %Y") : 'N/A' %>			
 						</td>
 						<td>
 							<%= user.role.name.present? ?  user.role.name.titleize : "N/A"%>
 						</td>
 						<td>
-							<%= user.gender.present? ?  user.gender : "N/A"%>
+							<%= user.gender.present? ?  user.gender.titleize : "N/A"%>
 						</td>
 						<td>
 							<%= user.zip_code.present? ?  user.zip_code : "N/A"%>
@@ -72,11 +74,18 @@
 						<td>
 							<%= user.address.present? ?  user.address : "N/A"%>
 						</td>
-						<td>
+						<td class="p-2">
 							<div class="d-flex">
-							 		<%= button_to "Edit", edit_user_path(user), method: :get, class: "btn btn-sm btn-primary" %> 
+								<% if is_admin? || is_manager? %>
+									<%= link_to "Edit", edit_user_path(user), method: :get, class: "btn btn-sm btn-primary" %> 
+								<%end%>
 								<%if is_admin?%>	
-									<%= button_to "Delete", user_path(user),method: :delete, form: { data: { turbo_confirm: 'Are you sure?' } }, class: "btn btn-sm btn-danger mx-1" %> 	
+									<% if current_user != user %>
+										<%= link_to "Delete", user_path(user), data: { turbo_method: :delete, turbo_confirm: "Are you sure?"}, class: "btn btn-sm btn-danger mx-1" %> 
+									<%end%>	
+									<%= link_to "Edit Leave", edit_user_leave_type_path(user), {remote: true, "data-bs-toggle": "modal", "data-bs-target": "#ppc_manager_modal", class: "btn btn-primary"} %>
+
+
 								<%end%>
 							</div>
 						</td>
@@ -91,6 +100,7 @@
 		<%end%>
 	</div>
 </div>
+<div id="ppc_manager"></div>
 
 
 

@@ -5,4 +5,9 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-roles = Role.create([{name: "admin"},{name: "manager"}, {name: "employee"}])
+Role.create([{name: "admin"},{name: "manager"}, {name: "employee"}])
+
+LeaveType.create([{name: "Earned Leave", count: 12}, {name: "Medical Leave", count: 4}, {name: "Compensatory Leave", count: 0},{name: "Short Leave", count: 0},{name: "Maternity Leave", count: 0},{name: "Paternity Leave", count: 0},{name: "Other Leave", count: 0} ])
+
+
+
