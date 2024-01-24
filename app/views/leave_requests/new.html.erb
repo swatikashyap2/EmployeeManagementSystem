@@ -6,7 +6,7 @@
 					<div>
 						<ol class="breadcrumb float-sm-right">
 							<li class="breadcrumb-item"><%= link_to "Dashboard", home_index_path %></li>
-							<li class="breadcrumb-item"><%= link_to "Assigned Leaves", leave_requests_path %></li>
+							<li class="breadcrumb-item"><%= link_to "Leave Requested", leave_requests_path %></li>
 							<li class="breadcrumb-item active">Apply Leave</li>
 						</ol>
 					</div>
@@ -20,23 +20,25 @@
 		<%= form_for @leave_request do |f| %>
 			<div class="row">
 				<div class="form-group col-md-6">
-					<%= f.label :leave_type %>
-					<%= f.select :user_leave_type_id, options_for_select(@user_leave_types), { include_blank: '--Select leave--' }, { class: "form-control", required: true, id: "user_leave_type_id" } %>
+					<%= f.label :leave_type, class: "required-field" %>
+					<%= f.select :user_leave_type_id, options_for_select(@user_leave_types), { include_blank: '--Select leave--' }, { class: "form-control",  id: "user_leave_type_id" } %>
 					<div id="show_count" class="text-success"></div>
 				</div>
 				<div class="form-group col-md-6">
 					<%= f.label :day_type %>
-					<%= f.select :day_type,options_for_select(["half day", "full day"]),{include_blank: "choose day type"}, {class: "form-control", id: "day_type" } %>
+					<%= f.select :day_type,options_for_select(["half day", "full day"]),{include_blank: "choose day type"}, {class: "form-control", id: "day_type", required: true} %>
 				</div>
 				
 				<div class="form-group col-md-6">
-					<%= f.label :leave_from %>
-					<%= f.date_field :leave_from,  autocomplete: "select_from", class: "form-control", placeholder: "choose starting date"%>
+					<%= f.label :leave_from, class: "required-field"%>
+					<%= f.date_field :leave_from,  autocomplete: "select_from", class: "form-control",id: "date_type1", placeholder: "choose starting date", required: true%>
+					<div id="date_error1"></div>
 				</div>
 
 				 <div class="form-group col-md-6 ">
 					<%= f.label :leave_to %>
-					<%= f.date_field :leave_to,  autocomplete: "select_to", class: "form-control", placeholder: "choose end date" %>
+					<%= f.date_field :leave_to,  autocomplete: "select_to", class: "form-control",id: "date_type2", placeholder: "choose end date" %>
+					<div id="date_error2"></div>
 				</div>
 
 				<div class="form-group col-md-6 d-none" id="time_field_from">
@@ -49,6 +51,8 @@
 					<%= f.label :time_to %>
 					<%= f.time_field :time_to,  autocomplete: "select_from", class: "form-control", placeholder: "choose time" %>
 				</div>
+				
+				<%= f.hidden_field :user_id, :value => current_user.id %>
                  
 				<div class="form-group mt-2">
 					<%= f.submit "save", class: "btn btn-sm btn-primary" %>
@@ -59,17 +63,20 @@
 	</div>
 </div>
 <script>
-	var selectedItem = [];
+	var leaveCount= 0;
+	let dayType = "";
+	let firstDate;
+	let secondDate;
 	document.getElementById('user_leave_type_id').addEventListener('change', function() {
 		var selectedLeaveTypeId = this.value;
-
 		$.ajax({
 			type: "GET",
 			url: '/user_leave_types/' + selectedLeaveTypeId,
 			dataType: 'json',
 			data: { id: selectedLeaveTypeId },
 			success: function(response) {
-				$('#show_count').html('Leave Count: ' + response.leave_counts);
+				leaveCount = response.leave_count;
+				$('#show_count').html('Your balance leave is: ' + leaveCount);
 			},
 			error: function() {
 				console.error('Error fetching leave count.');
@@ -77,28 +84,66 @@
 		});
 
 		let leaveTypeName = $("#user_leave_type_id option:selected").text();
-		let dayType = $("#day_type option:selected").text();
-
 		if (leaveTypeName === 'Short Leave') {
 			$('#day_type').prop('disabled', true);
+			$("#time_field_from, #time_field_to").removeClass('d-none');
 		} else {
 			$('#day_type').prop('disabled', false);
+			$("#time_field_from, #time_field_to").addClass('d-none');
 		}
 	});
 
 	document.getElementById('day_type').addEventListener('change', function() {
-		let dayType = $("#day_type option:selected").text();
+		dayType = $("#day_type option:selected").text();
 		if (dayType === 'half day') {
-			$("#time_field_from").removeClass('d-none');
-			$("#time_field_to").removeClass('d-none');
-		} else if ( dayType === 'half day') {
-			$("#time_field_from").removeClass('d-none');
-			$("#time_field_to").removeClass('d-none');
+			$('#show_count').html('Your balance leaves is: ' + (leaveCount - 0.5));
+			$("#time_field_from, #time_field_to").removeClass('d-none');
+			$("#date_type2").prop('disabled', true); 
 		} else {
-			$("#time_field_from").addClass('d-none');
-			$("#time_field_to").addClass('d-none');
+			$('#show_count').html('Your balance leaves is: ' + (leaveCount));
+			$("#time_field_from, #time_field_to").addClass('d-none');
+			$("#date_type2").prop('disabled', false);
 		}
 	});
-	
-</script>
 
+	document.getElementById('date_type1').addEventListener('change', function() {
+		let dateType1 = $("#date_type1").val();
+		if (dateType1 !== ""){
+			firstDate = new Date(dateType1);
+		}
+	});
+	document.getElementById('date_type2').addEventListener('change', function() {
+		let dateType2 = $("#date_type2").val();
+		if (dateType2 !== ""){
+			secondDate = new Date(dateType2);
+		}
+		let days = secondDate.getTime() - firstDate.getTime();
+		days = Math.floor(days / (1000 * 60 * 60 * 24));
+		if (days != "" && leaveCount > days){
+			$('#show_count').html('Your balance leaves is: ' + (leaveCount - days));
+		}else if (leaveCount < days){
+			$('#show_count').html('Your balance leaves is: 0');
+		}
+	});		
+
+	document.addEventListener("turbo:load", function() {
+		var dateField = $('#date_type2, #date_type1');
+		var dateError = $('#date_error2, #date_error1');
+
+		dateField.on('input', function () {
+			var selectedDate = new Date(dateField.val());
+			var currentDate = new Date();
+
+			if (selectedDate < currentDate) {
+				dateField.addClass('error');
+				dateError.text('You can only select the current or future date').css('color', 'red');
+			} else {
+				dateField.removeClass('error');
+				dateError.text('');
+			}
+		});
+	});
+
+
+
+</script>

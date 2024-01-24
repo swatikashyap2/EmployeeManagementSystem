@@ -8,7 +8,6 @@ class UserLeaveTypesController < ApplicationController
         end
       end
       
-
       def update
         @user = User.find(params[:id])
         user_leave_types_params = params[:user_leave_types]
@@ -29,15 +28,11 @@ class UserLeaveTypesController < ApplicationController
       end
 
       def show
-        @user_leave_type_counts = UserLeaveType.find_by(id: params[:id]).leave_count
+        @user_leave_type_count = UserLeaveType.find_by(id: params[:id]).leave_count
         
-        render json: { leave_counts: @user_leave_type_counts }
+        render json: { leave_count: @user_leave_type_count }
       end
-      
-      
-      
-      
-      
+
     private
         def user_leave_type_params
             params.require(:user_leave_types).permit(:leave_count)

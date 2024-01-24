@@ -16,7 +16,13 @@ Rails.application.routes.draw do
   resources :roles
   resources :leave_types
   resources :user_leave_types
-  resources :leave_requests
+  resources :leave_requests do
+    member do
+      post  :leave_approve
+      post  :leave_reject
+    end
+  end
+
   resources :teams
   resources :policies
   # namespace :admin do
