@@ -15,18 +15,18 @@ class LeaveTypePolicy < ApplicationPolicy
   end
 
   def create?
-        false
+    false
   end
 
   def edit?
-        false
+    false
   end
 
   def update?
-       false
+    false
   end
 
   def destroy?
-       false
+    false
   end
 end

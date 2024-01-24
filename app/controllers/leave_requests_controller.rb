@@ -1,6 +1,6 @@
 class LeaveRequestsController < ApplicationController
     before_action :set_user_leave_types, only: %i[new]
-    before_action :set_leave_request, only: %i[leave_approve leave_reject]
+
     def index
         if is_admin?
             @leave_requests = LeaveRequest.order(created_at: :desc)
@@ -9,18 +9,21 @@ class LeaveRequestsController < ApplicationController
         else
             @leave_requests = current_user.leave_requests.order(created_at: :desc)
         end 
+		authorize @leave_requests
     end
 
     def new
         @leave_request = LeaveRequest.new()
+		authorize @leave_request
     end
 
     def create
-        @leave_requests = LeaveRequest.new(leave_request_params)
-        if @leave_requests.save!
+        @leave_request = LeaveRequest.new(leave_request_params)
+		
+        if @leave_request.save
             redirect_to leave_requests_path, notice: "Request Created Successfully."
         else
-            redirect_to new_leave_request_path
+            redirect_to new_leave_request_path, error:  @leave_request.errors.full_messages
         end
     end
 
@@ -43,13 +46,13 @@ class LeaveRequestsController < ApplicationController
                 @user_leave_type.update(leave_count: leave_count - no_of_days)
             end
         end
-        redirect_to leave_requests_path
+        redirect_to leave_requests_path,notice: "Leave Approved Successfully."
     end
 
     def leave_reject
         @leave_requests = LeaveRequest.find(params[:id])
         @leave_requests.update(approve: false)
-        redirect_to leave_requests_path
+        redirect_to leave_requests_path,notice: "Leave rejected."
     end
 
     private
@@ -57,9 +60,7 @@ class LeaveRequestsController < ApplicationController
         def set_user_leave_types
             @user_leave_types = current_user.user_leave_types.includes(:leave_type).collect{|user_leave_type|[user_leave_type.leave_type.name, user_leave_type.id] if user_leave_type.leave_count > 0 }.compact  
         end
-        def set_leave_request
 
-        end
         def leave_request_params
             params.require(:leave_request).permit(:user_leave_type_id, :leave_from, :leave_to, :time_from, :time_to, :user_id, :day_type, :reporting_manager_id)
         end

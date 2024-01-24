@@ -3,6 +3,7 @@ class UserLeaveTypesController < ApplicationController
     def edit
         @user = User.find(params[:id])
         @user_leave_types = @user.user_leave_types.order(created_at: :asc)
+        authorize @user_leave_types
         respond_to do |format|
           format.js
         end
@@ -29,7 +30,6 @@ class UserLeaveTypesController < ApplicationController
 
       def show
         @user_leave_type_count = UserLeaveType.find_by(id: params[:id]).leave_count
-        
         render json: { leave_count: @user_leave_type_count }
       end
 
