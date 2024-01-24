@@ -55,7 +55,7 @@
 				<%= f.hidden_field :user_id, :value => current_user.id %>
                  
 				<div class="form-group mt-2">
-					<%= f.submit "save", class: "btn btn-sm btn-primary" %>
+					<%= f.submit "Send Request", class: "btn btn-sm btn-primary send-request" %>
 				</div>
 				</div>
 			</div>
@@ -127,19 +127,36 @@
 	});		
 
 	document.addEventListener("turbo:load", function() {
-		var dateField = $('#date_type2, #date_type1');
-		var dateError = $('#date_error2, #date_error1');
+		let dateField1 = $('#date_type1');
+		let dateField2 = $('#date_type2');
+		let dateError1 = $('#date_error1');
+		let dateError2 = $('#date_error2');
 
-		dateField.on('input', function () {
-			var selectedDate = new Date(dateField.val());
-			var currentDate = new Date();
-
+		dateField1.on('input', function () {
+			let selectedDate = new Date(dateField1.val());
+			let currentDate = new Date();
 			if (selectedDate < currentDate) {
-				dateField.addClass('error');
-				dateError.text('You can only select the current or future date').css('color', 'red');
+				dateField1.addClass('error');
+				dateError1.text('You can only select the current or future date').css('color', 'red');
+				$('.send-request')[0].disabled = true;
 			} else {
-				dateField.removeClass('error');
-				dateError.text('');
+				dateField1.removeClass('error');
+				dateError1.text('');
+				$('.send-request')[0].disabled = false;
+			}
+		});
+
+		dateField2.on('input', function () {
+			let selectedDate = new Date(dateField2.val());
+			let currentDate = new Date();
+			if (selectedDate < currentDate) {
+				dateField2.addClass('error');
+				dateError2.text('You can only select the current or future date').css('color', 'red');
+				$('.send-request')[0].disabled = true;
+			} else {
+				dateField2.removeClass('error');
+				dateError2.text('');
+				$('.send-request')[0].disabled = false;
 			}
 		});
 	});
