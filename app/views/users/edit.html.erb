@@ -22,11 +22,11 @@
 			<div class="row">
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :first_name, class: "required-field" %>
-					<%= f.text_field :first_name,  autocomplete: "first_name", class: "form-control", placeholder: "Enter first name", required: true %>
+					<%= f.text_field :first_name,  autocomplete: "first_name", class: "form-control", placeholder: "Enter First Name", required: true %>
 				</div>
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :last_name %>
-					<%= f.text_field :last_name,  autocomplete: "last_name", class: "form-control", placeholder: "Enter last name" %>
+					<%= f.text_field :last_name,  autocomplete: "last_name", class: "form-control", placeholder: "Enter Last Name" %>
 				</div>
 				
 				<div class="form-group col-md-6 mb-2">
@@ -40,13 +40,13 @@
 
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :phone %>
-					<%= f.text_field :phone, autofocus: true, autocomplete: "phone",id: "user_phone",onkeyup: "phone()", class: "form-control", placeholder: "Enter phone no" %>
+					<%= f.text_field :phone, autofocus: true, autocomplete: "phone",id: "user_phone",onkeyup: "phone()", class: "form-control", placeholder: "Enter Phone No" %>
 					<span id="user_phone_error"></span>
 				</div>
 				<%if is_admin?%>
 					<div class="form-group col-md-6 mb-2">
 						<%= f.label :employee_code, class: "required-field" %>
-						<%= f.text_field :employee_code, autofocus: true, autocomplete: "employee_code",  class: "form-control", placeholder: "Enter employee code", required: true %>
+						<%= f.text_field :employee_code, autofocus: true, autocomplete: "employee_code",  class: "form-control", placeholder: "Enter Employee Code", required: true %>
 					</div>
 				<%else%>
 					<div class="form-group col-md-6 mb-2">
@@ -56,7 +56,7 @@
 				<%end%>
 				<div class="col-md-6 field mb-2">
 					<%= f.label :dob %>
-					<%= f.date_field :dob, autofocus: true, autocomplete: "dob", id:"date_valid", class: "form-control datepicker", placeholder: "Enter date of birth"  %>
+					<%= f.date_field :dob, autofocus: true, autocomplete: "dob", id:"date_valid", class: "form-control datepicker", placeholder: "Enter Date Of Birth"  %>
 					<span id="user_date_error"></span>
 				</div>
 				<% if is_admin?%>
@@ -85,27 +85,37 @@
 				<%else%>
 					<div class="form-group col-md-6 mb-2">
 						<%= f.label :designation %>
-						<%= f.select :designation, User.designations.keys.map { |d| [d.humanize, d] },{include_blank: "Select Designation"},{class: "form-control" }%>
+						<%= f.select :designation, User.designations.keys.map { |d| [d.humanize, d] },{include_blank: "--Select Designation--"},{class: "form-control" }%>
 					</div>
 				<%end%>
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :gender %>
-					<%= f.select :gender, User.genders.keys.map { |g| [g.humanize, g] }, {nclude_blank: "Select Gender"},{class: "form-control"}%>
+					<%= f.select :gender, User.genders.keys.map { |g| [g.humanize, g] }, {nclude_blank: "--Select Gender--"},{class: "form-control"}%>
 				</div>
 				
 				<div class=" col-md-6 field mb-2">
 					<%= f.label :zip_code %>
-					<%= f.text_field :zip_code, autofocus: true, autocomplete: "zip_code", class: "form-control", placeholder: "Enter zip-code"   %>
+					<%= f.text_field :zip_code, autofocus: true, autocomplete: "zip_code", class: "form-control", placeholder: "Enter Zip-Code"   %>
 				</div>
 
 				<div class="field mb-2">
 					<%= f.label :address %>
-					<%= f.text_area :address, autofocus: true, autocomplete: "address", class: "form-control", placeholder: "Enter address" %>
+					<%= f.text_area :address, autofocus: true, autocomplete: "address", class: "form-control", placeholder: "Enter Address" %>
 				</div>
-
+				<div class="field mt-2">
+					<%= f.submit "Update", class: "btn btn-sm btn-primary" %>
+				</div>	
+			</div>
+		<%end%>
+	</div>
+</div>
+<div class="card">
+	<div class="card-body">
+		<%= form_for @user do|f|%>
+			<div class="row">
 				<div class="field mb-2">
 					<%= f.label :password %> <i>(leave blank if you don't want to change it)</i>
-					<%= f.password_field :password, autocomplete: "new-password",id: "pass", class: "form-control", placeholder: "Create password" %>
+					<%= f.password_field :password, autocomplete: "new-password",id: "pass", class: "form-control", placeholder: "Create Password" %>
 					<% if @minimum_password_length %>
 						
 						<em><%= @minimum_password_length %> characters minimum</em>
@@ -114,14 +124,14 @@
 
 				<div class="field mb-2">
 					<%= f.label :password_confirmation %><i>(please confirm your password)</i>
-					<%= f.password_field :password_confirmation, autocomplete: "new-password",  class: " con_pass form-control", placeholder: "Confirm password"%>
+					<%= f.password_field :password_confirmation, autocomplete: "new-password",  class: " con_pass form-control", placeholder: "Confirm Password"%>
 					<span id="user_pass_error"></span>
 				</div>
 				<div class="field mt-2">
-					<%= f.submit "Update", class: "btn btn-sm btn-primary" %>
+					<%= f.submit "Update", class: "btn btn-sm btn-primary send-request" %>
 				</div>	
 			</div>
-		<% end %>
+		<% end %>	
 	</div>
 </div>
 <style>
@@ -180,21 +190,31 @@
 
 		phoneField.addEventListener('keyup', function () {
 			var phoneNumber = phoneField.value;
-			if (/[^0-9]/.test(phoneNumber)) {
-				phoneField.classList.add('error');
-				errorSpan.textContent = 'Phone number must contain only numeric characters';
-				errorSpan.style.color = 'red';
-			} else if (phoneNumber.length > maxPhoneNumberLength) {
-				phoneField.classList.add('error');
-				errorSpan.textContent = 'Phone number cannot exceed ' + maxPhoneNumberLength + ' characters';
-				errorSpan.style.color = 'red';
-			} else if (phoneNumber.length < minPhoneNumberLength) {
-				phoneField.classList.add('error');
-				errorSpan.textContent = 'Phone number should be ' + minPhoneNumberLength + ' characters';
-				errorSpan.style.color = 'red';
-			} else {
+			if(phoneNumber != ""){
+				if (/[^0-9]/.test(phoneNumber)) {
+					phoneField.classList.add('error');
+					errorSpan.textContent = 'Phone number must contain only numeric characters';
+					errorSpan.style.color = 'red';
+					$('.send-request')[0].disabled = true;
+				} else if (phoneNumber.length > maxPhoneNumberLength) {
+					phoneField.classList.add('error');
+					errorSpan.textContent = 'Phone number cannot exceed ' + maxPhoneNumberLength + ' characters';
+					$('.send-request')[0].disabled = true;
+					errorSpan.style.color = 'red';
+				} else if (phoneNumber.length < minPhoneNumberLength) {
+					phoneField.classList.add('error');
+					errorSpan.textContent = 'Phone number should be ' + minPhoneNumberLength + ' characters';
+					errorSpan.style.color = 'red';
+					$('.send-request')[0].disabled = true;
+				} else {
+					phoneField.classList.remove('error');
+					errorSpan.textContent = '';
+					$('.send-request')[0].disabled = false;
+				}
+			}else{
 				phoneField.classList.remove('error');
 				errorSpan.textContent = '';
+				$('.send-request')[0].disabled = false;
 			}
 		});
 	};
@@ -210,17 +230,21 @@
 			if (password !== "" && confirmation === "") {
 				confirmationField.addClass('error');
 				confirmationErrorSpan.text('Please enter password to confirm password').css('color', 'red');
+				$('.send-request')[0].disabled = true;
 			} else if (confirmation !== "") {
 				if (password !== confirmation) {
 					confirmationField.addClass('error');
 					confirmationErrorSpan.text('Passwords do not match').css('color', 'red');
+					$('.send-request')[0].disabled = true;
 				} else {
 					confirmationField.removeClass('error');
 					confirmationErrorSpan.text('');
+					$('.send-request')[0].disabled = false;
 				}
 			} else {
 				confirmationField.removeClass('error');
 					confirmationErrorSpan.text('');
+					$('.send-request')[0].disabled = false;
 			}
 		});
 
@@ -231,9 +255,11 @@
 			if (confirmation !== "" && password !== confirmation) {
 				confirmationField.addClass('error');
 				confirmationErrorSpan.text('Passwords do not match').css('color', 'red');
+				$('.send-request')[0].disabled = true;
 			} else {
 				confirmationField.removeClass('error');
 				confirmationErrorSpan.text('');
+				$('.send-request')[0].disabled = false;
 			}
 		});
 	});
@@ -251,12 +277,15 @@
 			if (selectedDate > currentDate) {
 				dateField.addClass('error');
 				dateErrorSpan.text('You cannot select a future date').css('color', 'red');
+				$('.send-request')[0].disabled = true;
 			} else if (selectedDate > minBirthDate) {
 				dateField.addClass('error');
 				dateErrorSpan.text('You must be at least 18 years old').css('color', 'red');
+				$('.send-request')[0].disabled = true;
 			} else {
 				dateField.removeClass('error');
 				dateErrorSpan.text('');
+				$('.send-request')[0].disabled = false;
 			}
 		});
 	});

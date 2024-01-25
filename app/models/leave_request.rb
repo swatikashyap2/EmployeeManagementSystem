@@ -7,8 +7,11 @@ class LeaveRequest < ApplicationRecord
 
     validates :user_leave_type_id, presence: true
     validates :leave_from, presence: true
+    validates :description, presence: true
     validate :leave_from_before_current_date
     validate :leave_to_before_current_date
+
+    enum :day_type, {half_day: "half_day", full_day: "full_day"}
 
     def set_default_values
       self.reporting_manager_id = User.admin.first.id

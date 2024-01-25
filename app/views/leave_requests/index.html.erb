@@ -11,7 +11,7 @@
 					</div>
                     <div>
 						<% if is_manager? || is_employee?%>
-							<%= button_to "Apply Leaves",new_leave_request_path, method: :get, class: "btn btn-sm btn-primary"%>
+							<%= button_to "Apply Leave",new_leave_request_path, method: :get, class: "btn btn-sm btn-primary"%>
 						<%end%>
 					</div>
 				</div>
@@ -28,49 +28,61 @@
 				<%end%>
 				<th>Leaves</th>
 				<th>Reporting Manager</th>
+				<th>Day Type</th>
                 <th>Leave From</th>
 				<th>Leave To</th>
-				<th>status</th>
+				<th>Status</th>
 			</thead>
 			<tbody>
-				<% @leave_requests.each do|leave_request|%>
-					<tr>
-						<% if is_admin?%>
-							<td>
-								<%= leave_request.user.first_name%>
-							</td>
-						<%end%>
-						<td>
-							<%= leave_request.user_leave_type.leave_type.name%>
-						</td>
-						 <td>
-							<%= leave_request.reporting_manager.first_name %>
-						</td>
-                        <td>
-							<%= leave_request.leave_from%>
-						</td>
-						 <td>
-							<%= leave_request.leave_to%>
-						</td>
-						 <td>
+				<% if @leave_requests.present?%>
+					<% @leave_requests.each do|leave_request|%>
+						<tr>
 							<% if is_admin?%>
-								<% if leave_request.approve.eql?(nil)%>
-									<%= link_to "Approve", leave_approve_leave_request_path(leave_request), method: :post, class: "btn btn-success"%>
-									<%= link_to "Reject", leave_reject_leave_request_path(leave_request),method: :post, class: "btn btn-danger"%>
-								<% elsif leave_request.approve.eql?(true)%>
-									<span class="text-success">Approved!</span>
-								<%elsif leave_request.approve.eql?(false)%>
-									<span class="text-danger">Rejected!</span>
-								<%end%>
-							<% elsif is_manager? || is_employee?%>
-								<% if leave_request.approve.eql?(nil)%>
-									<span class="text-warning">Pending!</span>
-								<% elsif leave_request.approve.eql?(true)%>
-									<span class="text-success">Approved!</span>
-								<%elsif leave_request.approve.eql?(false)%>
-									<span class="text-danger">Rejected!</span>
-								<%end%>
+								<td>
+									<%= leave_request.user.first_name.present? ? leave_request.user.first_name.titleize : "N/A"%>
+								</td>
 							<%end%>
+							<td>
+								<%= leave_request.user_leave_type.leave_type.name.present? ? leave_request.user_leave_type.leave_type.name.titleize : "N/A"%>
+							</td>
+							<td>
+								<%= leave_request.reporting_manager.first_name.present? ? leave_request.reporting_manager.first_name.titleize : "N/A" %>
+							</td>
+							<td>
+								<%= leave_request.day_type.present? ? leave_request.day_type.titleize : "N/A"%>
+							</td>
+							<td>
+								<%= leave_request.leave_from.present? ? leave_request.leave_from : "N/A"%>
+							</td>
+							<td>
+								<%= leave_request.leave_to.present? ? leave_request.leave_to : "N/A"%>
+							</td>
+							<td>
+								<% if is_admin?%>
+									<% if leave_request.approve.eql?(nil)%>
+										<%= link_to "Approve", leave_approve_leave_request_path(leave_request), method: :post, class: "btn btn-success"%>
+										<%= link_to "Reject", leave_reject_leave_request_path(leave_request),method: :post, class: "btn btn-danger"%>
+									<% elsif leave_request.approve.eql?(true)%>
+										<span class="text-success">Approved!</span>
+									<%elsif leave_request.approve.eql?(false)%>
+										<span class="text-danger">Rejected!</span>
+									<%end%>
+								<% elsif is_manager? || is_employee?%>
+									<% if leave_request.approve.eql?(nil)%>
+										<span class="text-warning">Pending!</span>
+									<% elsif leave_request.approve.eql?(true)%>
+										<span class="text-success">Approved!</span>
+									<%elsif leave_request.approve.eql?(false)%>
+										<span class="text-danger">Rejected!</span>
+									<%end%>
+								<%end%>
+							</td>
+						</tr>
+					<%end%>
+				<%else%>
+					<tr>
+						<td colspan="12" class="text-center border-0">
+							<h2 class="mt-3">Record Not Found</h2>
 						</td>
 					</tr>
 				<%end%>

@@ -25,38 +25,45 @@
 				<div class="form-group col-md-6">
 					<%= f.label :leave_type, class: "required-field" %>
 					<%= f.select :user_leave_type_id, options_for_select(@user_leave_types), { include_blank: '--Select leave--' }, { class: "form-control",  id: "user_leave_type_id", required: true} %>
-					<div id="show_count" class="text-success"></div>
+					<div id="show_count"></div>
 				</div>
+				
 				<div class="form-group col-md-6">
 					<%= f.label :day_type %>
-					<%= f.select :day_type,options_for_select(["half day", "full day"]),{include_blank: "choose day type"}, {class: "form-control", id: "day_type", required: true} %>
+					<%= f.select :day_type,options_for_select(LeaveRequest.day_types.keys.map{ |dt| [dt.humanize, dt]}),{include_blank: "--Choose Day Type--"}, {class: "form-control", id: "day_type", required: true} %>
 				</div>
 				
 				<div class="form-group col-md-6">
 					<%= f.label :leave_from, class: "required-field"%>
-					<%= f.date_field :leave_from,  autocomplete: "select_from", class: "form-control",id: "date_type1", placeholder: "choose starting date", required: true%>
+					<%= f.date_field :leave_from, selected: Date.today, autocomplete: "select_from", class: "form-control",id: "date_type1", placeholder: "--Choose Starting Date--", required: true%>
 					<div id="date_error1"></div>
 				</div>
 
 				 <div class="form-group col-md-6 ">
 					<%= f.label :leave_to %>
-					<%= f.date_field :leave_to,  autocomplete: "select_to", class: "form-control",id: "date_type2", placeholder: "choose end date", required: true %>
+					<%= f.date_field :leave_to,  autocomplete: "select_to", class: "form-control",id: "date_type2", placeholder: "--Choose End Date--", required: true %>
 					<div id="date_error2"></div>
 				</div>
 
 				<div class="form-group col-md-6 d-none" id="time_field_from">
 					<%= f.label :time_from %>
-					<%= f.time_field :time_from,  autocomplete: "select_from", class: "form-control", placeholder: "choose time" %>
+					<%= f.time_field :time_from,  autocomplete: "select_from", class: "form-control", placeholder: "--choose Time--" %>
 				</div>
 
 
 				<div class="form-group col-md-6 d-none" id="time_field_to">
 					<%= f.label :time_to %>
-					<%= f.time_field :time_to,  autocomplete: "select_from", class: "form-control", placeholder: "choose time" %>
+					<%= f.time_field :time_to,  autocomplete: "select_from", class: "form-control", placeholder: "--Choose Time--" %>
 				</div>
 				
 				<%= f.hidden_field :user_id, :value => current_user.id %>
                  
+				 <div>
+					<%= f.label :description, class: "required-field" %>
+					<%= f.text_area :description, class: "form-control",  id: "user_leave_type_id", placeholder: "Reason of Leave.........", required: true %>
+				</div>
+
+
 				<div class="form-group mt-2">
 					<%= f.submit "Send Request", class: "btn btn-sm btn-primary send-request" %>
 				</div>
@@ -166,7 +173,8 @@
 			}
 		});
 	});
-
+		var today = new Date().toISOString().split('T')[0];
+		document.getElementsById("date_type1")[0].setAttribute('min', today);
 
 
 </script>

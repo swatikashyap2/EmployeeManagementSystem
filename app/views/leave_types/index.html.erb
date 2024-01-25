@@ -22,13 +22,21 @@
 				<th>Count</th>
 			</thead>
 			<tbody>
-				<% @leave_types.each do|leave_type|%>
+				<% if @leave_types.present?%>
+					<% @leave_types.each do|leave_type|%>
+						<tr>
+							<td>
+								<%= leave_type.name.present? ? leave_type.name.titleize : "N/A"%>
+							</td>
+							<td>
+								<%= leave_type.count.present? ? leave_type.count : "N/A"%>
+							</td>
+						</tr>
+					<%end%>
+				<%else%>
 					<tr>
-						<td>
-							<%= leave_type.name.titleize%>
-						</td>
-						<td>
-							<%= leave_type.count%>
+						<td colspan="12" class="text-center border-0">
+							<h2 class="mt-3">Record Not Found</h2>
 						</td>
 					</tr>
 				<%end%>
