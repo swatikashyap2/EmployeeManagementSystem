@@ -27,8 +27,8 @@ class LeaveRequestsController < ApplicationController
         end
     end
 
-
-    def leave_approve
+     
+    def leave_approve    
         @leave_request = LeaveRequest.find(params[:id])
         if @leave_request.update(approve: true)
             @user_leave_type= @leave_request.user_leave_type
@@ -46,12 +46,14 @@ class LeaveRequestsController < ApplicationController
                 @user_leave_type.update(leave_count: leave_count - no_of_days)
             end
         end
+        UserMailer.approve_email(@leave_request).deliver_later
         redirect_to leave_requests_path,notice: "Leave Approved Successfully."
     end
 
     def leave_reject
-        @leave_requests = LeaveRequest.find(params[:id])
-        @leave_requests.update(approve: false)
+        @leave_request = LeaveRequest.find(params[:id])
+        @leave_request.update(approve: false)
+        UserMailer.reject_email(@leave_request).deliver_later
         redirect_to leave_requests_path,notice: "Leave rejected."
     end
 
