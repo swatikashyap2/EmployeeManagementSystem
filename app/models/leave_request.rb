@@ -42,3 +42,4 @@ class LeaveRequest < ApplicationRecord
     end
 end
 
+ 

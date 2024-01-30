@@ -53,7 +53,7 @@
 
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :DOB %>
-					<%= f.date_field :dob, autofocus: true,id: "date_valid",  class: "form-control ", value: "Enter Date Of Birth"  %>
+					<%= f.date_field :dob, autofocus: true,id: "date_valid",  class: "form-control ", value: "Enter Date Of Birth",max: Date.today - 18.years %>
 					<span id="user_date_error"></span>
 				</div>
 

@@ -20,7 +20,7 @@
                     <!-- START MAIN CONTENT AREA -->
                     <p style="text-transform: capitalize; font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">Hello,</p>
                     <p style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">
-                      Your <%= @leave_request.user_leave_type.leave_type.name %><br>have been rejected.
+                      You just cancelled your requested <%= @leave_request.user_leave_type.leave_type.name %><br>
                     </p>
                     <p style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">Thank you.</p>
                   </td>
@@ -32,7 +32,7 @@
 
               <!-- START FOOTER -->
               <div style="clear: both; background-color: #fff;">
-                <table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt;width: 100%;">
+                <table role="presentation"  cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt;width: 100%;">
                   <tr style="display: block; padding: 0 20px;">
                     <td style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px; vertical-align: top; padding-bottom: 10px; padding-top: 10px; color: #000; font-size: 12px;">
                       <span style="color: #000; font-size: 12px;">This is an automated message from the <b>backspacce technologies</b>.</span><br>
@@ -44,11 +44,12 @@
                       <b>Powered by Forwood</b>
                     </td>
                   </tr>
-                  <tr style="display: block; margin-top: 15px;">
-                    <td style="background: #009ae4;">
-                       <%= image_tag("logo.png", :size => "10x10", class: "position-absolute top", alt: "Sample image") %>
+                 <tr style="display: block; margin-top: 15px;">
+                    <td style="background: #009ae4; text-align: center;">
+                        <%= image_tag("logo.png", size: "200x100", class: "position-absolute top", alt: "Sample image") %>
                     </td>
-                  </tr>
+                </tr>
+
                 </table>
               </div>
               <!-- END FOOTER -->

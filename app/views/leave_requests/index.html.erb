@@ -58,24 +58,33 @@
 								<%= leave_request.leave_to.present? ? leave_request.leave_to : "N/A"%>
 							</td>
 							<td>
-								<% if is_admin?%>
-									<% if leave_request.approve.eql?(nil)%>
-										<%= link_to "Approve", leave_approve_leave_request_path(leave_request), method: :post, class: "btn btn-success"%>
-										<%= link_to "Reject", leave_reject_leave_request_path(leave_request),method: :post, class: "btn btn-danger"%>
-									<% elsif leave_request.approve.eql?(true)%>
-										<span class="text-success">Approved!</span>
-									<%elsif leave_request.approve.eql?(false)%>
-										<span class="text-danger">Rejected!</span>
+								<div>
+									<% if is_admin?%>
+										<% if leave_request.approve.eql?(nil)%>
+											<%= link_to "Approve", leave_approve_leave_request_path(leave_request), method: :post, class: "btn btn-success"%>
+											<%= link_to "Reject", leave_reject_leave_request_path(leave_request),method: :post, class: "btn btn-danger"%>
+										<% elsif leave_request.approve.eql?(true)%>
+											<span class="text-success">Approved!</span>
+										<%elsif leave_request.approve.eql?(false)%>
+											<span class="text-danger">Rejected!</span>
+										<%end%>
+									<% elsif is_manager? || is_employee?%>
+										<% if leave_request.approve.eql?(nil)%>
+											<div class="d-flex">
+												<div><span class="text-warning">Pending!</span></div>
+												<div class="mx-2">
+													<%= link_to  leave_request_path(leave_request), data: { turbo_method: :delete, class: "mx-2", turbo_confirm: "Are you sure? you want to cancel your leave request"} do%> 
+														<i class="bi bi-backspace"></i>
+													<%end%>
+												</div>
+											</div>
+										<% elsif leave_request.approve.eql?(true)%>
+											<span class="text-success">Approved!</span>
+										<%elsif leave_request.approve.eql?(false)%>
+											<span class="text-danger">Rejected!</span>
+										<%end%>
 									<%end%>
-								<% elsif is_manager? || is_employee?%>
-									<% if leave_request.approve.eql?(nil)%>
-										<span class="text-warning">Pending!</span>
-									<% elsif leave_request.approve.eql?(true)%>
-										<span class="text-success">Approved!</span>
-									<%elsif leave_request.approve.eql?(false)%>
-										<span class="text-danger">Rejected!</span>
-									<%end%>
-								<%end%>
+								</div>
 							</td>
 						</tr>
 					<%end%>

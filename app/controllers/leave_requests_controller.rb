@@ -21,6 +21,7 @@ class LeaveRequestsController < ApplicationController
         @leave_request = LeaveRequest.new(leave_request_params)
 		
         if @leave_request.save
+            UserMailer.leave_apply_email(@leave_request).deliver_later
             redirect_to leave_requests_path, notice: "Request Created Successfully."
         else
             redirect_to new_leave_request_path, error:  @leave_request.errors.full_messages
@@ -56,6 +57,19 @@ class LeaveRequestsController < ApplicationController
         UserMailer.reject_email(@leave_request).deliver_later
         redirect_to leave_requests_path,notice: "Leave rejected."
     end
+
+    def destroy
+        @leave_request = LeaveRequest.find_by(id: params[:id])
+
+        if @leave_request
+            UserMailer.leave_cancel_email(@leave_request).deliver_later
+            @leave_request.destroy
+            redirect_to leave_requests_path, notice: "Leave rejected."
+        else
+            redirect_to leave_requests_path, alert: "Leave not found."
+        end
+    end
+
 
     private
 

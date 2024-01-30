@@ -11,5 +11,18 @@ class UserMailer < ApplicationMailer
         @leave_request = leave_request
         @url  = 'http://www.gmail.com'
         mail(to: @leave_request.user.email, subject: 'Leave Rejected!')
-     end
+    end
+
+
+    def leave_apply_email(leave_request)
+        @leave_request = leave_request
+        @url  = 'http://www.gmail.com'
+        mail(to: @leave_request.user.email, subject: 'Leave Rejected!')
+    end
+
+    def leave_cancel_email(leave_request)
+        @leave_request = leave_request
+        @url  = 'http://www.gmail.com'
+        mail(to: @leave_request.user.email, subject: 'Leave Rejected!')
+    end
 end

@@ -28,32 +28,32 @@
 					<div id="show_count"></div>
 				</div>
 				
-				<div class="form-group col-md-6">
+				<div class="form-group col-md-6", id="dayty">
 					<%= f.label :day_type %>
 					<%= f.select :day_type,options_for_select(LeaveRequest.day_types.keys.map{ |dt| [dt.humanize, dt]}),{include_blank: "--Choose Day Type--"}, {class: "form-control", id: "day_type", required: true} %>
 				</div>
 				
 				<div class="form-group col-md-6">
 					<%= f.label :leave_from, class: "required-field"%>
-					<%= f.date_field :leave_from, selected: Date.today, autocomplete: "select_from", class: "form-control",id: "date_type1", placeholder: "--Choose Starting Date--", required: true%>
+					<%= f.date_field :leave_from, selected: Date.today, autocomplete: "select_from", class: "form-control",id: "date_type1", placeholder: "--Choose Starting Date--",type: 'text',onfocus: "(this.type='date')",onblur: "(this.type='text')", required: true, min: Date.today%>
 					<div id="date_error1"></div>
 				</div>
 
-				 <div class="form-group col-md-6 ">
+				 <div class="form-group col-md-6 " id="date2">
 					<%= f.label :leave_to %>
-					<%= f.date_field :leave_to,  autocomplete: "select_to", class: "form-control",id: "date_type2", placeholder: "--Choose End Date--", required: true %>
+					<%= f.date_field :leave_to,  autocomplete: "leave_to", class: "form-control ",id: "date_type2", placeholder: "--Choose End Date--",type: 'text',onfocus: "(this.type='date')",onblur: "(this.type='text')", required: true,min: Date.today%>
 					<div id="date_error2"></div>
 				</div>
 
 				<div class="form-group col-md-6 d-none" id="time_field_from">
 					<%= f.label :time_from %>
-					<%= f.time_field :time_from,  autocomplete: "select_from", class: "form-control", placeholder: "--choose Time--" %>
+					<%= f.time_field :time_from,  autocomplete: "time_from", class: "form-control", placeholder: "--choose Time--", min: Time.current.strftime('%Y-%m-%dT%H:%M'), id: "time_from" %>
 				</div>
 
 
 				<div class="form-group col-md-6 d-none" id="time_field_to">
 					<%= f.label :time_to %>
-					<%= f.time_field :time_to,  autocomplete: "select_from", class: "form-control", placeholder: "--Choose Time--" %>
+					<%= f.time_field :time_to,  autocomplete: "time_from", class: "form-control", placeholder: "--Choose Time--",min: Time.current.strftime('%Y-%m-%dT%H:%M'),id: "time_to"%>
 				</div>
 				
 				<%= f.hidden_field :user_id, :value => current_user.id %>
@@ -74,9 +74,6 @@
 </div>
 <script>
 	var leaveCount= 0;
-	let dayType = "";
-	let firstDate;
-	let secondDate;
 	document.getElementById('user_leave_type_id').addEventListener('change', function() {
 		var selectedLeaveTypeId = this.value;
 		$.ajax({
@@ -86,7 +83,7 @@
 			data: { id: selectedLeaveTypeId },
 			success: function(response) {
 				leaveCount = response.leave_count;
-				$('#show_count').html('Your balance leave is: ' + leaveCount);
+				$('#show_count').html('Your leave balance is: ' + leaveCount);
 			},
 			error: function() {
 				console.error('Error fetching leave count.');
@@ -95,27 +92,27 @@
 
 		let leaveTypeName = $("#user_leave_type_id option:selected").text();
 		if (leaveTypeName === 'Short Leave') {
-			$('#day_type').prop('disabled', true);
+			$('#dayty').addClass('d-none');
 			$("#time_field_from, #time_field_to").removeClass('d-none');
-			$("#date_type2").prop('disabled', true);
+			$("#date2").addClass('d-none');
 
 		} else {
-			$('#day_type').prop('disabled', false);
+			$('#dayty').removeClass('d-none');
 			$("#time_field_from, #time_field_to").addClass('d-none');
-			$("#date_type2").prop('disabled', false);
+			$("#date2").removeClass('d-none');
 		}
 	});
 
 	document.getElementById('day_type').addEventListener('change', function() {
 		dayType = $("#day_type option:selected").text();
-		if (dayType === 'half day') {
-			$('#show_count').html('Your balance leaves is: ' + (leaveCount - 0.5));
+		if (dayType === 'Half day') {
+			$('#show_count').html('Your leave balance is: ' + (leaveCount - 0.5));
 			$("#time_field_from, #time_field_to").removeClass('d-none');
-			$("#date_type2").prop('disabled', true); 
+			$("#date2").addClass('d-none'); 
 		} else {
-			$('#show_count').html('Your balance leaves is: ' + (leaveCount));
+			$('#show_count').html('Your balance leave is: ' + (leaveCount));
 			$("#time_field_from, #time_field_to").addClass('d-none');
-			$("#date_type2").prop('disabled', false);
+			$("#date2").removeClass('d-none');
 		}
 	});
 
@@ -132,10 +129,21 @@
 		}
 		let days = secondDate.getTime() - firstDate.getTime();
 		days = Math.floor(days / (1000 * 60 * 60 * 24));
-		if (days != "" && leaveCount > days){
-			$('#show_count').html('Your balance leaves is: ' + (leaveCount - days));
-		}else if (leaveCount < days){
-			$('#show_count').html('Your balance leaves is: 0');
+		if (days !=""){
+			if (days != "" && leaveCount > days){
+				$('#show_count').html('Your leave balance is: ' + (leaveCount - days));
+			}else if (leaveCount < days){
+				$('#date_error2').html('You can not select more then your leave balance').css('color', 'red');
+				$('.send-request')[0].disabled = true;
+			}else if (leaveCount == days){
+				$('#show_count').html('Your leave balance is:  0');
+			} else {
+				$('#date_error2').removeClass('.error')
+				$('.send-request')[0].disabled = false;
+			}
+		}else{
+			$('#date_error2').removeClass('.error')
+			$('.send-request')[0].disabled = false;
 		}
 	});		
 
@@ -148,20 +156,23 @@
 		dateField1.on('input', function () {
 			let selectedDate = new Date(dateField1.val());
 			let currentDate = new Date();
+			
 			if (selectedDate < currentDate) {
-				dateField1.addClass('error');
-				dateError1.text('You can only select the current or future date').css('color', 'red');
-				$('.send-request')[0].disabled = true;
+			dateField1.addClass('error');
+			dateError1.text('You can only select the current or future date').css('color', 'red');
+			$('.send-request')[0].disabled = true;
 			} else {
-				dateField1.removeClass('error');
-				dateError1.text('');
-				$('.send-request')[0].disabled = false;
+			dateField1.removeClass('error');
+			dateError1.text('');
+			$('.send-request')[0].disabled = false;
+			dateField2.attr('min', dateField1.val());
 			}
 		});
 
 		dateField2.on('input', function () {
 			let selectedDate = new Date(dateField2.val());
 			let currentDate = new Date();
+			
 			if (selectedDate < currentDate) {
 				dateField2.addClass('error');
 				dateError2.text('You can only select the current or future date').css('color', 'red');
@@ -173,6 +184,7 @@
 			}
 		});
 	});
+
 		// var today = new Date().toISOString().split('T')[0];
 		// document.getElementsById("date_type1")[0].setAttribute('min', today);
 
