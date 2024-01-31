@@ -73,9 +73,9 @@
 											<div class="d-flex">
 												<div><span class="text-warning">Pending!</span></div>
 												<div class="mx-2">
-													<%= link_to  leave_request_path(leave_request), data: { turbo_method: :delete, class: "mx-2", turbo_confirm: "Are you sure? you want to cancel your leave request"} do%> 
+													<%= link_to cancel_leave_request_path(leave_request),data: { turbo_method: :post, confirm: "Are you sure you want to cancel your leave request?" },class: "mx-2" do %>
 														<i class="bi bi-backspace"></i>
-													<%end%>
+													<% end %>
 												</div>
 											</div>
 										<% elsif leave_request.approve.eql?(true)%>

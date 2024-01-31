@@ -22,6 +22,7 @@ class LeaveRequestsController < ApplicationController
 		
         if @leave_request.save
             UserMailer.leave_apply_email(@leave_request).deliver_later
+            UserMailer.notify_to_admin(@leave_request).deliver_later
             redirect_to leave_requests_path, notice: "Request Created Successfully."
         else
             redirect_to new_leave_request_path, error:  @leave_request.errors.full_messages
@@ -46,8 +47,10 @@ class LeaveRequestsController < ApplicationController
                 leave_count = @user_leave_type.leave_count
                 @user_leave_type.update(leave_count: leave_count - no_of_days)
             end
+            user = current_user
+            ApproveNotifier.with(user: user).notify(LeaveRequest.find(params[:id]))
+            UserMailer.approve_email(@leave_request).deliver_later
         end
-        UserMailer.approve_email(@leave_request).deliver_later
         redirect_to leave_requests_path,notice: "Leave Approved Successfully."
     end
 
@@ -58,17 +61,16 @@ class LeaveRequestsController < ApplicationController
         redirect_to leave_requests_path,notice: "Leave rejected."
     end
 
-    def destroy
+    def cancel
         @leave_request = LeaveRequest.find_by(id: params[:id])
-
         if @leave_request
-            UserMailer.leave_cancel_email(@leave_request).deliver_later
-            @leave_request.destroy
-            redirect_to leave_requests_path, notice: "Leave rejected."
+          @leave_request.update(canceled: true)
+          UserMailer.leave_cancel_email(@leave_request).deliver_later
+          redirect_to leave_requests_path, notice: "Leave canceled."
         else
-            redirect_to leave_requests_path, alert: "Leave not found."
+          redirect_to leave_requests_path, alert: "Leave not found."
         end
-    end
+      end
 
 
     private

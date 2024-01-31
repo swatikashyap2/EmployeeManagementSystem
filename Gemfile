@@ -75,3 +75,5 @@ gem 'turbo-rails'
 gem 'stimulus-rails'
 gem "importmap-rails", "~> 2.0"
 gem 'devise-security'
+
+gem "noticed", "~> 2.1"

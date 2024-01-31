@@ -20,6 +20,7 @@ Rails.application.routes.draw do
     member do
       post  :leave_approve
       post  :leave_reject
+      post  :cancel
     end
   end
 
