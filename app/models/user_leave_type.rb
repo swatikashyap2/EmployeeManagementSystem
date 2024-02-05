@@ -1,4 +1,4 @@
 class UserLeaveType < ApplicationRecord
-    belongs_to :user, dependent: :destroy
-    belongs_to :leave_type, dependent: :destroy
+    belongs_to :user
+    belongs_to :leave_type
 end

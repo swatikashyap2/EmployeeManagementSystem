@@ -14,45 +14,39 @@
         <tbody>
             <% if @notifications.present?%>
                 <% @notifications.each do|notification|%>
-                    <% if is_employee? || is_manager?%>
-                        <tr>
+                    <tr>
+                        <td>
+                            <%= notification.message.present? ? notification.message : "N/A" %>
+                        </td>
+                        <% if is_employee? || is_manager?%>
                             <td>
-                               <%= notification.message%></div> 
-                            </td>
-                            <td>
-                                <%= notification.notifiable.reporting_manager.first_name%>
+                                <%= notification.notifiable.reporting_manager.present? ? notification.notifiable.reporting_manager.first_name.titleize : 'N/A'%>
                             </th>
                             <td>
-                                <%= notification.created_at.strftime("%B %d, %Y")%>
+                                <%= notification.created_at.present? ? notification.created_at.strftime("%B %d, %Y") : 'N/A'%>
                             </td>
                             <td>
-                                <%= notification.created_at.in_time_zone("Asia/Kolkata").strftime("%I:%M%p")  %>
+                                <%=  notification.created_at.present? ? notification.created_at.in_time_zone("Asia/Kolkata").strftime("%I:%M%p") : 'N/A'  %>
                             </td>
                             <td>
                                 <%= link_to read_notification_path(notification), method: :post, remote: true do  %>
                                     <i class="bi bi-backspace"></i>
                                 <%end%>
                             </td>
-                        </tr>
-                    <%else%>
-                     <tr>
-                        <td>
-                            Hii <%= notification.recipient.first_name %> <%= notification.user.first_name %> requested for <%= notification.notifiable&.user_leave_type&.leave_type&.name %>
-                            has been <%= notification.message%></div> 
-                        </td>
-                        <td>
-                            <%= notification.notifiable&.leave_from&.strftime("%B %d, %Y")%>
-                        </td>
-                        <td>
-                            <%= notification.notifiable&.leave_to&.strftime("%B %d, %Y")%>
-                        </td>
-                        <td>
-                            <%= link_to read_notification_path(notification), method: :post, remote: true do  %>
-                                <i class="bi bi-backspace"></i>
-                            <%end%>
-                        </td>
+                        <%else%>
+                            <td>
+                                <%=  notification.notifiable.leave_from.present? ? notification.notifiable.leave_from.strftime("%B %d, %Y") : 'N/A'%>
+                            </td>
+                            <td>
+                                <%= notification.notifiable.leave_to.present? ? notification.notifiable.leave_to.strftime("%B %d, %Y") : 'N/A'%>
+                            </td>
+                            <td>
+                                <%= link_to read_notification_path(notification), method: :post, remote: true do  %>
+                                    <i class="bi bi-backspace"></i>
+                                <%end%>
+                            </td>
+                        <%end%>
                     </tr>
-                    <%end%>
                 <%end%>
             <%else%>
                 <tr>
@@ -60,7 +54,7 @@
                         <h2 class="mt-3">Record Not Found</h2>
                     </td>
                 </tr>
-        <% end %>
+            <% end %>
         </tbody>
     </table>
 </div>

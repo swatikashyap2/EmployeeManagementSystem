@@ -34,8 +34,10 @@ class LeaveRequestsController < ApplicationController
                 leave_count = @user_leave_type.leave_count
                 @user_leave_type.update(leave_count: leave_count - no_of_days)
             end
-            Notification.create(recipient: @leave_request.reporting_manager, user: current_user, message:  @leave_request.reporting_manager.first_name, notifiable: @leave_request, recipient_type: "true", read: false)
-            Notification.create(recipient: @leave_request.user, user: current_user, message: 'applied!', notifiable: @leave_request, recipient_type: "true", read: false)
+            message1 = " Hi #{@leave_request.reporting_manager.first_name.titleize}, #{current_user.first_name.titleize} has been applied for #{@leave_request.user_leave_type.leave_type.name} "
+            message2 = " Hi #{current_user.first_name.titleize}, your #{@leave_request.user_leave_type.leave_type.name.titleize} has been succefully applied! "
+            Notification.create(recipient: @leave_request.reporting_manager, user: current_user, message: message1,  notifiable: @leave_request, recipient_type: "true", read: false)
+            Notification.create(recipient: @leave_request.user, user: current_user, message: message2, notifiable: @leave_request, recipient_type: "true", read: false)
             UserMailer.leave_apply_email(@leave_request).deliver_later
             UserMailer.notify_to_admin(@leave_request).deliver_later
             redirect_to leave_requests_path, notice: "Request Created Successfully."
@@ -49,7 +51,8 @@ class LeaveRequestsController < ApplicationController
         @leave_request = LeaveRequest.find(params[:id])
         if @leave_request.update(approve: true)
             @user_leave_type= @leave_request.user_leave_type
-            Notification.create(recipient: @leave_request.user, user: current_user, message: 'approved!', notifiable: @leave_request, recipient_type: "true", read: false)
+            message = " Hi #{@leave_request.user.first_name.titleize}, your #{@leave_request.user_leave_type.leave_type.name.titleize} has been succefully approved!"
+            Notification.create(recipient: @leave_request.user, user: current_user, message: message, notifiable: @leave_request, recipient_type: "true", read: false)
             UserMailer.approve_email(@leave_request).deliver_later
         end
         redirect_to leave_requests_path,notice: "Leave Approved Successfully."
@@ -58,7 +61,9 @@ class LeaveRequestsController < ApplicationController
     def leave_reject
         @leave_request = LeaveRequest.find(params[:id])
         @leave_request.update(approve: false)
-        Notification.create(recipient: @leave_request.user, user: current_user, message: 'rejected!', notifiable: @leave_request, recipient_type: "true", read: false)
+        @user_leave_type= @leave_request.user_leave_type
+        message = " Hi #{@leave_request.user.first_name.titleize}, your #{@leave_request.user_leave_type.leave_type.name.titleize} has been rejected!"
+        Notification.create(recipient: @leave_request.user, user: current_user, message: message, notifiable: @leave_request, recipient_type: "true", read: false)
         if @user_leave_type.leave_type.name.eql?("Short Leave")
             @user_leave_type.update(leave_count: 1)
         else
@@ -79,7 +84,10 @@ class LeaveRequestsController < ApplicationController
     def cancel
         @leave_request = LeaveRequest.find_by(id: params[:id])
         if @leave_request.update(canceled: true)
-            Notification.create(recipient: @leave_request.user, user: current_user, message: 'cancelled!', notifiable: @leave_request, recipient_type: "true", read: false)
+            message1 = " Hi #{@leave_request.reporting_manager.first_name.titleize}, #{current_user.first_name.titleize} has been cancel #{@leave_request.user_leave_type.leave_type.name} "
+            message2 = " Hi #{@leave_request.user.first_name.titleize}, you have been cancelled your  #{@leave_request.user_leave_type.leave_type.name.titleize}"
+            Notification.create(recipient: @leave_request.reporting_manager, user: current_user, message: message1,  notifiable: @leave_request, recipient_type: "true", read: false)
+            Notification.create(recipient: @leave_request.user, user: current_user, message: message2, notifiable: @leave_request, recipient_type: "true", read: false)
             @user_leave_type= @leave_request.user_leave_type
             if @user_leave_type.leave_type.name.eql?("Short Leave")
                 @user_leave_type.update(leave_count: 1)
