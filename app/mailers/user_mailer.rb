@@ -1,5 +1,5 @@
 class UserMailer < ApplicationMailer
-    default from: 'swatikashyap00000@gmail.com'
+    default from: 'Backspacce<info@backspacce.com>'
 
     def approve_email(leave_request)
         @leave_request = leave_request
@@ -14,7 +14,7 @@ class UserMailer < ApplicationMailer
 
     def leave_apply_email(leave_request)
         @leave_request = leave_request
-        mail(to: @leave_request.user.email, subject: 'Leave Applied!')
+        mail(to: @leave_request.user.email, subject: "Leave Requested!")
     end
 
     def leave_cancel_email(leave_request)
@@ -24,7 +24,7 @@ class UserMailer < ApplicationMailer
 
     def notify_to_admin(leave_request)
         @leave_request = leave_request
-        mail(to: @leave_request.reporting_manager.email, subject: 'Leave Requested!')
+        mail(to: @leave_request.reporting_manager.email, subject: "#{@leave_request.user&.first_name} request a leave!")
     end
 
     def leave_approved_notification(leave_request)

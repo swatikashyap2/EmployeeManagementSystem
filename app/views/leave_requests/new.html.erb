@@ -24,48 +24,46 @@
 			<div class="row">
 				<div class="form-group col-md-6">
 					<%= f.label :leave_type, class: "required-field" %>
-					<%= f.select :user_leave_type_id, options_for_select(@user_leave_types), { include_blank: '--Select leave--' }, { class: "form-control",  id: "user_leave_type_id", required: true} %>
+					<%= f.select :user_leave_type_id, options_for_select(@user_leave_types), { include_blank: 'Select Leave Type' }, { class: "form-control",  id: "user_leave_type_id", required: true} %>
 					<div id="show_count"></div>
 				</div>
 				
 				<div class="form-group col-md-6", id="dayty">
-					<%= f.label :day_type %>
-					<%= f.select :day_type,options_for_select(LeaveRequest.day_types.keys.map{ |dt| [dt.humanize, dt]}),{include_blank: "--Choose Day Type--"}, {class: "form-control", id: "day_type", required: true} %>
+					<%= f.label :day_type, class: "required-field"%>
+					<%= f.select :day_type,options_for_select(LeaveRequest.day_types.keys.map{ |dt| [dt.humanize, dt]}),{include_blank: "Select Day Type"}, {class: "form-control", id: "day_type", required: true} %>
 				</div>
 				
 				<div class="form-group col-md-6">
 					<%= f.label :leave_from, class: "required-field"%>
-					<%= f.date_field :leave_from, selected: Date.today, autocomplete: "select_from", class: "form-control",id: "date_type1", placeholder: "--Choose Starting Date--",type: 'text',onfocus: "(this.type='date')",onblur: "(this.type='text')", required: true, min: Date.today%>
+					<%= f.date_field :leave_from, selected: Date.today, autocomplete: "select_from", class: "form-control",id: "date_type1", placeholder: "Select Starting Date",type: 'text',onfocus: "(this.type='date')",onblur: "(this.type='text')", required: true, min: Date.today%>
 					<div id="date_error1"></div>
 				</div>
 
 				 <div class="form-group col-md-6 " id="date2">
-					<%= f.label :leave_to %>
-					<%= f.date_field :leave_to,  autocomplete: "leave_to", class: "form-control ",id: "date_type2", placeholder: "--Choose End Date--",type: 'text',onfocus: "(this.type='date')",onblur: "(this.type='text')", required: true,min: Date.today%>
+					<%= f.label :leave_to , class: "leave-to required-field" %>
+					<%= f.date_field :leave_to,  autocomplete: "leave_to", class: "form-control ",id: "date_type2", placeholder: "Select End Date",type: 'text',onfocus: "(this.type='date')",onblur: "(this.type='text')", required: true, min: Date.today%>
 					<div id="date_error2"></div>
 				</div>
-
+				
 				<div class="form-group col-md-6 d-none" id="time_field_from">
-					<%= f.label :time_from %>
-					<%= f.time_field :time_from,  autocomplete: "time_from", class: "form-control", placeholder: "--choose Time--", min: Time.current.strftime('%Y-%m-%dT%H:%M'), id: "time_from" %>
+					<%= f.label :time_from, class: "required-field" %>
+					<%= f.time_field :time_from,  autocomplete: "time_from", class: "form-control", placeholder: "--choose Time--", min: Time.current.strftime("%H:%M"), id: "time_from" %>
 				</div>
 
-
 				<div class="form-group col-md-6 d-none" id="time_field_to">
-					<%= f.label :time_to %>
-					<%= f.time_field :time_to,  autocomplete: "time_from", class: "form-control", placeholder: "--Choose Time--",min: Time.current.strftime('%Y-%m-%dT%H:%M'),id: "time_to"%>
+					<%= f.label :time_to, class: "required-field" %>
+					<%= f.time_field :time_to,  autocomplete: "time_from", class: "form-control", placeholder: "--Choose Time--",min: Time.current.strftime("%H:%M"),id: "time_to"%>
 				</div>
 				
 				<%= f.hidden_field :user_id, :value => current_user.id %>
                  
 				 <div>
-					<%= f.label :description, class: "required-field" %>
-					<%= f.text_area :description, class: "form-control",  id: "user_leave_type_id", placeholder: "Reason of Leave.........", required: true %>
+					<%= f.label :description, "Reason", class: "required-field" %>
+					<%= f.text_area :description, class: "form-control",  id: "user_leave_type_id", placeholder: "Reason of Leave...!", required: true %>
 				</div>
 
-
 				<div class="form-group mt-2">
-					<%= f.submit "Send Request", class: "btn btn-sm btn-primary send-request" %>
+					<%= f.submit "Apply Leave", class: "btn btn-sm btn-primary send-request" %>
 				</div>
 				</div>
 			</div>
@@ -108,10 +106,12 @@
 		if (dayType === 'Half day') {
 			$('#show_count').html('Your leave balance is: ' + (leaveCount - 0.5));
 			$("#time_field_from, #time_field_to").removeClass('d-none');
+			$(".leave-to").removeClass("required-field");
 			$('#date_type2')[0].disabled = true;
 		} else {
-			$('#show_count').html('Your balance leave is: ' + (leaveCount));
+			$('#show_count').html('Your leave balance is: ' + (leaveCount));
 			$("#time_field_from, #time_field_to").addClass('d-none');
+			$(".leave-to").addClass("required-field");
 			$('#date_type2')[0].disabled = false;
 		}
 	});
@@ -120,6 +120,7 @@
 		let dateType1 = $("#date_type1").val();
 		if (dateType1 !== ""){
 			firstDate = new Date(dateType1);
+			$("#date_type2")[0].min = dateType1;
 		}
 	});
 	document.getElementById('date_type2').addEventListener('change', function() {
@@ -127,16 +128,18 @@
 		if (dateType2 !== ""){
 			secondDate = new Date(dateType2);
 		}
-		let days = secondDate.getTime() - firstDate.getTime();
-		days = Math.floor(days / (1000 * 60 * 60 * 24));
+		let days =  secondDate.getTime() - firstDate.getTime()
+		days = Math.floor(days / (1000 * 60 * 60 * 24)) + 1;
 		if (days !=""){
 			if (days != "" && leaveCount > days){
 				$('#show_count').html('Your leave balance is: ' + (leaveCount - days));
+				$('.send-request')[0].disabled = false;
 			}else if (leaveCount < days){
 				$('#date_error2').html('You can not select more then your leave balance').css('color', 'red');
 				$('.send-request')[0].disabled = true;
 			}else if (leaveCount == days){
 				$('#show_count').html('Your leave balance is:  0');
+				$('.send-request')[0].disabled = false;
 			} else {
 				$('#date_error2').removeClass('.error')
 				$('.send-request')[0].disabled = false;
@@ -156,37 +159,40 @@
 		dateField1.on('input', function () {
 			let selectedDate = new Date(dateField1.val());
 			let currentDate = new Date();
-			
-			if (selectedDate < currentDate) {
-			dateField1.addClass('error');
-			dateError1.text('You can only select the current or future date').css('color', 'red');
-			$('.send-request')[0].disabled = true;
-			} else {
-			dateField1.removeClass('error');
-			dateError1.text('');
-			$('.send-request')[0].disabled = false;
-			dateField2.attr('min', dateField1.val());
+			let selectedDay = selectedDate.getDate(selectedDate);
+			let currentDay = currentDate.getDate(currentDate);
+			if (selectedDay != currentDay){
+				if (selectedDate < currentDate) {
+					dateField1.addClass('error');
+					dateError1.text('You can only select the current or future date').css('color', 'red');
+					$('.send-request')[0].disabled = true;
+				} 
+			}
+			else {
+				dateField1.removeClass('error');
+				dateError1.text('');
+				$('.send-request')[0].disabled = false;
+				dateField2.attr('min', dateField1.val());
 			}
 		});
 
 		dateField2.on('input', function () {
 			let selectedDate = new Date(dateField2.val());
 			let currentDate = new Date();
-			
-			if (selectedDate < currentDate) {
-				dateField2.addClass('error');
-				dateError2.text('You can only select the current or future date').css('color', 'red');
-				$('.send-request')[0].disabled = true;
-			} else {
+			let selectedDay = selectedDate.getDate(selectedDate);
+			let currentDay = currentDate.getDate(currentDate);
+			if (selectedDay != currentDay){
+				if (selectedDate < currentDate) {
+					dateField2.addClass('error');
+					dateError2.text('You can only select the current or future date').css('color', 'red');
+					$('.send-request')[0].disabled = true;
+				}
+			}
+			else {
 				dateField2.removeClass('error');
 				dateError2.text('');
 				$('.send-request')[0].disabled = false;
 			}
 		});
 	});
-
-		// var today = new Date().toISOString().split('T')[0];
-		// document.getElementsById("date_type1")[0].setAttribute('min', today);
-
-
 </script>

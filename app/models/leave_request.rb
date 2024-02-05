@@ -2,6 +2,7 @@ class LeaveRequest < ApplicationRecord
     belongs_to :user, dependent: :destroy
     belongs_to :reporting_manager, class_name: 'User', foreign_key: 'reporting_manager_id', optional: true
     belongs_to :user_leave_type
+    has_many :notifications, as: :notifiable, dependent: :destroy
     before_create :set_default_values
 
     validates :user_leave_type_id, presence: true
