@@ -19,8 +19,23 @@ class LeaveRequestsController < ApplicationController
 
     def create
         @leave_request = LeaveRequest.new(leave_request_params)
-		
         if @leave_request.save
+            @user_leave_type= @leave_request.user_leave_type
+            if @user_leave_type.leave_type.name.eql?("Short Leave")
+                @user_leave_type.update(leave_count: 0)
+            else
+                date_from = Date.parse("#{@leave_request.leave_from}") if @leave_request.leave_from.present?
+                date_to = Date.parse("#{@leave_request.leave_to}") if @leave_request.leave_to.present?
+                if date_from == date_to
+                    no_of_days = 1
+                else
+                    no_of_days = @leave_request.day_type.eql?("full_day") ? (date_to - date_from).to_i : 0.5
+                end
+                leave_count = @user_leave_type.leave_count
+                @user_leave_type.update(leave_count: leave_count - no_of_days)
+            end
+            Notification.create(recipient: @leave_request.reporting_manager, user: current_user, message:  @leave_request.reporting_manager.first_name, notifiable: @leave_request, recipient_type: "true", read: false)
+            Notification.create(recipient: @leave_request.user, user: current_user, message: 'applied!', notifiable: @leave_request, recipient_type: "true", read: false)
             UserMailer.leave_apply_email(@leave_request).deliver_later
             UserMailer.notify_to_admin(@leave_request).deliver_later
             redirect_to leave_requests_path, notice: "Request Created Successfully."
@@ -34,21 +49,7 @@ class LeaveRequestsController < ApplicationController
         @leave_request = LeaveRequest.find(params[:id])
         if @leave_request.update(approve: true)
             @user_leave_type= @leave_request.user_leave_type
-            if @user_leave_type.leave_type.name.eql?("Short Leave")
-                @user_leave_type.update(leave_count: 0)
-            else
-                date_from = Date.parse("#{@leave_request.leave_from}") if @leave_request.leave_from.present?
-                date_to = Date.parse("#{@leave_request.leave_to}") if @leave_request.leave_to.present?
-                if date_from == date_to
-                    no_of_days = 1
-                else
-                    no_of_days = @leave_request.day_type.eql?("full day") ? (date_to - date_from).to_i : 0.5
-                end
-                leave_count = @user_leave_type.leave_count
-                @user_leave_type.update(leave_count: leave_count - no_of_days)
-            end
-            user = current_user
-            ApproveNotifier.with(user: user).notify(LeaveRequest.find(params[:id]))
+            Notification.create(recipient: @leave_request.user, user: current_user, message: 'approved!', notifiable: @leave_request, recipient_type: "true", read: false)
             UserMailer.approve_email(@leave_request).deliver_later
         end
         redirect_to leave_requests_path,notice: "Leave Approved Successfully."
@@ -57,19 +58,45 @@ class LeaveRequestsController < ApplicationController
     def leave_reject
         @leave_request = LeaveRequest.find(params[:id])
         @leave_request.update(approve: false)
+        Notification.create(recipient: @leave_request.user, user: current_user, message: 'rejected!', notifiable: @leave_request, recipient_type: "true", read: false)
+        if @user_leave_type.leave_type.name.eql?("Short Leave")
+            @user_leave_type.update(leave_count: 1)
+        else
+            date_from = Date.parse("#{@leave_request.leave_from}") if @leave_request.leave_from.present?
+            date_to = Date.parse("#{@leave_request.leave_to}") if @leave_request.leave_to.present?
+            if date_from == date_to
+                no_of_days = 1
+            else
+                no_of_days = @leave_request.day_type.eql?("full_day") ? (date_to - date_from).to_i : 0.5
+            end
+            leave_count = @user_leave_type.leave_count
+            @user_leave_type.update(leave_count: leave_count + no_of_days)
+        end
         UserMailer.reject_email(@leave_request).deliver_later
         redirect_to leave_requests_path,notice: "Leave rejected."
     end
 
     def cancel
         @leave_request = LeaveRequest.find_by(id: params[:id])
-        if @leave_request
-          @leave_request.update(canceled: true)
-          UserMailer.leave_cancel_email(@leave_request).deliver_later
-          redirect_to leave_requests_path, notice: "Leave canceled."
-        else
-          redirect_to leave_requests_path, alert: "Leave not found."
-        end
+        if @leave_request.update(canceled: true)
+            Notification.create(recipient: @leave_request.user, user: current_user, message: 'cancelled!', notifiable: @leave_request, recipient_type: "true", read: false)
+            @user_leave_type= @leave_request.user_leave_type
+            if @user_leave_type.leave_type.name.eql?("Short Leave")
+                @user_leave_type.update(leave_count: 1)
+            else
+                date_from = Date.parse("#{@leave_request.leave_from}") if @leave_request.leave_from.present?
+                date_to = Date.parse("#{@leave_request.leave_to}") if @leave_request.leave_to.present?
+                if date_from == date_to
+                    no_of_days = 1
+                else
+                    no_of_days = @leave_request.day_type.eql?("full_day") ? (date_to - date_from).to_i : 0.5
+                end
+                leave_count = @user_leave_type.leave_count
+                @user_leave_type.update(leave_count: leave_count + no_of_days)
+            end
+            UserMailer.leave_cancel_email(@leave_request).deliver_later
+            redirect_to leave_requests_path, notice: "Leave canceled."
+        end 
       end
 
 

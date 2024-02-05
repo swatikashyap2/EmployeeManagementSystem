@@ -39,14 +39,14 @@
 						<tr>
 							<% if is_admin?%>
 								<td>
-									<%= leave_request.user.first_name.present? ? leave_request.user.first_name.titleize : "N/A"%>
+									<%= leave_request&.user&.first_name.present? ? leave_request.user.first_name.titleize : "N/A"%>
 								</td>
 							<%end%>
 							<td>
-								<%= leave_request.user_leave_type.leave_type.name.present? ? leave_request.user_leave_type.leave_type.name.titleize : "N/A"%>
+								<%= leave_request.user_leave_type&.leave_type&.name.present? ? leave_request.user_leave_type.leave_type.name.titleize : "N/A"%>
 							</td>
 							<td>
-								<%= leave_request.reporting_manager.first_name.present? ? leave_request.reporting_manager.first_name.titleize : "N/A" %>
+								<%= leave_request&.reporting_manager&.first_name.present? ? leave_request.reporting_manager.first_name.titleize : "N/A" %>
 							</td>
 							<td>
 								<%= leave_request.day_type.present? ? leave_request.day_type.titleize : "N/A"%>
@@ -71,12 +71,16 @@
 									<% elsif is_manager? || is_employee?%>
 										<% if leave_request.approve.eql?(nil)%>
 											<div class="d-flex">
-												<div><span class="text-warning">Pending!</span></div>
-												<div class="mx-2">
-													<%= link_to cancel_leave_request_path(leave_request),data: { turbo_method: :post, confirm: "Are you sure you want to cancel your leave request?" },class: "mx-2" do %>
-														<i class="bi bi-backspace"></i>
-													<% end %>
-												</div>
+												<% if leave_request.canceled.eql?(nil)%>
+													<div><span class="text-warning">Pending!</span></div>
+													<div class="mx-2">
+														<%= link_to cancel_leave_request_path(leave_request),data: { turbo_method: :post, confirm: "Are you sure you want to cancel your leave request?" },class: "mx-2" do %>
+															<i class="bi bi-backspace"></i>
+														<% end %>
+													</div>
+												<%else%>
+													<span class="text-danger">cancelled!</span>
+												<%end%>
 											</div>
 										<% elsif leave_request.approve.eql?(true)%>
 											<span class="text-success">Approved!</span>

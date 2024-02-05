@@ -4,6 +4,7 @@ class UsersController < ApplicationController
 	
 
 	def index
+
 		if is_employee? 
 			@users = [current_user]
 		elsif is_manager?

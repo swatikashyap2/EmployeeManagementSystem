@@ -26,6 +26,11 @@ Rails.application.routes.draw do
 
   resources :teams
   resources :policies
+  resources :notifications do
+    member do
+      post  :read
+    end
+  end
   # namespace :admin do
   #   resources :users
   # end

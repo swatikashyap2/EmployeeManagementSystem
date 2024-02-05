@@ -94,12 +94,12 @@
 		if (leaveTypeName === 'Short Leave') {
 			$('#dayty').addClass('d-none');
 			$("#time_field_from, #time_field_to").removeClass('d-none');
-			$("#date2").addClass('d-none');
+			$('#date_type2')[0].disabled = true;
 
 		} else {
 			$('#dayty').removeClass('d-none');
 			$("#time_field_from, #time_field_to").addClass('d-none');
-			$("#date2").removeClass('d-none');
+			$('#date_type2')[0].disabled = false;
 		}
 	});
 
@@ -108,11 +108,11 @@
 		if (dayType === 'Half day') {
 			$('#show_count').html('Your leave balance is: ' + (leaveCount - 0.5));
 			$("#time_field_from, #time_field_to").removeClass('d-none');
-			$("#date2").addClass('d-none'); 
+			$('#date_type2')[0].disabled = true;
 		} else {
 			$('#show_count').html('Your balance leave is: ' + (leaveCount));
 			$("#time_field_from, #time_field_to").addClass('d-none');
-			$("#date2").removeClass('d-none');
+			$('#date_type2')[0].disabled = false;
 		}
 	});
 

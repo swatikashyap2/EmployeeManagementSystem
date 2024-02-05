@@ -8,7 +8,7 @@ class User < ApplicationRecord
 	has_many :leave_types, through: :user_leave_types
 	has_many :leave_requests
 	belongs_to :role
-	has_many :notifications, as: :recipient, dependent: :destroy
+	has_many :notifications, as: :recipient,foreign_key: :notifiable_id, dependent: :destroy
 
 	validates :first_name, presence: true
 	validates :email, presence: true
@@ -44,7 +44,7 @@ class User < ApplicationRecord
 			self.password_confirmation = "admin@123"
 		end
 	end
-	
+
 	private
 
 	def assign_all_leave_types
@@ -53,3 +53,4 @@ class User < ApplicationRecord
 		end
 	end
 end
+  
