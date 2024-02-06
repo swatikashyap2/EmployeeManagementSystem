@@ -40,12 +40,9 @@ class LeaveRequestsController < ApplicationController
             @leave_request.notifications.create(recipient: @leave_request.reporting_manager, user: current_user, message: message1, recipient_type: "true", read: false)
             @leave_request.notifications.create(recipient: @leave_request.user, user: current_user, message: message2, recipient_type: "true", read: false)
             
-            UserMailer.leave_apply_email(@leave_request).deliver_now
-            UserMailer.notify_to_admin(@leave_request).deliver_now
-
-            # ActionCable.server.broadcast \
-            # "notifications:#{@leave_request.reporting_manager.id}", { notification: { message: 'okk' } }
-
+            UserMailer.leave_apply_email(@leave_request).deliver_later
+            UserMailer.notify_to_admin(@leave_request).deliver_later
+            NotificationsChannel.broadcast_to(current_user, @leave_request.notifications.last)
             redirect_to leave_requests_path, notice: "Request Created Successfully."
         else
             redirect_to new_leave_request_path, error:  @leave_request.errors.full_messages
