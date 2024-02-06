@@ -26,6 +26,7 @@
 					<%= f.label :leave_type, class: "required-field" %>
 					<%= f.select :user_leave_type_id, options_for_select(@user_leave_types), { include_blank: 'Select Leave Type' }, { class: "form-control",  id: "user_leave_type_id", required: true} %>
 					<div id="show_count"></div>
+					<div id="leave_type_error"></div>
 				</div>
 				
 				<div class="form-group col-md-6", id="dayty">
@@ -71,7 +72,7 @@
 	</div>
 </div>
 <script>
-	var leaveCount= 0;
+	var leaveCount = null;
 	document.getElementById('user_leave_type_id').addEventListener('change', function() {
 		var selectedLeaveTypeId = this.value;
 		$.ajax({
@@ -82,6 +83,8 @@
 			success: function(response) {
 				leaveCount = response.leave_count;
 				$('#show_count').html('Your leave balance is: ' + leaveCount);
+				selectDatefrom();
+				selectedDayType();
 			},
 			error: function() {
 				console.error('Error fetching leave count.');
@@ -99,100 +102,137 @@
 			$("#time_field_from, #time_field_to").addClass('d-none');
 			$('#date_type2')[0].disabled = false;
 		}
+
+		$("#leave_type_error").html('');
+		$('#date_type2')[0].disabled = false;
+		$('#day_type')[0].disabled = false;
+		$('#date_type1')[0].disabled = false;
+		$('.send-request')[0].disabled = false;		
 	});
 
 	document.getElementById('day_type').addEventListener('change', function() {
+		if (leaveCount == null){
+			$("#leave_type_error").html('Please select the leave type first.').css('color', 'red');
+			$('#date_type2')[0].disabled = true;
+			$('#date_type1')[0].disabled = true;
+			$('.send-request')[0].disabled = true;
+		}else{
+			$("#leave_type_error").html('');
+			$('#date_type2')[0].disabled = false;
+			$('#date_type1')[0].disabled = false;
+			$('.send-request')[0].disabled = false;
+			selectedDayType();
+		}
+		
+	});
+
+	document.getElementById('date_type1').addEventListener('change', function() {
+		if (leaveCount == null){
+			$("#leave_type_error").html('Please select the leave type first.').css('color', 'red');
+			$('#date_type2')[0].disabled = true;
+			$('#day_type')[0].disabled = true;
+			$('.send-request')[0].disabled = true;
+		}else{
+			$("#leave_type_error").html('');
+			$('#date_type2')[0].disabled = false;
+			$('#day_type')[0].disabled = false;
+			$('.send-request')[0].disabled = false;
+			selectDatefrom()
+		}
+	});
+
+	document.getElementById('date_type2').addEventListener('change', function() {
+		if (leaveCount == null){
+			$("#leave_type_error").html('Please select the leave type first.').css('color', 'red');
+			$('#date_type1')[0].disabled = true;
+			$('#day_type')[0].disabled = true;
+			$('.send-request')[0].disabled = true;
+		}else{
+			$("#leave_type_error").html('');
+			$('#date_type1')[0].disabled = false;
+			$('#day_type')[0].disabled = false;
+			$('.send-request')[0].disabled = false;
+			selectDateTo();
+		}
+	});
+
+	function selectedDayType(){
 		dayType = $("#day_type option:selected").text();
 		if (dayType === 'Half day') {
 			$('#show_count').html('Your leave balance is: ' + (leaveCount - 0.5));
 			$("#time_field_from, #time_field_to").removeClass('d-none');
 			$(".leave-to").removeClass("required-field");
 			$('#date_type2')[0].disabled = true;
+			$('#date_type2').val("");
+			$('#date_error2').html('');
 		} else {
 			$('#show_count').html('Your leave balance is: ' + (leaveCount));
 			$("#time_field_from, #time_field_to").addClass('d-none');
 			$(".leave-to").addClass("required-field");
 			$('#date_type2')[0].disabled = false;
 		}
-	});
+	}
 
-	document.getElementById('date_type1').addEventListener('change', function() {
+	function selectDatefrom(){
 		let dateType1 = $("#date_type1").val();
 		if (dateType1 !== ""){
 			firstDate = new Date(dateType1);
 			$("#date_type2")[0].min = dateType1;
+			selectDateTo();
 		}
-	});
-	document.getElementById('date_type2').addEventListener('change', function() {
-		let dateType2 = $("#date_type2").val();
+	}
+
+	function selectDateTo(){
+		let dateField2 = $('#date_type2');
+		let dateError2 = $('#date_error2');
+		let dateType2 = dateField2.val();
+		let firstDate = new Date($('#date_type1').val());
+
 		if (dateType2 !== ""){
 			secondDate = new Date(dateType2);
 		}
+
 		let days =  secondDate.getTime() - firstDate.getTime()
 		days = Math.floor(days / (1000 * 60 * 60 * 24)) + 1;
+
 		if (days !=""){
 			if (days != "" && leaveCount > days){
 				$('#show_count').html('Your leave balance is: ' + (leaveCount - days));
+				$('#date_error2').html('');
 				$('.send-request')[0].disabled = false;
 			}else if (leaveCount < days){
 				$('#date_error2').html('You can not select more then your leave balance').css('color', 'red');
 				$('.send-request')[0].disabled = true;
 			}else if (leaveCount == days){
 				$('#show_count').html('Your leave balance is:  0');
+				$('#date_error2').html('');
 				$('.send-request')[0].disabled = false;
 			} else {
 				$('#date_error2').removeClass('.error')
+				$('#date_error2').html('');
 				$('.send-request')[0].disabled = false;
 			}
 		}else{
 			$('#date_error2').removeClass('.error')
+			$('#date_error2').html('');
 			$('.send-request')[0].disabled = false;
 		}
-	});		
 
-	document.addEventListener("turbo:load", function() {
-		let dateField1 = $('#date_type1');
-		let dateField2 = $('#date_type2');
-		let dateError1 = $('#date_error1');
-		let dateError2 = $('#date_error2');
-
-		dateField1.on('input', function () {
-			let selectedDate = new Date(dateField1.val());
-			let currentDate = new Date();
-			let selectedDay = selectedDate.getDate(selectedDate);
-			let currentDay = currentDate.getDate(currentDate);
-			if (selectedDay != currentDay){
-				if (selectedDate < currentDate) {
-					dateField1.addClass('error');
-					dateError1.text('You can only select the current or future date').css('color', 'red');
-					$('.send-request')[0].disabled = true;
-				} 
+		let currentDate = new Date();
+		let selectedDay = secondDate.getDate(secondDate);
+		let currentDay = currentDate.getDate(currentDate);
+		if (selectedDay != currentDay){
+			if (secondDate < firstDate) {
+				dateField2.addClass('error');
+				dateError2.text('You can select only the future date').css('color', 'red');
+				$('#show_count').html('Your leave balance is: ' + (leaveCount));
+				$('.send-request')[0].disabled = true;
 			}
-			else {
-				dateField1.removeClass('error');
-				dateError1.text('');
-				$('.send-request')[0].disabled = false;
-				dateField2.attr('min', dateField1.val());
-			}
-		});
-
-		dateField2.on('input', function () {
-			let selectedDate = new Date(dateField2.val());
-			let currentDate = new Date();
-			let selectedDay = selectedDate.getDate(selectedDate);
-			let currentDay = currentDate.getDate(currentDate);
-			if (selectedDay != currentDay){
-				if (selectedDate < currentDate) {
-					dateField2.addClass('error');
-					dateError2.text('You can only select the current or future date').css('color', 'red');
-					$('.send-request')[0].disabled = true;
-				}
-			}
-			else {
-				dateField2.removeClass('error');
-				dateError2.text('');
-				$('.send-request')[0].disabled = false;
-			}
-		});
-	});
+		}
+		else {
+			dateField2.removeClass('error');
+			dateError2.text('');
+			$('.send-request')[0].disabled = false;
+		}
+	}
 </script>
