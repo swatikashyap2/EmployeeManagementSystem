@@ -12,10 +12,12 @@
 			<%# <a href="#" class="nav-link">Contact</a> %>
 		</li -->
 		<li>
-			<%= link_to notifications_path do%>
+			<%= link_to notification_popup_notifications_path, id: 'notification_popup', remote: true do %>
 				<i class="bi bi-bell-fill"></i>
-			<%end%>
+			<% end %>
 		</li>
+
+
 		<li class="nav-item mx-2">
 			<strong><%= current_user.role.name.titleize %></strong>
 		</li>
@@ -147,4 +149,5 @@
 		</li>
 	</ul-->
 </nav>
+
   

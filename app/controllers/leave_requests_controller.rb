@@ -34,17 +34,28 @@ class LeaveRequestsController < ApplicationController
                 leave_count = @user_leave_type.leave_count
                 @user_leave_type.update(leave_count: leave_count - no_of_days)
             end
+          
             message1 = "Hi #{@leave_request.reporting_manager.first_name.titleize}, #{current_user.first_name.titleize} has been applied for #{@leave_request.user_leave_type.leave_type.name} "
             message2 = "Hi #{current_user.first_name.titleize}, your #{@leave_request.user_leave_type.leave_type.name.titleize} has been succefully applied! "
             @leave_request.notifications.create(recipient: @leave_request.reporting_manager, user: current_user, message: message1, recipient_type: "true", read: false)
             @leave_request.notifications.create(recipient: @leave_request.user, user: current_user, message: message2, recipient_type: "true", read: false)
             UserMailer.leave_apply_email(@leave_request).deliver_later
             UserMailer.notify_to_admin(@leave_request).deliver_later
+            
+            # ActionCable.server.broadcast \
+            # "notifications:#{@leave_request.reporting_manager.id}", { notification: { message: 'okk' } }
+
+
             redirect_to leave_requests_path, notice: "Request Created Successfully."
         else
             redirect_to new_leave_request_path, error:  @leave_request.errors.full_messages
         end
     end
+
+    
+
+    
+
 
      
     def leave_approve    
@@ -62,6 +73,7 @@ class LeaveRequestsController < ApplicationController
         @leave_request = LeaveRequest.find(params[:id])
         @leave_request.update(approve: false)
         @user_leave_type= @leave_request.user_leave_type
+        
         message = " Hi #{@leave_request.user.first_name.titleize}, your #{@leave_request.user_leave_type.leave_type.name.titleize} has been rejected!"
         @leave_request.notifications.create(recipient: @leave_request.user, user: current_user, message: message, notifiable: @leave_request, recipient_type: "true", read: false)
         if @user_leave_type.leave_type.name.eql?("Short Leave")

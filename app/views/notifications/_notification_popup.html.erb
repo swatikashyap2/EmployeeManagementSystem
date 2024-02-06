@@ -1,0 +1,14 @@
+<%= link_to "ALL", notifications_path %>
+<ul id="notification_list" >
+	<% if @notifications.present? %>
+		<% @notifications.each do |notification| %>
+			<li>
+				<%= notification.message.present? ? notification.message : "N/A" %>
+				(<%= notification.created_at.present? ? notification.created_at.strftime("%B %d, %Y") : 'N/A'%>
+				<%= notification.created_at.present? ? notification.created_at.in_time_zone("Asia/Kolkata").strftime("%I:%M%p") : 'N/A'%>)
+			</li>
+		<% end %>
+	<% else %>
+		<li><h2 class="mt-3">Record Not Found</h2></li>
+	<% end %>
+</ul>

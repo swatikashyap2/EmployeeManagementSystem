@@ -1,0 +1,10 @@
+
+$('#notification_popup').popover({title: 'Notifications',content: '<%= j(render partial: "notifications/notification_popup",locals: { notifications: @notifications }) %>',
+	placement: 'bottom',
+	trigger: 'focus',
+	html: true 
+}).popover('toggle');
+
+$('#notification_popup').on('shown.bs.popover', function () {
+    $('.popover').addClass('popover_style');
+});

@@ -27,10 +27,14 @@ Rails.application.routes.draw do
   resources :teams
   resources :policies
   resources :notifications do
+    collection do
+      get :notification_popup
+    end
     member do
       post  :read
     end
   end
+  mount ActionCable.server => '/cable'
   # namespace :admin do
   #   resources :users
   # end

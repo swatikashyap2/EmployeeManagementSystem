@@ -1,10 +1,16 @@
 class NotificationsController < ApplicationController
-    before_action :set_all_notifications, only: %i[index read]
+    before_action :set_all_notifications, only: %i[index read  notification_popup]
     before_action :set_notification, only: %i[read]
   
     def index
     end
-  
+
+    def notification_popup
+		respond_to do |format|
+			format.js
+		end
+    end
+
     def read
         @notification.update(read: true)
         respond_to do|format|
