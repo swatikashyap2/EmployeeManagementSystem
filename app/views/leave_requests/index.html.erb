@@ -28,6 +28,7 @@
 				<%end%>
 				<th>Leaves</th>
 				<th>Reporting Manager</th>
+				<th>Leave Type</th>
 				<th>Day Type</th>
                 <th>Leave From</th>
 				<th>Leave To</th>
@@ -47,6 +48,9 @@
 							</td>
 							<td>
 								<%= leave_request&.reporting_manager&.first_name.present? ? leave_request.reporting_manager.first_name.titleize : "N/A" %>
+							</td>
+							<td>
+								<%= leave_request.user_leave_type.leave_type.name%>
 							</td>
 							<td>
 								<%= leave_request.day_type.present? ? leave_request.day_type.titleize : "N/A"%>
