@@ -24,7 +24,7 @@
 				<thead>
 					<th>Message</th>
 						<% if is_employee? || is_manager?%>
-						<th>Approved By</th>
+						<th>Reporting Manager</th>
 						<th>Date</th>
 						<th>Time</th>
 					<%elsif is_admin?%>
@@ -70,5 +70,6 @@
 				</tbody>
 			</table>
 		</div>
+		<%= will_paginate @notifications%>
 	</div>
 </div>

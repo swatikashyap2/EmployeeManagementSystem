@@ -3,6 +3,7 @@ class NotificationsController < ApplicationController
     before_action :set_notification, only: %i[read_notification show]
   
     def index
+     @notifications =  @notifications.paginate(page: params[:page], per_page: 10)
     end
 
     def notification_popup
@@ -33,7 +34,7 @@ class NotificationsController < ApplicationController
     end
   
     def set_all_notifications
-      @notifications = Notification.where(recipient_id: current_user.id, read: false)
+      @notifications = Notification.where(recipient_id: current_user.id, read: false).order(created_at: :desc)
     end
   end
   

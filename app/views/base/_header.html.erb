@@ -161,16 +161,19 @@
 	</ul-->
 </nav>
 <script>
-	let count = 0;
-	// document.body.addEventListener('click', function(event) {
-	// 	if (event.target !== document.body) {
-	// 		const popup = document.querySelector('#notification-card');
-	// 		debugger
-	// 		if (!popup.classList.contains('d-none')) {
-	// 			$('#notification-card').addClass("d-none");
-	// 		}
-	// 	}
-	// });
+	var count = 0;
+	document.body.addEventListener('click', function(event) {
+		if (event.target !== document.body) {
+			const popup = document.querySelector('#notification-card');
+			classes = event.target.classList;
+			if ((count != 0) && !classes.contains("notification-icon") && classes.value != '') {
+		
+				$('#notification-card').addClass("d-none");
+				count = count - 1;
+			}
+		}
+	});
+
 	document.getElementsByClassName('notification-icon')[0].addEventListener('click', function(event) {
 		if (count != 0){
 			$('#notification-card').addClass("d-none");
