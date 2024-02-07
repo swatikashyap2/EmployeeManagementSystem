@@ -32,7 +32,9 @@
 				<th>Day Type</th>
                 <th>Leave From</th>
 				<th>Leave To</th>
+				<th>Request Time</th>
 				<th>Status</th>
+				<th>Reason</th>
 			</thead>
 			<tbody>
 				<% if @leave_requests.present?%>
@@ -62,11 +64,18 @@
 								<%= leave_request.leave_to.present? ? leave_request.leave_to : "N/A"%>
 							</td>
 							<td>
+								<%= leave_request.created_at.present? ? leave_request.created_at.in_time_zone("Asia/Kolkata").strftime("%I:%M%p") : "N/A"%>
+							</td>
+							<td>
 								<div>
 									<% if is_admin?%>
 										<% if leave_request.approve.eql?(nil)%>
-											<%= link_to "Approve", leave_approve_leave_request_path(leave_request), method: :post, class: "btn btn-success"%>
-											<%= link_to "Reject", leave_reject_leave_request_path(leave_request),method: :post, class: "btn btn-danger"%>
+											<% if leave_request.canceled.eql?(true)%>
+												<div><span class="text-danger">Cancelled!</span></div>
+											<%elsif%>
+												<%= link_to "Approve", leave_approve_leave_request_path(leave_request), method: :post, class: "btn btn-success"%>
+												<%= link_to "Reject", leave_reject_leave_request_path(leave_request),method: :post, class: "btn btn-danger"%>
+											<%end%>
 										<% elsif leave_request.approve.eql?(true)%>
 											<span class="text-success">Approved!</span>
 										<%elsif leave_request.approve.eql?(false)%>
@@ -83,7 +92,7 @@
 														<% end %>
 													</div>
 												<%else%>
-													<span class="text-danger">cancelled!</span>
+													<span class="text-danger">Cancelled!</span>
 												<%end%>
 											</div>
 										<% elsif leave_request.approve.eql?(true)%>
@@ -93,6 +102,9 @@
 										<%end%>
 									<%end%>
 								</div>
+							</td>
+							<td>
+								<%= leave_request.description.present? ? leave_request.description : "N/A"%>
 							</td>
 						</tr>
 					<%end%>

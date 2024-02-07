@@ -5,9 +5,9 @@ class LeaveRequestsController < ApplicationController
         if is_admin?
             @leave_requests = LeaveRequest.order(created_at: :desc)
         elsif is_manager?
-            @leave_requests = current_user.leave_requests.order(created_at: :desc)
+            @leave_requests = current_user.leave_requests.order(created_at: :asc)
         else
-            @leave_requests = current_user.leave_requests.order(created_at: :desc)
+            @leave_requests = current_user.leave_requests.order(created_at: :asc)
         end 
 		authorize @leave_requests
     end
@@ -42,8 +42,8 @@ class LeaveRequestsController < ApplicationController
             
             UserMailer.leave_apply_email(@leave_request).deliver_later
             UserMailer.notify_to_admin(@leave_request).deliver_later
-            NotificationsChannel.broadcast_to(current_user, @leave_request.notifications.last)
-            redirect_to leave_requests_path, notice: "Request Created Successfully."
+            # NotificationsChannel.broadcast_to(current_user, @leave_request.notifications.last)
+             redirect_to leave_requests_path, notice: "Request Created Successfully."
         else
             redirect_to new_leave_request_path, error:  @leave_request.errors.full_messages
         end
@@ -51,38 +51,43 @@ class LeaveRequestsController < ApplicationController
      
     def leave_approve    
         @leave_request = LeaveRequest.find(params[:id])
-        if @leave_request.update(approve: true)
+        if  @leave_request.canceled == true
+            redirect_to leave_requests_path, error: "Employee already cancelled leave."
+        elsif @leave_request.update(approve: true)
             @user_leave_type= @leave_request.user_leave_type
             message = " Hi #{@leave_request.user.first_name.titleize}, your #{@leave_request.user_leave_type.leave_type.name.titleize} has been succefully approved!"
             @leave_request.notifications.create(recipient: @leave_request.user, user: current_user, message: message, notifiable: @leave_request, recipient_type: "true", read: false)
             UserMailer.approve_email(@leave_request).deliver_now
+            redirect_to leave_requests_path,notice: "Leave Approved Successfully."
         end
-        redirect_to leave_requests_path,notice: "Leave Approved Successfully."
     end
 
     def leave_reject
         @leave_request = LeaveRequest.find(params[:id])
-        @leave_request.update(approve: false)
-        @user_leave_type= @leave_request.user_leave_type
-        
-        message = " Hi #{@leave_request.user.first_name.titleize}, your #{@leave_request.user_leave_type.leave_type.name.titleize} has been rejected!"
-        @leave_request.notifications.create(recipient: @leave_request.user, user: current_user, message: message, notifiable: @leave_request, recipient_type: "true", read: false)
-        
-        if @user_leave_type.leave_type.name.eql?("Short Leave")
-            @user_leave_type.update(leave_count: 1)
-        else
-            date_from = Date.parse("#{@leave_request.leave_from}") if @leave_request.leave_from.present?
-            date_to = Date.parse("#{@leave_request.leave_to}") if @leave_request.leave_to.present?
-            if date_from == date_to
-                no_of_days = 1
+        if  @leave_request.canceled == true
+            redirect_to leave_requests_path, error: "Employee already cancelled leave."
+        elsif @leave_request.update(approve: false)
+            @user_leave_type= @leave_request.user_leave_type
+            
+            message = " Hi #{@leave_request.user.first_name.titleize}, your #{@leave_request.user_leave_type.leave_type.name.titleize} has been rejected!"
+            @leave_request.notifications.create(recipient: @leave_request.user, user: current_user, message: message, notifiable: @leave_request, recipient_type: "true", read: false)
+            
+            if @user_leave_type.leave_type.name.eql?("Short Leave")
+                @user_leave_type.update(leave_count: 1)
             else
-                no_of_days = @leave_request.day_type.eql?("full_day") ? ((date_to - date_from).to_i + 1) : 0.5
+                date_from = Date.parse("#{@leave_request.leave_from}") if @leave_request.leave_from.present?
+                date_to = Date.parse("#{@leave_request.leave_to}") if @leave_request.leave_to.present?
+                if date_from == date_to
+                    no_of_days = 1
+                else
+                    no_of_days = @leave_request.day_type.eql?("full_day") ? ((date_to - date_from).to_i + 1) : 0.5
+                end
+                leave_count = @user_leave_type.leave_count
+                @user_leave_type.update(leave_count: leave_count + no_of_days)
             end
-            leave_count = @user_leave_type.leave_count
-            @user_leave_type.update(leave_count: leave_count + no_of_days)
+            UserMailer.reject_email(@leave_request).deliver_now
+            redirect_to leave_requests_path,notice: "Leave rejected."
         end
-        UserMailer.reject_email(@leave_request).deliver_now
-        redirect_to leave_requests_path,notice: "Leave rejected."
     end
 
     def cancel
