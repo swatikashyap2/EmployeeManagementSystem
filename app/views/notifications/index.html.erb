@@ -49,11 +49,6 @@
 									<td>
 										<%=  notification.created_at.present? ? notification.created_at.in_time_zone("Asia/Kolkata").strftime("%I:%M%p") : 'N/A'  %>
 									</td>
-									<td>
-										<%= link_to read_notification_path(notification), method: :post, remote: true do  %>
-											<i class="bi bi-backspace"></i>
-										<%end%>
-									</td>
 								<%else%>
 									<td>
 										<%=  notification.notifiable.leave_from.present? ? notification.notifiable.leave_from.strftime("%B %d, %Y") : 'N/A'%>
@@ -61,11 +56,7 @@
 									<td>
 										<%= notification.notifiable.leave_to.present? ? notification.notifiable.leave_to.strftime("%B %d, %Y") : 'N/A'%>
 									</td>
-									<td>
-										<%= link_to read_notification_path(notification), method: :post, remote: true do  %>
-											<i class="bi bi-backspace"></i>
-										<%end%>
-									</td>
+
 								<%end%>
 							</tr>
 						<%end%>

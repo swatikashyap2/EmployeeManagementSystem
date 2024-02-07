@@ -1,14 +1,35 @@
-<%= link_to "ALL", notifications_path %>
-<ul id="notification_list" >
-	<% if @notifications.present? %>
-		<% @notifications.each do |notification| %>
-			<li>
-				<%= notification.message.present? ? notification.message : "N/A" %>
-				(<%= notification.created_at.present? ? notification.created_at.strftime("%B %d, %Y") : 'N/A'%>
-				<%= notification.created_at.present? ? notification.created_at.in_time_zone("Asia/Kolkata").strftime("%I:%M%p") : 'N/A'%>)
-			</li>
-		<% end %>
-	<% else %>
-		<li><h2 class="mt-3">Record Not Found</h2></li>
-	<% end %>
+<div class="p-2 d-flex justify-content-between">
+    <h5> Notifications</h5>
+    <%= link_to "All", notifications_path %>
+</div>
+<ul id="notification_list" style="width: 100%; height: auto; overflow: auto; max-height: 600px; min-height: 200px;">
+    <% if @notifications.present? %>
+        <% @notifications.each do |notification| %>
+            <li>
+                <div>
+                    <%= notification.message.present? ? notification.message : "N/A" %>
+                    (<%= notification.created_at.present? ? notification.created_at.strftime("%B %d, %Y") : 'N/A'%>
+                    <%= notification.created_at.present? ? notification.created_at.in_time_zone("Asia/Kolkata").strftime("%I:%M%p") : 'N/A'%>)
+                </div>
+                <div>
+                    <%= link_to read_notification_notification_path(notification), format: :js, remote: true do  %>
+                        <i class="bi bi-backspace"></i>
+                    <%end%>
+                    
+                </div>
+                <%= @notifications.count%>
+            </li>
+        <% end %>
+    <% else %>
+        <h5 class="mt-3">Record Not Found</h5>
+    <% end %>
 </ul>
+<style>
+    #notification_list{
+        width: 100% !important;
+        height: auto !important;
+        overflow: auto !important;
+        max-height: 600px !important;
+        min-height: 200px !important;
+    }
+</style>

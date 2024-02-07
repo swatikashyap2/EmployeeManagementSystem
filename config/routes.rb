@@ -31,7 +31,7 @@ Rails.application.routes.draw do
       get :notification_popup
     end
     member do
-      post  :read
+      get :read_notification
     end
   end
   mount ActionCable.server => '/cable'

@@ -8,7 +8,7 @@ class User < ApplicationRecord
 	has_many :leave_types, through: :user_leave_types
 	has_many :leave_requests
 	belongs_to :role
-	has_many :notifications, as: :recipient
+	has_many :notifications
 
 	validates :first_name, presence: true
 	validates :email, presence: true

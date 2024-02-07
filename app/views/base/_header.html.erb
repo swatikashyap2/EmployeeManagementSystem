@@ -11,10 +11,22 @@
 		<li class="nav-item d-none d-sm-inline-block">
 			<%# <a href="#" class="nav-link">Contact</a> %>
 		</li -->
-		<li>
-			<%= link_to notification_popup_notifications_path, id: 'notification_popup', remote: true do %>
-				<i class="bi bi-bell-fill"></i>
-			<% end %>
+		<li class="">
+			<div class="d-flex">
+				<div class="">
+					<%= link_to notification_popup_notifications_path, remote: true do %>
+						<i class="bi bi-bell-fill notification-icon" ></i>
+					<% end %>
+					<div id='notification-card'></div>
+				</div>
+				<div class="position-relative">
+					<div class="position-absolute count-style">
+						<% if current_user.present?%>
+								<%=  Notification.where(recipient_id: current_user.id, read: false).count%>
+						<%end%>
+					</div>
+				</div>	
+			</div>
 		</li>
 
 
@@ -149,5 +161,56 @@
 		</li>
 	</ul-->
 </nav>
+<script>
+	let count = 0;
+	// document.body.addEventListener('click', function(event) {
+	// 	if (event.target !== document.body) {
+	// 		const popup = document.querySelector('#notification-card');
+	// 		debugger
+	// 		if (!popup.classList.contains('d-none')) {
+	// 			$('#notification-card').addClass("d-none");
+	// 		}
+	// 	}
+	// });
+	document.getElementsByClassName('notification-icon')[0].addEventListener('click', function(event) {
+		if (count != 0){
+			$('#notification-card').addClass("d-none");
+			count = 0;
+		} else{
+			$('#notification-card').removeClass("d-none");
+			count = count + 1;
+		}
+	});
+</script>
+<style>
+	#notification-card{
+		position: absolute;
+		top: 50px;
+		right: 150px;
+		display: block;
+		max-width: 300px;
+		font-size: 0.875rem;
+		word-wrap: break-word;
+		background-color: #fff;
+		background-clip: padding-box;
+		border: 1px solid rgba(0, 0, 0, 0.2);
+		border-radius: 0.3rem;
+		box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+	}
+	.notification-icon{
+		font-size: 22px;
+	}
+	.count-style{
+		width: 20px;
+		right: -7px;
+		top: -6px;
+		background-color: red;
+		border-radius: 100%;
+		height: 20px;
+		text-align: center;
+		font-size: 12px;
+		color: white;
+	}
+</style>
 
   
