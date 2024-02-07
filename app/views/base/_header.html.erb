@@ -20,10 +20,9 @@
 					<div id='notification-card'></div>
 				</div>
 				<div class="position-relative">
-					<div class="position-absolute count-style">
-						<% if current_user.present?%>
-								<%=  Notification.where(recipient_id: current_user.id, read: false).count%>
-						<%end%>
+					<%  notification_count = Notification.where(recipient_id: current_user.id, read: false).count %>
+					<div id="noti-count">
+						<%= render "/base/notification_count", notification_count: notification_count%>
 					</div>
 				</div>	
 			</div>
