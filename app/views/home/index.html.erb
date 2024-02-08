@@ -1,9 +1,87 @@
-<div class="text-center">
-    <div>
-        <h1>Welcome to the Backspacce Technologies</h1>
-    </div>
-    <div>
-       <%= image_tag("download.png") %>
-    </div>
+<div class="content-header">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<div class="d-flex justify-content-between">
+					<div>
+						<ol class="breadcrumb float-sm-right">
+							<li class="breadcrumb-item active">Dashboard</li>
+						</ol>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
+<div class="text-center" id="container">
+    <div id="chart-container"></div>
+</div>
+
+<script>
+    document.addEventListener("turbo:load", function() {
+        Highcharts.chart('chart-container', {
+            chart: {
+                type: 'pie'
+            },
+            // title: {
+            //     text: 'Browser market shares. January, 2022',
+            //     align: 'left'
+            // },
+            // subtitle: {
+            //     text: 'Click the slices to view versions. Source: <a href="http://statcounter.com" target="_blank">statcounter.com</a>',
+            //     align: 'left'
+            // },
+
+            accessibility: {
+                announceNewData: {
+                    enabled: true
+                },
+                point: {
+                    valueSuffix: '%'
+                }
+            },
+
+            plotOptions: {
+                series: {
+                    borderRadius: 5,
+                    dataLabels: [{
+                        enabled: true,
+                        distance: 15,
+                        format: '{point.name}'
+                    }, {
+                        enabled: true,
+                        distance: '-30%',
+                        filter: {
+                            property: 'percentage',
+                            operator: '>',
+                            value: 5
+                        },
+                        format: '{point.y:.1f}%',
+                        style: {
+                            fontSize: '0.9em',
+                            textOutline: 'none'
+                        }
+                    }]
+                }
+            },
+
+            tooltip: {
+                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+            },
+
+            series: [
+                {
+                    name: 'Browsers',
+                    colorByPoint: true,
+                    data: gon.leaves
+                }
+            ],
+        });
+    });
+</script>
+
+
+
+
 

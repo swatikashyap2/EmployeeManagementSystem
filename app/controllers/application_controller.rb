@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
 	helper_method :current_user
 	
 	include Pundit::Authorization
+	include Gon::ControllerHelpers
 	protect_from_forgery with: :exception
   	rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   	
@@ -34,7 +35,7 @@ class ApplicationController < ActionController::Base
 	protected
 		def configure_permitted_parameters
 			devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:email, :password, :password_confirmation, :role_id)}
-			
+
 		end
 
 end
