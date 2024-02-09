@@ -73,8 +73,12 @@
 											<% if leave_request.canceled.eql?(true)%>
 												<div><span class="text-danger">Cancelled!</span></div>
 											<%elsif%>
-												<%= link_to "Approve", leave_approve_leave_request_path(leave_request), method: :post, class: "btn btn-success"%>
-												<%= link_to "Reject", leave_reject_leave_request_path(leave_request),method: :post, class: "btn btn-danger"%>
+												<%= link_to  leave_approve_leave_request_path(leave_request), method: :post do%>
+												 	<i class="bi bi-check2 text-green"></i>
+												<%end%>
+												<%= link_to leave_reject_leave_request_path(leave_request),method: :post do%>
+													<i class="bi bi-x text-danger"></i>
+												<%end%>
 											<%end%>
 										<% elsif leave_request.approve.eql?(true)%>
 											<span class="text-success">Approved!</span>

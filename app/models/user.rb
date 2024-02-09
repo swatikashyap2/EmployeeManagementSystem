@@ -9,6 +9,7 @@ class User < ApplicationRecord
 	has_many :leave_requests
 	belongs_to :role
 	has_many :notifications
+	belongs_to :reporting_manager,  class_name: 'User', foreign_key: 'reporting_manager_id', optional: true
 
 	validates :first_name, presence: true
 	validates :email, presence: true
@@ -21,6 +22,7 @@ class User < ApplicationRecord
 
 	after_create :assign_all_leave_types
 	before_validation :set_default_password, on: :create
+	before_validation :set_default_reporting_manager, on: :create
 
 	scope :manager, -> {includes(:role).where(roles: {name: "manager"})}
 	scope :employees, -> {includes(:role).where(roles: {name: "employee"})}
@@ -45,6 +47,13 @@ class User < ApplicationRecord
 		end
 	end
 
+	def set_default_reporting_manager
+		admin_user = User.admin.first
+		self.reporting_manager_id = admin_user.id if admin_user
+	end
+	  
+	  
+
 	private
 
 	def assign_all_leave_types
@@ -53,4 +62,3 @@ class User < ApplicationRecord
 		end
 	end
 end
-  

@@ -7,15 +7,17 @@
         <% @notifications.each do |notification| %>
             <li>
                 <div>
-                    <%= notification.message.present? ? notification.message : "N/A" %>
-                    (<%= notification.created_at.present? ? notification.created_at.strftime("%B %d, %Y") : 'N/A'%>
-                    <%= notification.created_at.present? ? notification.created_at.in_time_zone("Asia/Kolkata").strftime("%I:%M%p") : 'N/A'%>)
+                    <%= notification.message %>
                 </div>
-                <div>
-                    <%= link_to read_notification_notification_path(notification), format: :js, remote: true do  %>
-                        <i class="bi bi-backspace"></i>
-                    <%end%>
-                    
+                <div class="d-flex justify-content-between" >
+                    <div>
+                        <%= time_ago_in_words(notification.created_at.in_time_zone("Asia/Kolkata")) + ' ago' %>
+                    </div>
+                    <div>
+                        <%= link_to read_notification_notification_path(notification), format: :js, remote: true do  %>
+                            <i class="bi bi-backspace"></i>
+                        <%end%>
+                    </div> 
                 </div>
             </li>
         <% end %>
@@ -32,4 +34,5 @@
         min-height: 200px !important;
     }
 </style>
+
 

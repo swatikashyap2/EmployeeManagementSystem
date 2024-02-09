@@ -25,7 +25,7 @@
 					<th>Message</th>
 						<% if is_employee? || is_manager?%>
 						<th>Reporting Manager</th>
-						<th>Date</th>
+						<th>Created At</th>
 						<th>Time</th>
 					<%elsif is_admin?%>
 						<th>Date From</th>
@@ -44,10 +44,10 @@
 										<%= notification.notifiable.reporting_manager.present? ? notification.notifiable.reporting_manager.first_name.titleize : 'N/A'%>
 									</th>
 									<td>
-										<%= notification.created_at.present? ? notification.created_at.strftime("%B %d, %Y") : 'N/A'%>
+										<%= notification.created_at.strftime("%B %d, %Y")%>
 									</td>
 									<td>
-										<%=  notification.created_at.present? ? notification.created_at.in_time_zone("Asia/Kolkata").strftime("%I:%M%p") : 'N/A'  %>
+										<%=  notification.created_at.in_time_zone("Asia/Kolkata").strftime("%I:%M%p")  %>
 									</td>
 								<%else%>
 									<td>
