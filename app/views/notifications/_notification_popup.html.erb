@@ -2,7 +2,7 @@
     <h5> Notifications</h5>
     <%= link_to "All", notifications_path %>
 </div>
-<ul id="notification_list" style="width: 100%; height: auto; overflow: auto; max-height: 600px; min-height: 200px;">
+<ul id="notification_list">
     <% if @notifications.present? %>
         <% @notifications.each do |notification| %>
             <li class="mt-2">

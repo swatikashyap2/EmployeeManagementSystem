@@ -19,6 +19,13 @@ class LeaveRequestsController < ApplicationController
 
     def create
         @leave_request = LeaveRequest.new(leave_request_params)
+        existing_leave = LeaveRequest.where(user_id: @leave_request.user_id)
+                                    .where("daterange(leave_from, leave_to, '[]') && daterange(?, ?, '[]')", @leave_request.leave_from, @leave_request.leave_to)
+        if existing_leave.exists?
+        redirect_to new_leave_request_path, alert: "Your leave request overlaps with an existing leave request."
+        return
+        end
+
         if @leave_request.save
             @user_leave_type= @leave_request.user_leave_type
             if @user_leave_type.leave_type.name.eql?("Short Leave")
@@ -118,6 +125,13 @@ class LeaveRequestsController < ApplicationController
         end 
     end
 
+    def reason_popup
+        @leave_request =  LeaveRequest.find(params[:id])
+        respond_to do|format|
+            format.js
+        end
+    end
+
     private
 
     def set_user_leave_types
@@ -128,4 +142,4 @@ class LeaveRequestsController < ApplicationController
         params.require(:leave_request).permit(:user_leave_type_id, :leave_from, :leave_to, :time_from, :time_to, :user_id, :day_type, :reporting_manager_id, :description)
     end
 end
-  
+

@@ -6,11 +6,11 @@ class HomeController < ApplicationController
 		end
 		gon.leaves = user_leaves
 		if is_admin?
-            @leave_requests = LeaveRequest.where(approve: nil, canceled: nil).order(created_at: :desc).paginate(page: params[:page], per_page: 10)
+            @leave_requests = LeaveRequest.where(approve: nil, canceled: nil).order(created_at: :desc)
         elsif is_manager?
-           @leave_requests = current_user.leave_requests.where(approve: nil, canceled: nil).order(created_at: :asc).paginate(page: params[:page], per_page: 10)
+           @leave_requests = current_user.leave_requests.where(approve: nil, canceled: nil).order(created_at: :asc)
         else
-           @leave_requests = current_user.leave_requests.where(approve: nil, canceled: nil).order(created_at: :asc).paginate(page: params[:page], per_page: 10)
+           @leave_requests = current_user.leave_requests.where(approve: nil, canceled: nil).order(created_at: :asc)
         end 
 
 		

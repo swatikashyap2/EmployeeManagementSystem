@@ -21,6 +21,7 @@ Rails.application.routes.draw do
       post  :leave_approve
       post  :leave_reject
       post  :cancel
+      post  :reason_popup
     end
   end
 

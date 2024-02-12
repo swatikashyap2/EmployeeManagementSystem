@@ -108,7 +108,10 @@
 								</div>
 							</td>
 							<td>
-								<%= leave_request.description.present? ? leave_request.description : "N/A"%>
+								<%= link_to reason_popup_leave_request_path(leave_request), method: :post,onclick: "defaultAlertBtn()", remote: true do%>
+									<i class="bi bi-info-circle"></i>
+								<%end%>
+								<div id='reason-card'></div>
 							</td>
 						</tr>
 					<%end%>
@@ -123,3 +126,14 @@
 		</table>
 	</div>
 </div>
+<script>
+  function defaultAlertBtn() {
+    alert("Button has been clicked")
+  }
+  function sweetAlertBtn() {
+    Swal.fire({
+      icon: 'success',
+      title: 'Button has been clicked',
+    })
+  }
+</script>

@@ -8,7 +8,7 @@ class User < ApplicationRecord
 	has_many :leave_types, through: :user_leave_types
 	has_many :leave_requests
 	belongs_to :role
-	has_many :notifications
+	has_many :notifications,dependent: :destroy
 	belongs_to :reporting_manager,  class_name: 'User', foreign_key: 'reporting_manager_id', optional: true
 
 	validates :first_name, presence: true
