@@ -5,17 +5,17 @@
 <ul id="notification_list" style="width: 100%; height: auto; overflow: auto; max-height: 600px; min-height: 200px;">
     <% if @notifications.present? %>
         <% @notifications.each do |notification| %>
-            <li>
+            <li class="mt-2">
                 <div>
                     <%= notification.message %>
                 </div>
                 <div class="d-flex justify-content-between" >
                     <div>
-                        <%= time_ago_in_words(notification.created_at.in_time_zone("Asia/Kolkata")) + ' ago' %>
+                         <strong><%= time_ago_in_words(notification.created_at.in_time_zone("Asia/Kolkata")) + ' ago' %> </strong>
                     </div>
                     <div>
                         <%= link_to read_notification_notification_path(notification), format: :js, remote: true do  %>
-                            <i class="bi bi-backspace"></i>
+                           <i class="bi bi-x text-danger p-2"></i>
                         <%end%>
                     </div> 
                 </div>
@@ -34,5 +34,3 @@
         min-height: 200px !important;
     }
 </style>
-
-

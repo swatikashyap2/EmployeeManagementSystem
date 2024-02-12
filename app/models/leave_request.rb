@@ -7,6 +7,7 @@ class LeaveRequest < ApplicationRecord
 
     validates :user_leave_type_id, presence: true
     validates :leave_from, presence: true
+    # validate :check_duplicate_leave_request, on: :create
     # validates :description, presence: true
     # validate :leave_from_before_current_date
     # validate :leave_to_before_current_date
@@ -41,5 +42,12 @@ class LeaveRequest < ApplicationRecord
 			end
 		end
     end
-end
 
+	private
+
+	# def check_duplicate_leave_request
+	# 	if user.leave_requests.exists?(leave_from: leave_from, leave_to: leave_to)
+	# 	errors.add(:leave_date, "You have already applied for leave on this date.")
+	# 	end
+	# end
+end

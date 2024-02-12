@@ -71,7 +71,7 @@
 									<% if is_admin?%>
 										<% if leave_request.approve.eql?(nil)%>
 											<% if leave_request.canceled.eql?(true)%>
-												<div><span class="text-danger">Cancelled!</span></div>
+												<div><span class="text-warning">Cancelled!</span></div>
 											<%elsif%>
 												<%= link_to  leave_approve_leave_request_path(leave_request), method: :post do%>
 												 	<i class="bi bi-check2 text-green"></i>
@@ -96,7 +96,7 @@
 														<% end %>
 													</div>
 												<%else%>
-													<span class="text-danger">Cancelled!</span>
+													<span class="text-warning">Cancelled!</span>
 												<%end%>
 											</div>
 										<% elsif leave_request.approve.eql?(true)%>

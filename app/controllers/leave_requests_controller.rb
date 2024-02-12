@@ -52,7 +52,7 @@ class LeaveRequestsController < ApplicationController
     def leave_approve    
         @leave_request = LeaveRequest.find(params[:id])
         if  @leave_request.canceled == true
-            redirect_to leave_requests_path, error: "Employee already cancelled leave."
+            redirect_to leave_requests_path, alert: "Leave has been cancelled."
         elsif @leave_request.update(approve: true)
             @user_leave_type= @leave_request.user_leave_type
             message = " Hi #{@leave_request.user.first_name.titleize}, your #{@leave_request.user_leave_type.leave_type.name.titleize} has been succefully approved!"
@@ -65,7 +65,7 @@ class LeaveRequestsController < ApplicationController
     def leave_reject
         @leave_request = LeaveRequest.find(params[:id])
         if  @leave_request.canceled == true
-            redirect_to leave_requests_path, error: "Employee already cancelled leave."
+            redirect_to leave_requests_path, alert: "Leave has been cancelled."
         elsif @leave_request.update(approve: false)
             @user_leave_type= @leave_request.user_leave_type
             
@@ -86,7 +86,7 @@ class LeaveRequestsController < ApplicationController
                 @user_leave_type.update(leave_count: leave_count + no_of_days)
             end
             UserMailer.reject_email(@leave_request).deliver_now
-            redirect_to leave_requests_path,notice: "Leave rejected."
+            redirect_to leave_requests_path, notice: "Leave rejected."
         end
     end
 
@@ -128,3 +128,4 @@ class LeaveRequestsController < ApplicationController
         params.require(:leave_request).permit(:user_leave_type_id, :leave_from, :leave_to, :time_from, :time_to, :user_id, :day_type, :reporting_manager_id, :description)
     end
 end
+  
