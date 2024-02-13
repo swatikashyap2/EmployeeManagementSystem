@@ -20,7 +20,7 @@ class UserLeaveTypesController < ApplicationController
           if attributes
             permitted_attributes = attributes.permit(:leave_count)
             if user_leave_type.leave_count != permitted_attributes[:leave_count].to_i
-              user_leave_type.update(permitted_attributes)
+              user_leave_type.update(permitted_attributes.merge({total_leave_count: attributes[:leave_count].to_i}))
             end
           end
         end
@@ -35,6 +35,6 @@ class UserLeaveTypesController < ApplicationController
 
     private
         def user_leave_type_params
-            params.require(:user_leave_types).permit(:leave_count)
+            params.require(:user_leave_types).permit(:leave_count, :total_leave_count)
         end
 end

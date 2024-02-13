@@ -8,5 +8,3 @@ import "bootstrap"
 import "./channels"
 import Highcharts from "highcharts"
 window.Highcharts = Highcharts;
-import * as Swal from 'sweetalert2';
-window.Swal = Swal.default;

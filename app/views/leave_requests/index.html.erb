@@ -108,14 +108,12 @@
 								</div>
 							</td>
 							<td>
-								<%= link_to reason_popup_leave_request_path(leave_request), method: :post,onclick: "defaultAlertBtn()", remote: true do%>
-									<i class="bi bi-info-circle"></i>
-								<%end%>
-								<div id='reason-card'></div>
+								<div id="reason" class="d-none"><%= leave_request.description %></div>
+								<i class="bi bi-info-circle" onclick="sweetAlertBtn()"></i>
 							</td>
 						</tr>
 					<%end%>
-				<%else%>
+		 		<%else%>
 					<tr>
 						<td colspan="12" class="text-center border-0">
 							<h2 class="mt-3">Record Not Found</h2>
@@ -127,13 +125,13 @@
 	</div>
 </div>
 <script>
-  function defaultAlertBtn() {
-    alert("Button has been clicked")
-  }
-  function sweetAlertBtn() {
-    Swal.fire({
-      icon: 'success',
-      title: 'Button has been clicked',
-    })
-  }
+	function sweetAlertBtn() {
+        var reason = document.getElementById('reason').innerHTML;
+        Swal.fire({
+            icon: 'info',
+             text: reason
+        });
+    }
+
 </script>
+

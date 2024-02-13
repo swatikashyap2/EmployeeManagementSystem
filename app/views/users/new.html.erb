@@ -107,6 +107,7 @@
 </div>
 
 <script>
+	document.addEventListener("turbo:load", function() {
 		var emails = [];
 		$.ajax({
 			type: "GET",
@@ -147,7 +148,7 @@
 			}
 		});
 	
-
+	});
 	function phone() { 
 		
 		var phoneField = document.getElementById('user_phone');

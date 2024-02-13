@@ -6,9 +6,9 @@ class User < ApplicationRecord
 			:recoverable, :rememberable, :validatable
 	has_many :user_leave_types
 	has_many :leave_types, through: :user_leave_types
-	has_many :leave_requests
+	has_many :leave_requests, dependent: :destroy 
 	belongs_to :role
-	has_many :notifications,dependent: :destroy
+	has_many :notifications, dependent: :destroy
 	belongs_to :reporting_manager,  class_name: 'User', foreign_key: 'reporting_manager_id', optional: true
 
 	validates :first_name, presence: true
@@ -19,6 +19,11 @@ class User < ApplicationRecord
 	validates :email, format: { with: /(\A([a-z]*\s*)*\<*([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\>*\Z)/i }
 	validate :dob_on_or_before_current_date
 
+	has_attached_file :image, styles: { medium: "300x300>", thumb: "100x100>" }
+ 	validates_attachment :image, content_type: { content_type: ["image/jpeg", "image/jpg"] }
+	attr_accessor :image_file_name
+	attr_accessor :image_content_type
+	  
 
 	after_create :assign_all_leave_types
 	before_validation :set_default_password, on: :create
@@ -58,7 +63,7 @@ class User < ApplicationRecord
 
 	def assign_all_leave_types
 		LeaveType.all.each do |leave|
-		user_leave_types.create(leave_type_id: leave.id, leave_count: leave.count)
+		user_leave_types.create(leave_type_id: leave.id, leave_count: leave.count, total_leave_count: leave.count)
 		end
 	end
 end

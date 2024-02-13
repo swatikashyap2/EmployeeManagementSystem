@@ -97,19 +97,37 @@
 					<%= f.label :zip_code %>
 					<%= f.text_field :zip_code, autofocus: true, autocomplete: "zip_code", class: "form-control", placeholder: "Enter Zip-Code"   %>
 				</div>
+				<div class="field mb-2">
+					<%= f.label :add_image%>
+					<%= f.file_field :image %>
+				</div>
 
 				<div class="field mb-2">
 					<%= f.label :address %>
 					<%= f.text_area :address, autofocus: true, autocomplete: "address", class: "form-control", placeholder: "Enter Address" %>
 				</div>
+				<div class="field mb-2">
+					<%= f.label :password %> <i>(leave blank if you don't want to change it)</i>
+					<%= f.password_field :password, autocomplete: "new-password",id: "pass", class: "form-control", placeholder: "Create Password" %>
+					<% if @minimum_password_length %>
+						
+						<em><%= @minimum_password_length %> characters minimum</em>
+					<% end %>
+				</div>
+
+				<div class="field mb-2">
+					<%= f.label :password_confirmation %><i>(please confirm your password)</i>
+					<%= f.password_field :password_confirmation, autocomplete: "new-password",  class: " con_pass form-control", placeholder: "Confirm Password"%>
+					<span id="user_pass_error"></span>
+				</div>
 				<div class="field mt-2">
-					<%= f.submit "Update", class: "btn btn-sm btn-primary" %>
+					<%= f.submit "Update", class: "btn btn-sm btn-primary send-request" %>
 				</div>	
 			</div>
 		<%end%>
 	</div>
 </div>
-<div class="card">
+<!-- div class="card">
 	<div class="card-body">
 		<%= form_for @user do|f|%>
 			<div class="row">
@@ -133,7 +151,7 @@
 			</div>
 		<% end %>	
 	</div>
-</div>
+</div -->
 <style>
 	.field-value{
 		border-radius: 4px;
