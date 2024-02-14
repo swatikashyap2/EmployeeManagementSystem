@@ -18,13 +18,9 @@ class User < ApplicationRecord
 	validates :phone, uniqueness: true,numericality: { only_integer: true },length: { maximum: 12}, allow_blank: true
 	validates :email, format: { with: /(\A([a-z]*\s*)*\<*([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\>*\Z)/i }
 	validate :dob_on_or_before_current_date
-
-	has_attached_file :image, styles: { medium: "300x300>", thumb: "100x100>" }
- 	validates_attachment :image, content_type: { content_type: ["image/jpeg", "image/jpg"] }
-	attr_accessor :image_file_name
-	attr_accessor :image_content_type
-	  
-
+	 
+	has_one_attached :avatar
+	
 	after_create :assign_all_leave_types
 	before_validation :set_default_password, on: :create
 	before_validation :set_default_reporting_manager, on: :create
@@ -56,6 +52,10 @@ class User < ApplicationRecord
 		admin_user = User.admin.first
 		self.reporting_manager_id = admin_user.id if admin_user
 	end
+
+	def image_url(style_name = :medium)
+		image.url(style_name)
+	  end
 	  
 	  
 

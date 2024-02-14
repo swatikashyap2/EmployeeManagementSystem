@@ -35,8 +35,15 @@
 		<li class="nav-item mx-1">	
 			<%= link_to "logout", destroy_user_session_path, method: :delete, class: "btn btn-warning", id: "logout-button" %>
 		</li>
-		<li class="nav-item">
-			<strong><%= link_to "Edit Profile", edit_user_path(current_user), class: "btn btn-primary" %></strong>
+		
+		<li>
+			<%= link_to edit_user_path(current_user) do %>
+				<% if current_user.avatar.attached? %>
+						<%= image_tag current_user.avatar, class: 'rounded-circle avatar_style' %>
+				<% else %>
+					<%= image_tag 'placeholder.jpg', class: 'rounded-circle avatar_style' %>
+				<% end %>
+			<% end %>
 		</li>
 	</ul>
 
@@ -212,6 +219,10 @@
 		text-align: center;
 		font-size: 12px;
 		color: white;
+	}
+	.avatar_style{
+		height: 40px;
+    	width: 40px;
 	}
 </style>
 

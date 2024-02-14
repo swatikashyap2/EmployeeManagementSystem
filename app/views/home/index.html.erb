@@ -18,54 +18,31 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body min-card">
-                    <% if is_manager? || is_employee?%>
-                        <div class="d-flex mt-1">
-                            <div>
+                    <div>
+                        <% if current_user.avatar.attached? %>
+                            <%= image_tag current_user.avatar, class:'rounded-circle img-height'%>
+                        <%else%>
+                            <%= image_tag 'placeholder.jpg', class: 'rounded-circle img-height' %>
+                        <%end%>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <% if is_manager? || is_employee?%>
+                            <div class="mt-1">
                                 <label class="label-font-color"><b>Reporting Manager :</b></label>
+                                <%= current_user.reporting_manager.present? ? current_user.reporting_manager.first_name : "N/A"%>
                             </div>
-                            <div>
-                                <% if current_user.reporting_manager.present?%>
-                                    <%= current_user.reporting_manager.first_name%>
-                                <%else%>
-                                    N/A
-                                <%end%>
-                            </div>
-                        </div>
-                    <%end%>
-                    <div class="d-flex mt-1">
-                        <div>
+                        <%end%>
+                        <div class="mt-1">
                             <label class="label-font-color"><b>Designation :</b></label>
+                            <%= current_user.designation.present? ? current_user.designation.titleize  : "N/A"%>
                         </div>
-                        <div>
-                            <% if current_user.designation.present?%>
-                                <%= current_user.designation.titleize%>
-                            <%else%>
-                                N/A
-                            <%end%>
-                        </div>
-                    </div>
-                    <div class="d-flex mt-1">
-                        <div>
+                        <div class="mt-1">
                             <label class="label-font-color"><b>Email :</b></label>
+                            <%= current_user.email.present? ? current_user.email : "N/A"%>
                         </div>
-                        <div>
-                            <% if current_user.email.present?%>
-                                <%= current_user.email%>
-                            <%else%>
-                                N/A
-                            <%end%>
-                        </div>
-                    </div>
-                    <div class="d-flex mt-1">
-                        <div>
+                        <div class="mt-1">
                             <label class="label-font-color"><b>Employee Code :</b></label>
-                        </div>
-                        <div>
-                            <% if current_user.employee_code.present?%>
-                                <%= current_user.employee_code%>
-                            <%else%>
-                                N/A
-                            <%end%>
+                            <%= current_user.employee_code.present? ? current_user.employee_code : "N/A"%>
                         </div>
                     </div>
                 </div>
@@ -154,8 +131,9 @@
                                         <%end%>
                                     </div>
                                 </td>
-                                <td>
-                                    <%= leave_request.description.present? ? leave_request.description : "N/A"%>
+                               <td>
+                                    <div id="reason" class="d-none"><%= leave_request.description %></div>
+                                    <i class="bi bi-info-circle" onclick="sweetAlertBtn()"></i>
                                 </td>
                             </tr>
                         <%end%>
@@ -205,10 +183,21 @@
             ],
         });
     });
+
+    function sweetAlertBtn() {
+        var reason = document.getElementById('reason').innerHTML;
+        Swal.fire({
+            icon: 'info',
+             text: reason
+        });
+    }
 </script>
 <style>
     .min-card{
         min-height: 440px;
+    }
+    .img-height{
+        height: 200px;
     }
 </style>
 

@@ -18,7 +18,7 @@
 </div>
 <div class="card">
 	<div class="card-body">
-		<%= form_for @user do|f|%>
+		<%= form_for @user, html: { multipart: true } do|f|%>
 			<div class="row">
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :first_name, class: "required-field" %>
@@ -99,7 +99,7 @@
 				</div>
 				<div class="field mb-2">
 					<%= f.label :add_image%>
-					<%= f.file_field :image %>
+					<%= f.file_field :avatar, class: "form-control" %>
 				</div>
 
 				<div class="field mb-2">

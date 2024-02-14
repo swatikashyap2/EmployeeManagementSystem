@@ -74,23 +74,27 @@
 <script>
 	var leaveCount = null;
 	document.getElementById('user_leave_type_id').addEventListener('change', function() {
-		var selectedLeaveTypeId = this.value;
-		$.ajax({
-			type: "GET",
-			url: '/user_leave_types/' + selectedLeaveTypeId,
-			dataType: 'json',
-			data: { id: selectedLeaveTypeId },
-			success: function(response) {
-				leaveCount = response.leave_count;
-				$('#show_count').html('Your leave balance is: ' + leaveCount);
-				selectDatefrom();
-				selectedDayType();
-			},
-			error: function() {
-				console.error('Error fetching leave count.');
-			}
-		});
-
+		var selectedLeaveTypeId = $(this).val();
+		if (selectedLeaveTypeId) { // Check if a leave type is selected
+			$.ajax({
+				type: "GET",
+				url: '/user_leave_types/' + selectedLeaveTypeId,
+				dataType: 'json',
+				data: { id: selectedLeaveTypeId },
+				success: function(response) {
+					leaveCount = response.leave_count;
+					$('#show_count').html('Your leave balance is: ' + leaveCount);
+					selectDatefrom();
+					selectedDayType();
+				},
+				error: function() {
+					console.error('Error fetching leave count.');
+				}
+			});
+		} else {
+			$('#show_count').html('');
+		}
+		
 		let leaveTypeName = $("#user_leave_type_id option:selected").text();
 		if (leaveTypeName === 'Short Leave') {
 			$('#dayty').addClass('d-none');

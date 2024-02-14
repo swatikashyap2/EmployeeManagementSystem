@@ -69,7 +69,6 @@ gem 'jquery-rails'
 gem 'spring'
 gem 'spring-watcher-listen'
 gem 'pundit'
-gem "paperclip"
 gem 'will_paginate-bootstrap4'
 gem 'turbo-rails'
 gem 'stimulus-rails'

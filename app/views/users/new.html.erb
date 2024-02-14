@@ -72,9 +72,15 @@
 					<%= f.select :gender,options_for_select(User.genders.keys.map { |g| [g.humanize, g] }), {include_blank: "--Select Gender--"},{class: "form-control"}%>
 				</div>
 
+
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :zip_code %>
 					<%= f.text_field :zip_code, autofocus: true, autocomplete: "zip_code", class: "form-control", placeholder: "Enter Zip-Code"   %>
+				</div>
+				
+				<div class="field mb-2">
+					<%= f.label :add_image%>
+					<%= f.file_field :avatar, class: "form-control" %>
 				</div>
 
 				<div class="form-group mb-2">

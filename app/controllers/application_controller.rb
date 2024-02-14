@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
 	
 	include Pundit::Authorization
 	include Gon::ControllerHelpers
+	
 	protect_from_forgery with: :exception
   	rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   	
@@ -22,7 +23,7 @@ class ApplicationController < ActionController::Base
 	def is_employee?
 		current_user.role.name == "employee" ? true : false
 	end
-	
+
 	private
 
 		def user_not_authorized
@@ -34,10 +35,8 @@ class ApplicationController < ActionController::Base
 	
 	protected
 		def configure_permitted_parameters
-			devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:email, :password, :password_confirmation, :role_id)}
-
+			devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:email, :password, :password_confirmation, :role_id, :avatar)}
 		end
-
 end
 
   

@@ -125,13 +125,6 @@ class LeaveRequestsController < ApplicationController
         end 
     end
 
-    def reason_popup
-        @leave_request =  LeaveRequest.find(params[:id])
-        respond_to do|format|
-            format.js
-        end
-    end
-
     private
 
     def set_user_leave_types
