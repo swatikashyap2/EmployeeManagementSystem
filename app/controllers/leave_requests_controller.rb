@@ -5,9 +5,9 @@ class LeaveRequestsController < ApplicationController
         if is_admin?
             @leave_requests = LeaveRequest.order(created_at: :desc)
         elsif is_manager?
-            @leave_requests = current_user.leave_requests.order(created_at: :asc)
+            @leave_requests = current_user.leave_requests.order(created_at: :desc)
         else
-            @leave_requests = current_user.leave_requests.order(created_at: :asc)
+            @leave_requests = current_user.leave_requests.order(created_at: :desc)
         end 
 		authorize @leave_requests
     end
@@ -19,13 +19,21 @@ class LeaveRequestsController < ApplicationController
 
     def create
         @leave_request = LeaveRequest.new(leave_request_params)
-        existing_leave = LeaveRequest.where(user_id: @leave_request.user_id)
-                                    .where("daterange(leave_from, leave_to, '[]') && daterange(?, ?, '[]')", @leave_request.leave_from, @leave_request.leave_to)
-        if existing_leave.exists?
-        redirect_to new_leave_request_path, alert: "Your leave request overlaps with an existing leave request."
-        return
+        if params[:leave_request][:day_type] == 'half_day'
+            existing_leave = LeaveRequest.where(user_id: @leave_request.user_id)
+                                        .where(leave_from: @leave_request.leave_from..@leave_request.leave_from.end_of_day)
+            if existing_leave.exists?
+                redirect_to new_leave_request_path, alert: "Your leave request overlaps with an existing leave request."
+                return
+            end
         end
-
+        if params[:leave_request][:day_type] == 'full_day'
+            existing_leave = current_user.leave_requests.where(leave_from: @leave_request.leave_from..@leave_request.leave_from.end_of_day,leave_to: @leave_request.leave_to..@leave_request.leave_to.end_of_day)
+            if existing_leave.exists?
+                redirect_to new_leave_request_path, alert: "Your leave request overlaps with an existing leave request."
+                return
+            end
+        end
         if @leave_request.save
             @user_leave_type= @leave_request.user_leave_type
             if @user_leave_type.leave_type.name.eql?("Short Leave")
@@ -125,6 +133,11 @@ class LeaveRequestsController < ApplicationController
         end 
     end
 
+    def checkleavedates
+		@leavedates = LeaveRequest.pluck(:leave_from)
+		render json: {leavedates: @leavedates}
+	end
+
     private
 
     def set_user_leave_types
@@ -132,7 +145,7 @@ class LeaveRequestsController < ApplicationController
     end
 
     def leave_request_params
-        params.require(:leave_request).permit(:user_leave_type_id, :leave_from, :leave_to, :time_from, :time_to, :user_id, :day_type, :reporting_manager_id, :description)
+        params.require(:leave_request).permit(:user_leave_type_id, :leave_from, :leave_to, :time_from, :time_to, :user_id, :day_type, :reporting_manager_id, :description, :half_type)
     end
 end
 

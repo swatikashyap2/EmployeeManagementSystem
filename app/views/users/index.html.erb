@@ -79,20 +79,22 @@
 									<td class="p-2">
 										<div class="d-flex">
 											<% if is_admin? || is_manager? %>
-												<%= link_to edit_user_path(user), method: :get, class: "mx-2" do%> 
+												<%= link_to edit_user_path(user), method: :get, class: "mx-2", 'data-toggle': 'tooltip', 'data-placement':'top', title: 'Edit User'  do%> 
 													<i class="bi bi-pencil-square"></i>
 												<%end%>
 											<%end%>
 											<%if is_admin?%>	
 												<% if current_user != user %>
-													<%= link_to  user_path(user), data: { turbo_method: :delete, class: "mx-2", turbo_confirm: "Are you sure?"} do%> 
+													<%= link_to user_path(user), method: :delete, class: 'delete-post', onclick: "confirmDelete(this)", 'data-toggle': 'tooltip', 'data-placement': 'top', title: 'Delete User' do %> 
 														<i class="bi bi-trash3-fill"></i>
 													<%end%>
 												<%end%>	
-												<%= link_to edit_user_leave_type_path(user), {remote: true,class: "mx-2", "data-bs-toggle": "moda
-												l", "data-bs-target": "#ppc_manager_modal" } do%>
+												<%= link_to edit_user_leave_type_path(user), {remote: true,class: "mx-2", "data-bs-toggle": "modal", "data-bs-target": "#ppc_manager_modal" } do%>
+												<span data-toggle='tooltip', data-placement='top', title= 'Edit User Leaves'>
 													<i class="bi bi-file-earmark-diff"></i>
-												<%end%>
+												</span>
+												<% end %>
+
 											<%end%>
 										</div>
 									</td>
@@ -116,3 +118,21 @@
 	</div>
 </div>
 <div id="ppc_manager"></div>
+<script>
+  function confirmDelete(link) {
+    event.preventDefault();
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        link.parentNode.submit();
+      }
+    });
+  }
+</script>

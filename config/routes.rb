@@ -17,6 +17,9 @@ Rails.application.routes.draw do
   resources :leave_types
   resources :user_leave_types
   resources :leave_requests do
+    collection do 
+      get :checkleavedates
+    end
     member do
       post  :leave_approve
       post  :leave_reject

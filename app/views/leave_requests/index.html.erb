@@ -30,10 +30,11 @@
 				<th>Reporting Manager</th>
 				<th>Leave Type</th>
 				<th>Day Type</th>
+				<th>Half Type</th>
                 <th>Leave From</th>
 				<th>Leave To</th>
 				<th>Request Time</th>
-				<th>Status</th>
+				<th>Action</th>
 				<th>Reason</th>
 			</thead>
 			<tbody>
@@ -58,10 +59,13 @@
 								<%= leave_request.day_type.present? ? leave_request.day_type.titleize : "N/A"%>
 							</td>
 							<td>
-								<%= leave_request.leave_from.present? ? leave_request.leave_from : "N/A"%>
+								<%= leave_request.half_type.present? ? leave_request.half_type.titleize : "N/A"%>
 							</td>
 							<td>
-								<%= leave_request.leave_to.present? ? leave_request.leave_to : "N/A"%>
+								<%= leave_request.leave_from.present? ? leave_request.leave_from.strftime("%d %b, %Y") : "N/A" %>
+							</td>
+							<td>
+								<%= leave_request.leave_to.present? ? leave_request.leave_to.strftime("%d %b, %Y") : "N/A"%>
 							</td>
 							<td>
 								<%= leave_request.created_at.present? ? leave_request.created_at.in_time_zone("Asia/Kolkata").strftime("%I:%M%p") : "N/A"%>
@@ -73,11 +77,11 @@
 											<% if leave_request.canceled.eql?(true)%>
 												<div><span class="text-warning">Cancelled!</span></div>
 											<%elsif%>
-												<%= link_to  leave_approve_leave_request_path(leave_request), method: :post do%>
-												 	<i class="bi bi-check2 text-green"></i>
+												<%= link_to  leave_approve_leave_request_path(leave_request), method: :post,  'data-toggle': 'tooltip', 'data-placement':'top', title: 'Approve Leave' do%>
+													<i class="bi bi-check-circle-fill text-green"></i>
 												<%end%>
-												<%= link_to leave_reject_leave_request_path(leave_request),method: :post do%>
-													<i class="bi bi-x text-danger"></i>
+												<%= link_to leave_reject_leave_request_path(leave_request),method: :post,'data-toggle': 'tooltip', 'data-placement':'top', title: 'Reject Leave' do%>
+													<i class="bi bi-x-circle-fill text-danger"></i>
 												<%end%>
 											<%end%>
 										<% elsif leave_request.approve.eql?(true)%>
@@ -91,8 +95,8 @@
 												<% if leave_request.canceled.eql?(nil)%>
 													<div><span class="text-warning">Pending!</span></div>
 													<div class="mx-2">
-														<%= link_to cancel_leave_request_path(leave_request),data: { turbo_method: :post, confirm: "Are you sure you want to cancel your leave request?" },class: "mx-2" do %>
-															<i class="bi bi-backspace"></i>
+														<%= link_to cancel_leave_request_path(leave_request),data: { turbo_method: :post, confirm: "Are you sure you want to cancel your leave request?" },class: "mx-2", 'data-toggle': 'tooltip', 'data-placement':'top', title: 'Cancel Leave' do %>
+															<i class="bi bi-x-circle-fill text-danger"></i>
 														<% end %>
 													</div>
 												<%else%>
@@ -108,8 +112,10 @@
 								</div>
 							</td>
 							<td>
-								<div id="reason" class="d-none"><%= leave_request.description %></div>
-								<i class="bi bi-info-circle" onclick="sweetAlertBtn()"></i>
+								<div id="reason" class="d-none">
+									<%= leave_request.description %>
+								</div>
+								<i class="bi bi-info-circle text-primary" onclick="sweetAlertBtn()" data-bs-toggle="tooltip" data-bs-placement="top" title="View Reason"></i>
 							</td>
 						</tr>
 					<%end%>
@@ -128,7 +134,6 @@
 	function sweetAlertBtn() {
         var reason = document.getElementById('reason').innerHTML;
         Swal.fire({
-            icon: 'info',
              text: reason
         });
     }

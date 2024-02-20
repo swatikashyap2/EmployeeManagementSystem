@@ -14,6 +14,7 @@ class LeaveRequest < ApplicationRecord
 
 
     enum :day_type, {half_day: "half_day", full_day: "full_day"}
+    enum :half_type, {first_half: "first_half", second_half: "second_half"}
 
     def set_default_values
 		self.reporting_manager_id = User.admin.first.id

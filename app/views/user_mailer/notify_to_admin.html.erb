@@ -14,16 +14,20 @@
               <!-- START CENTERED WHITE CONTAINER -->
               <table role="presentation" style="background: #ffffff; border-radius: 3px; width: 100%; border-left-width: 0 !important; border-radius: 0 !important; border-right-width: 0 !important; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt;width: 100%;">
                 <tr>
-                  <td style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px; vertical-align: top; box-sizing: border-box; padding: 20px;">
-                    <h3>Hi <%= @leave_request.reporting_manager&.first_name&.titleize %></h3>
+					<td style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px; vertical-align: top; box-sizing: border-box; padding: 20px;">
+						<h3>Hi <%= @leave_request.reporting_manager&.first_name&.titleize %></h3>
 
-                    <!-- START MAIN CONTENT AREA -->
-                    <p style="text-transform: capitalize; font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">Hello,</p>
-                    <p style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">
-                      <%= @leave_request.user&.first_name&.titleize %> has applied <%= @leave_request.user_leave_type.leave_type.name %> from <%= @leave_request.leave_from %> to <%= @leave_request.leave_to%>.
-                    </p>
-                    <p style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">Thank you.</p>
-                  </td>
+						<!-- START MAIN CONTENT AREA -->
+						<p style="text-transform: capitalize; font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;"></p>
+						<p style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">
+							<% if @leave_request.day_type == "full_day"%>
+								<%= @leave_request.user&.first_name&.titleize %> has applied <%= @leave_request.user_leave_type.leave_type.name %> from <%= @leave_request.leave_from %> to <%= @leave_request.leave_to%>.
+							<%else%>
+								<%= @leave_request.user&.first_name&.titleize %> has applied <%= @leave_request.user_leave_type.leave_type.name %> on <%= @leave_request.leave_from%>.
+							<%end%>
+						</p>
+						<p style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">Thank you.</p>
+					</td>
                 </tr>
 
                 <!-- END MAIN CONTENT AREA -->

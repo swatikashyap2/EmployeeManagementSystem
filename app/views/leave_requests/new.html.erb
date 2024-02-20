@@ -33,8 +33,14 @@
 					<%= f.label :day_type, class: "required-field"%>
 					<%= f.select :day_type,options_for_select(LeaveRequest.day_types.keys.map{ |dt| [dt.humanize, dt]}),{include_blank: "Select Day Type"}, {class: "form-control", id: "day_type", required: true} %>
 				</div>
+
+				<div class="form-group col-md-6 d-none" id='half_type'>
+					<%= f.label :half_type, class: "required-field" %>
+					<%= f.select :half_type, options_for_select(LeaveRequest.half_types.keys.map{ |hf| [hf.humanize, hf]}), { include_blank: "Select half_type" }, { class: "form-control", id: "half" } %>
+				</div>
+
 				
-				<div class="form-group col-md-6">
+				<div class="form-group col-md-6", id="date1">
 					<%= f.label :leave_from, class: "required-field"%>
 					<%= f.date_field :leave_from, selected: Date.today, autocomplete: "select_from", class: "form-control",id: "date_type1", placeholder: "Select Starting Date",type: 'text',onfocus: "(this.type='date')",onblur: "(this.type='text')", required: true, min: Date.today%>
 					<div id="date_error1"></div>
@@ -75,7 +81,7 @@
 	var leaveCount = null;
 	document.getElementById('user_leave_type_id').addEventListener('change', function() {
 		var selectedLeaveTypeId = $(this).val();
-		if (selectedLeaveTypeId) { // Check if a leave type is selected
+		if (selectedLeaveTypeId) { 
 			$.ajax({
 				type: "GET",
 				url: '/user_leave_types/' + selectedLeaveTypeId,
@@ -164,14 +170,14 @@
 		dayType = $("#day_type option:selected").text();
 		if (dayType === 'Half day') {
 			$('#show_count').html('Your leave balance is: ' + (leaveCount - 0.5));
-			$("#time_field_from, #time_field_to").removeClass('d-none');
+			$("#half_type").removeClass('d-none');
 			$(".leave-to").removeClass("required-field");
-			$('#date_type2')[0].disabled = true;
-			$('#date_type2').val("");
-			$('#date_error2').html('');
+			$('#date_type2, #date2').addClass('d-none');
+			$('#date_type2').addClass('d-none');
+			$('#date_error2').addClass('d-none');
 		} else {
 			$('#show_count').html('Your leave balance is: ' + (leaveCount));
-			$("#time_field_from, #time_field_to").addClass('d-none');
+			$("#half_type").addClass('d-none');
 			$(".leave-to").addClass("required-field");
 			$('#date_type2')[0].disabled = false;
 		}
@@ -180,9 +186,13 @@
 	function selectDatefrom(){
 		let dateType1 = $("#date_type1").val();
 		if (dateType1 !== ""){
-			firstDate = new Date(dateType1);
-			$("#date_type2")[0].min = dateType1;
-			selectDateTo();
+			if(dayType === 'Half day'){
+				$('#date_type2')[0].disabled = true;
+			} else {
+				firstDate = new Date(dateType1);
+				$("#date_type2")[0].min = dateType1;
+				selectDateTo();
+			}
 		}
 	}
 
@@ -239,4 +249,42 @@
 			$('.send-request')[0].disabled = false;
 		}
 	}
+	
+
+	document.addEventListener("turbo:load", function() {
+		var leavedates = [];
+
+		$.ajax({
+			type: "GET",
+			url: "/leave_requests/checkleavedates",
+			dataType: "json",
+			data: { key1: true },
+			success: function(response) {
+				leavedates = response.leavedates;
+
+				$("#date1").on('select', function() {
+					var leaveFromDate = $(this).val();
+					if (leaveFromDate !== "") {
+						if (leavedates.indexOf(leaveFromDate) !== -1) {
+							$("#date1").addClass("error error-border-color");
+							$("#date_error1").text("Leave date already exists. Please choose another date.").css("color", "red");
+							$('.send-request').prop('disabled', true);
+						} else {
+							$("#date1").removeClass("error");
+							$("#date_error1").text("");
+							$('.send-request').prop('disabled', false);
+						}
+					} else {
+						$("#date1").removeClass("error");
+						$("#date_error1").text("");
+						$('.send-request').prop('disabled', false);
+					}
+				});
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				console.error("Error fetching leavedates:", errorThrown);
+			}
+		});
+	});
+
 </script>

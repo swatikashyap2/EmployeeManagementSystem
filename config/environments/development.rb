@@ -63,5 +63,15 @@ Rails.application.configure do
   config.action_cable.url = "ws://localhost:3000/cable"
   config.action_cable.allowed_request_origins = [/http:\/\/*/, /https:\/\/*/]
 
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.smtp_settings = {
+      address:              'smtp.gmail.com',
+      port:                 587,
+      domain:               'gmail.com',
+      user_name:            'swatikashyap00000@gmail.com',
+      password:             'vugx wikh uhdv jknp',
+      authentication:       'plain',
+      enable_starttls_auto: true  
+    }
 
 end

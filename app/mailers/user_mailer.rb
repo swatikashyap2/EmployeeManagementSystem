@@ -24,7 +24,7 @@ class UserMailer < ApplicationMailer
 
     def notify_to_admin(leave_request)
         @leave_request = leave_request
-        mail(to: @leave_request.reporting_manager.email, subject: "#{@leave_request.user&.first_name} request a leave!")
+        mail(to: @leave_request.reporting_manager.email, subject: "#{@leave_request.user&.first_name.titleize} request a leave!")
     end
 
     def leave_approved_notification(leave_request)
