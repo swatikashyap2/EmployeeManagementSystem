@@ -51,7 +51,7 @@ class LeaveRequestsController < ApplicationController
             end
           
             message1 = "Hi #{@leave_request.reporting_manager.first_name.titleize}, #{current_user.first_name.titleize} has been applied for #{@leave_request.user_leave_type.leave_type.name} "
-            message2 = "Hi #{current_user.first_name.titleize}, your #{@leave_request.user_leave_type.leave_type.name.titleize} has been succefully applied! "
+            message2 = "Hi #{current_user.first_name.titleize}, your #{@leave_request.user_leave_type.leave_type.name.titleize} has been successfully applied! "
             @leave_request.notifications.create(recipient: @leave_request.reporting_manager, user: current_user, message: message1, recipient_type: "true", read: false)
             @leave_request.notifications.create(recipient: @leave_request.user, user: current_user, message: message2, recipient_type: "true", read: false)
             
@@ -70,7 +70,7 @@ class LeaveRequestsController < ApplicationController
             redirect_to leave_requests_path, alert: "Leave has been cancelled."
         elsif @leave_request.update(approve: true)
             @user_leave_type= @leave_request.user_leave_type
-            message = " Hi #{@leave_request.user.first_name.titleize}, your #{@leave_request.user_leave_type.leave_type.name.titleize} has been succefully approved!"
+            message = " Hi #{@leave_request.user.first_name.titleize}, your #{@leave_request.user_leave_type.leave_type.name.titleize} has been successfully approved!"
             @leave_request.notifications.create(recipient: @leave_request.user, user: current_user, message: message, notifiable: @leave_request, recipient_type: "true", read: false)
             UserMailer.approve_email(@leave_request).deliver_now
             redirect_to leave_requests_path,notice: "Leave Approved Successfully."

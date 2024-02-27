@@ -1,75 +1,28 @@
-
-
 <div class="content-header">
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col">
-				<div class="d-flex justify-content-between">
-					<div>
-						<ol class="breadcrumb float-sm-right">
-							<li class="breadcrumb-item"><%= link_to "Dashboard", home_index_path %></li>
-							<li class="breadcrumb-item active">Notifications</li>
-						</ol>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <div class="d-flex justify-content-between">
+          <div>
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><%= link_to "Dashboard", home_index_path %></li>
+              <li class="breadcrumb-item active">Notifications</li>
+            </ol>
+          </div>
+           <div class="d-flex align-items-center justify-content-end">
+            <%= render partial: "search", locals: { notification: @notification } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="card">
-	<div class="card-body">
-		<div id="">
-			<table class='table'>
-				<thead>
-					<th>Message</th>
-						<% if is_employee? || is_manager?%>
-						<th>Reporting Manager</th>
-						<th>Created At</th>
-						<th>Time</th>
-					<%elsif is_admin?%>
-						<th>Date From</th>
-						<th>Date To</th>
-					<%end%>
-				</thead>
-				<tbody>
-					<% if @notifications.present?%>
-						<% @notifications.each do|notification|%>
-							<tr>
-								<td>
-									<%= notification.message.present? ? notification.message : "N/A" %>
-								</td>
-								<% if is_employee? || is_manager?%>
-									<td>
-										<%= notification.notifiable.reporting_manager.present? ? notification.notifiable.reporting_manager.first_name.titleize : 'N/A'%>
-									</th>
-									<td>
-										<%= notification.created_at.strftime("%B %d, %Y")%>
-									</td>
-									<td>
-										<%=  notification.created_at.in_time_zone("Asia/Kolkata").strftime("%I:%M%p")  %>
-									</td>
-								<%else%>
-									<td>
-										<%=  notification.notifiable.leave_from.present? ? notification.notifiable.leave_from.strftime("%B %d, %Y") : 'N/A'%>
-									</td>
-									<td>
-										<%= notification.notifiable.leave_to.present? ? notification.notifiable.leave_to.strftime("%B %d, %Y") : 'N/A'%>
-									</td>
-
-								<%end%>
-							</tr>
-						<%end%>
-					<%else%>
-						<tr>
-							<td colspan="12" class="text-center border-0">
-								<h2 class="mt-3">Record Not Found</h2>
-							</td>
-						</tr>
-					<% end %>
-				</tbody>
-			</table>
-		</div>
-		<%= will_paginate @notifications%>
-	</div>
+  <div class="card-body">
+    <div id="role_user">
+      <%= render partial: "notification_list", locals: { notifications: @notifications } %>
+    </div>
+    <%= will_paginate @notifications %>
+  </div>
 </div>

@@ -32,9 +32,11 @@ Rails.application.routes.draw do
   resources :notifications do
     collection do
       get :notification_popup
+      post :search
     end
     member do
       get :read_notification
+      get :see_notification
     end
   end
   mount ActionCable.server => '/cable'

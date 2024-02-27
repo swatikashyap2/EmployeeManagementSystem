@@ -20,7 +20,7 @@
 					<div id='notification-card'></div>
 				</div>
 				<div class="position-relative">
-					<%  notification_count = Notification.where(recipient_id: current_user.id, read: false).count %>
+					<%  notification_count = Notification.where(recipient_id: current_user.id).count %>
 					<div id="noti-count">
 						<%= render "/base/notification_count", notification_count: notification_count%>
 					</div>
@@ -187,7 +187,6 @@
 			count = 0;
 		} else{
 			$('#notification-card').removeClass("d-none");
-			$('#noti-count').addClass("d-none")
 			count = count + 1;
 		}
 	});

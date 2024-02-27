@@ -1,0 +1,18 @@
+<%= form_tag(search_notifications_path(format: :js), html: { method: :post }, remote: true, class: 'd-flex align-items-center justify-content-end gap-1 flex-wrap search-form') do %>
+ 	<%= hidden_field_tag :method_name, params[:action]%> 
+	<div class="form-group text-primary">
+		Search By:
+	</div>
+	<div class="form-group w-22">
+		<%= text_field_tag :search, params[:search],id:"search-field", class:"form-control user-role-control", placeholder:"Search "%>
+	</div>
+	<%= button_tag type: 'submit', id: "search-submit-btn", class: "btn btn-sm btn-secondary", style: "display: none;"  do %>
+		<i class='mdi mdi-magnify search-icon'></i>
+	<%end%>
+<%end%>
+<script>
+	document.getElementById('search-field').addEventListener('keyup', function(e) {
+		document.getElementById('search-submit-btn').click();
+	});
+
+</script> 
