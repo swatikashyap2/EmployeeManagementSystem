@@ -24,6 +24,7 @@
 		<table class='table'>
 			<div>
 				<thead> 
+					<th>Image</th>
 					<th>First Name</th>
 					<th>Last Name</th>
 					<th>Email</th>
@@ -43,6 +44,13 @@
 						<% if @users.present?%>
 							<% @users.each do|user|%>
 								<tr>
+									<td>
+										<% if user.avatar.attached? %>
+												<%= image_tag user.avatar, class: 'rounded-circle avatar_style' %>
+										<% else %>
+											<%= image_tag 'placeholder.jpg', class: 'rounded-circle avatar_style' %>
+										<% end %>
+									</td>
 									<td>
 										<%= user.first_name.present? ?  user.first_name.titleize : "N/A"%>
 									</td>

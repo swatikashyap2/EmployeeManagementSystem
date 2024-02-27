@@ -6,7 +6,7 @@
     <% if @notifications.present? %>
         <% @notifications.each do |notification| %>
             <% if notification.read == true%>
-                <%= link_to notifications_path do%>
+                <%= link_to notifications_path(user_name: notification.user.first_name), class: "text-black" do%>
                     <li class="mt-2">
                         <div>
                             <%= notification.message %>
@@ -25,7 +25,7 @@
                 <%end%>
             <%else%>
                 <div class="notification-bg">
-                    <%= link_to notifications_path do%>
+                    <%= link_to notifications_path(user_name: notification.user.first_name), class: "text-black" do%>
                         <li class="mt-2">
                             <div>
                                 <%= notification.message %>

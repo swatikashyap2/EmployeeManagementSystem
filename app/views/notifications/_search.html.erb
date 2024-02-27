@@ -4,12 +4,17 @@
 		Search By:
 	</div>
 	<div class="form-group w-22">
-		<%= text_field_tag :search, params[:search],id:"search-field", class:"form-control user-role-control", placeholder:"Search "%>
-	</div>
+		<% if @query.present?%>
+			<%= text_field_tag :search, params[:search],value: @query,id:"search-field", class:"form-control user-role-control", placeholder:"Search "%>
+		<%else%>
+			<%= text_field_tag :search, params[:search],id:"search-field", class:"form-control user-role-control", placeholder:"Search "%>
+		<%end%>
+	</div> 
 	<%= button_tag type: 'submit', id: "search-submit-btn", class: "btn btn-sm btn-secondary", style: "display: none;"  do %>
 		<i class='mdi mdi-magnify search-icon'></i>
 	<%end%>
 <%end%>
+
 <script>
 	document.getElementById('search-field').addEventListener('keyup', function(e) {
 		document.getElementById('search-submit-btn').click();

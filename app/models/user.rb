@@ -12,6 +12,7 @@ class User < ApplicationRecord
 	belongs_to :reporting_manager,  class_name: 'User', foreign_key: 'reporting_manager_id', optional: true
 
 	validates :first_name, presence: true
+	validates :designation, presence: true
 	validates :email, presence: true
 	validates :role, presence: true
 	validates :employee_code, presence: true, uniqueness: true
@@ -28,7 +29,7 @@ class User < ApplicationRecord
 	scope :manager, -> {includes(:role).where(roles: {name: "manager"})}
 	scope :employees, -> {includes(:role).where(roles: {name: "employee"})}
 	scope :admin, -> {includes(:role).where(roles: {name: "admin"})}
-
+	scope :search_result, -> (query) { where("first_name LIKE ?", "%#{query}%") }
 	enum :designation, {backend_developer: "backend_developer", frontend_developer: "frontend_developer", designer: "designer" }
 	enum :gender, {male: "male", female: "female", other: "other"}
 

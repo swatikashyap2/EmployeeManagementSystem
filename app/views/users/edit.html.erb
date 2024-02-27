@@ -84,8 +84,8 @@
 					</div>
 				<%else%>
 					<div class="form-group col-md-6 mb-2">
-						<%= f.label :designation %>
-						<%= f.select :designation, User.designations.keys.map { |d| [d.humanize, d] },{include_blank: "--Select Designation--"},{class: "form-control" }%>
+						<%= f.label :designation, class: "required-field" %>
+						<%= f.select :designation, User.designations.keys.map { |d| [d.humanize, d] },{include_blank: "--Select Designation--"},{class: "form-control",required: true  }%>
 					</div>
 				<%end%>
 				<div class="form-group col-md-6 mb-2">

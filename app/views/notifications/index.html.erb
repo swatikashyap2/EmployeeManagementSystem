@@ -1,28 +1,30 @@
 <div class="content-header">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col">
-        <div class="d-flex justify-content-between">
-          <div>
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><%= link_to "Dashboard", home_index_path %></li>
-              <li class="breadcrumb-item active">Notifications</li>
-            </ol>
-          </div>
-           <div class="d-flex align-items-center justify-content-end">
-            <%= render partial: "search", locals: { notification: @notification } %>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<div class="d-flex justify-content-between">
+					<div>
+						<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><%= link_to "Dashboard", home_index_path %></li>
+						<li class="breadcrumb-item active">Notifications</li>
+						</ol>
+					</div>
+					<% if is_admin?%>
+						<div class="d-flex align-items-center justify-content-end">
+						<%= render partial: "search", locals: { notification: @notification } %>
+						</div>
+					<%end%>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <div class="card">
-  <div class="card-body">
-    <div id="role_user">
-      <%= render partial: "notification_list", locals: { notifications: @notifications } %>
-    </div>
-    <%= will_paginate @notifications %>
-  </div>
+	<div class="card-body">
+		<div id="role_user">
+			<%= render partial: "notification_list", locals: { notifications: @notifications } %>
+		</div>
+		<%= will_paginate @notifications %>
+	</div>
 </div>

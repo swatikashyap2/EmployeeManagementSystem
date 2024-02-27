@@ -36,7 +36,7 @@
 
 				<div class="form-group col-md-6 d-none" id='half_type'>
 					<%= f.label :half_type, class: "required-field" %>
-					<%= f.select :half_type, options_for_select(LeaveRequest.half_types.keys.map{ |hf| [hf.humanize, hf]}), { include_blank: "Select half_type" }, { class: "form-control", id: "half" } %>
+					<%= f.select :half_type, options_for_select(LeaveRequest.half_types.keys.map{ |hf| [hf.humanize, hf]}), { include_blank: "Select half type" }, { class: "form-control", id: "half" } %>
 				</div>
 
 				
