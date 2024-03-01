@@ -87,15 +87,21 @@
 									<td class="p-2">
 										<div class="d-flex">
 											<% if is_admin? || is_manager? %>
-												<%= link_to edit_user_path(user), method: :get, class: "mx-2", 'data-toggle': 'tooltip', 'data-placement':'top', title: 'Edit User'  do%> 
+												<div>
+													<%= link_to edit_user_path(user), method: :get, class: "mx-2", 'data-toggle': 'tooltip', 'data-placement':'top', title: 'Edit User'  do%> 
+														<i class="bi bi-pencil-square"></i>
+													<%end%>
+												</div>
+												<div>
 													<i class="bi bi-pencil-square"></i>
-												<%end%>
+												</div>
+													
 											<%end%>
 											<%if is_admin?%>	
 												<% if current_user != user %>
-													<%= link_to user_path(user), method: :delete, class: 'delete-post', onclick: "confirmDelete(this)", 'data-toggle': 'tooltip', 'data-placement': 'top', title: 'Delete User' do %> 
+													<%= button_to user_path(user), method: :delete,form_class: 'delete-alertbox', 'data-toggle': 'tooltip', 'data-placement': 'top', title: 'Delete User' do %> 
 														<i class="bi bi-trash3-fill"></i>
-													<%end%>
+													<% end %>      
 												<%end%>	
 												<%= link_to edit_user_leave_type_path(user), {remote: true,class: "mx-2", "data-bs-toggle": "modal", "data-bs-target": "#ppc_manager_modal" } do%>
 												<span data-toggle='tooltip', data-placement='top', title= 'Edit User Leaves'>
@@ -126,21 +132,46 @@
 	</div>
 </div>
 <div id="ppc_manager"></div>
+
+
 <script>
-  function confirmDelete(link) {
-    event.preventDefault();
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete it!"
-    }).then((result) => {
-      if (result.isConfirmed) {
-        link.parentNode.submit();
-      }
-    });
-  }
+	window.addEventListener(('turbo:load'), () => {
+		document.addEventListener('submit', (event) => {
+			if (event.target && event.target.className === 'delete-alertbox') {
+			event.preventDefault()
+			Swal.fire({
+				title: 'Are you sure?, you want to Delete this Employee',
+				text: "You won't be able to revert this!",
+				icon: 'error',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				cancelButtonText: 'No',
+				confirmButtonText: 'Yes'
+			})
+				.then((result) => {
+				if (result.isConfirmed) {
+					document.querySelector('.delete-alertbox').submit()
+				}
+				})
+				.catch(event.preventDefault())
+			}
+		})
+	});
+	document.addEventListener("turbo:load", function() {
+		var user_password = [];
+		$.ajax({
+			type: "GET",
+			url: "/users/get_password",
+			dataType: "json",
+			data: { key1: true },
+			success: function(response) {
+				emails = response.emails; 
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				console.error("Error fetching emails:", errorThrown);
+			}
+		});
+	});
 </script>
+

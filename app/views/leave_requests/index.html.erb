@@ -77,10 +77,10 @@
 											<% if leave_request.canceled.eql?(true)%>
 												<div><span class="text-warning">Cancelled!</span></div>
 											<%elsif%>
-												<%= link_to  leave_approve_leave_request_path(leave_request), method: :post,  'data-toggle': 'tooltip', 'data-placement':'top', title: 'Approve Leave' do%>
+												<%= button_to  leave_approve_leave_request_path(leave_request), method: :post,  form_class: 'approve-alertbox','data-toggle': 'tooltip', 'data-placement':'top', title: 'Approve Leave' do%>
 													<i class="bi bi-check-circle-fill text-green"></i>
 												<%end%>
-												<%= link_to leave_reject_leave_request_path(leave_request),method: :post,'data-toggle': 'tooltip', 'data-placement':'top', title: 'Reject Leave' do%>
+												<%= button_to leave_reject_leave_request_path(leave_request),method: :post,form_class: 'reject-alertbox','data-toggle': 'tooltip', 'data-placement':'top', title: 'Reject Leave' do%>
 													<i class="bi bi-x-circle-fill text-danger"></i>
 												<%end%>
 											<%end%>
@@ -95,10 +95,16 @@
 												<% if leave_request.canceled.eql?(nil)%>
 													<div><span class="text-warning">Pending!</span></div>
 													<div class="mx-2">
-														<%= link_to cancel_leave_request_path(leave_request),data: { turbo_method: :post, confirm: "Are you sure you want to cancel your leave request?" },class: "mx-2", 'data-toggle': 'tooltip', 'data-placement':'top', title: 'Cancel Leave' do %>
+														<%= button_to cancel_leave_request_path(leave_request),form_class: 'cancel-alertbox',class: "mx-2", 'data-toggle': 'tooltip', 'data-placement':'top', title: 'Cancel Leave' do %>
 															<i class="bi bi-x-circle-fill text-danger"></i>
 														<% end %>
 													</div>
+													<!-- <div class="mx-2">
+														<%= link_to edit_leave_request_path(leave_request),class: "mx-2", 'data-toggle': 'tooltip', 'data-placement':'top', title: 'Edit Leave' do %>
+															<i class="bi bi-pencil-square"></i>
+														<% end %>
+													</div>
+													-->
 												<%else%>
 													<span class="text-warning">Cancelled!</span>
 												<%end%>
@@ -137,6 +143,67 @@
              text: reason
         });
     }
+	window.addEventListener(('turbo:load'), () => {
+		document.addEventListener('submit', (event) => {
+			if (event.target && event.target.className === 'approve-alertbox') {
+			event.preventDefault()
+			Swal.fire({
+				title: 'Are you sure?, you want to Approve this leave',
+				text: "You won't be able to revert this!",
+				icon: 'success',
+				showCancelButton: true,
+				confirmButtonColor: 'green',
+				cancelButtonColor: '#d33',
+				cancelButtonText: "No",
+				confirmButtonText: 'Yes'
+			})
+				.then((result) => {
+				if (result.isConfirmed) {
+					document.querySelector('.approve-alertbox').submit()
+				}
+				})
+				.catch(event.preventDefault())
+			}
+			if (event.target && event.target.className === 'reject-alertbox') {
+			event.preventDefault()
+			Swal.fire({
+				title: 'Are you sure?, you want to Reject this leave',
+				text: "You won't be able to revert this!",
+				icon: 'error',
+				showCancelButton: true,
+				confirmButtonColor: 'green',
+				cancelButtonColor: '#d33',
+				cancelButtonText: "No",
+				confirmButtonText: 'Yes'
+			})
+				.then((result) => {
+				if (result.isConfirmed) {
+					document.querySelector('.reject-alertbox').submit()
+				}
+				})
+				.catch(event.preventDefault())
+			}
+			if (event.target && event.target.className === 'cancel-alertbox') {
+			event.preventDefault()
+			Swal.fire({
+				title: 'Are you sure?, you want to cancel your leave',
+				text: "You won't be able to revert this!",
+				icon: 'question',
+				showCancelButton: true,
+				confirmButtonColor: 'green',
+				cancelButtonColor: '#d33',
+				cancelButtonText: "No",
+				confirmButtonText: 'Yes'
+			})
+				.then((result) => {
+				if (result.isConfirmed) {
+					document.querySelector('.cancel-alertbox').submit()
+				}
+				})
+				.catch(event.preventDefault())
+			}
+		})
+	});
 
 </script>
 
