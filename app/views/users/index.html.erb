@@ -93,9 +93,10 @@
 													<%end%>
 												</div>
 												<div>
-													<i class="bi bi-pencil-square"></i>
-												</div>
-													
+													<%= link_to send_password_user_path(user), method: :get,class: "mx-2",'data-toggle': 'tooltip', 'data-placement':'top', title: 'Send Password' do %>
+														<i class="bi bi-arrow-right-circle"></i>
+													<%end%>
+												</div>	
 											<%end%>
 											<%if is_admin?%>	
 												<% if current_user != user %>

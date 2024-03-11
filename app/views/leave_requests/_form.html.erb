@@ -1,9 +1,8 @@
-
 <%= form_for @leave_request do |f| %>
 	<div class="row">
 		<div class="form-group col-md-6">
-			<%= f.label :leave_type, class: "required-field" %>
-			<%= f.select :user_leave_type_id, options_for_select(@user_leave_types), { include_blank: 'Select Leave Type' }, { class: "form-control",  id: "user_leave_type_id", required: true, selected: @leave_request.user_leave_type.leave_type.name} %>
+			<%= f.label :user_leave_type_id, class: "required-field" %>
+			<%= f.select :user_leave_type_id, options_for_select(@user_leave_types), { include_blank: 'Select Leave Type' }, { class: "form-control",  id: "user_leave_type_id", required: true, selected: @leave_request.user_leave_type&.leave_type&.name} %>
 			<div id="show_count"></div>
 			<div id="leave_type_error"></div>
 		</div>
@@ -25,7 +24,7 @@
 			<div id="date_error1"></div>
 		</div>
 
-			<div class="form-group col-md-6 " id="date2">
+		<div class="form-group col-md-6 " id="date2">
 			<%= f.label :leave_to , class: "leave-to required-field" %>
 			<%= f.date_field :leave_to,  autocomplete: "leave_to", class: "form-control ",id: "date_type2", placeholder: "Select End Date",type: 'text',onfocus: "(this.type='date')",onblur: "(this.type='text')", required: true, min: Date.today%>
 			<div id="date_error2"></div>
@@ -82,16 +81,20 @@
 		if (leaveTypeName === 'Short Leave') {
 			$('#dayty').addClass('d-none');
 			$("#time_field_from, #time_field_to").removeClass('d-none');
-			$('#date_type2')[0].disabled = true;
+			$('#date_type2, #date2').addClass('d-none');
+			$(".leave-to").removeClass("required-field");
+			$("#dayty").removeClass("required-field");
+			$('#day_type').removeAttr('required');
+			$('#date_type2').removeAttr('required');
 
 		} else {
 			$('#dayty').removeClass('d-none');
 			$("#time_field_from, #time_field_to").addClass('d-none');
-			$('#date_type2')[0].disabled = false;
+			$('#date_type2').removeClass('d-none')
 		}
 
 		$("#leave_type_error").html('');
-		$('#date_type2')[0].disabled = false;
+		$('#date_type2')[0].removeClass('d-none');
 		$('#day_type')[0].disabled = false;
 		$('#date_type1')[0].disabled = false;
 		$('.send-request')[0].disabled = false;		

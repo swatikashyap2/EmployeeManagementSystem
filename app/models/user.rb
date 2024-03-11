@@ -56,7 +56,7 @@ class User < ApplicationRecord
 
 	def image_url(style_name = :medium)
 		image.url(style_name)
-	  end
+	end
 	  
 	  
 

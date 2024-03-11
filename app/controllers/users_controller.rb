@@ -72,8 +72,9 @@ class UsersController < ApplicationController
 		end
 	end
 
-	def get_password
-		
+	def send_password
+		@user = User.find(params[:id])
+		redirect_to users_path
 	end
 	private 
 		def user_params

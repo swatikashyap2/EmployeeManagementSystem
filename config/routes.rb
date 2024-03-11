@@ -11,6 +11,9 @@ Rails.application.routes.draw do
     collection do 
       get :checkemail
     end
+    member do
+      get :send_password
+    end
   end
    
   resources :roles

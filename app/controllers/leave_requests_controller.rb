@@ -1,5 +1,5 @@
 class LeaveRequestsController < ApplicationController
-    before_action :set_user_leave_types, only: %i[new, edit]
+    before_action :set_user_leave_types, only: %i[new edit]
 
     def index
         if is_admin?
