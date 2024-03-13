@@ -1,5 +1,7 @@
-<div class="position-absolute count-style">
-    <% if current_user.present?%>
+<% if notification_count > 0%>
+    <div class="position-absolute count-style">
+        <% if current_user.present? %>
             <%=  notification_count %>
-    <%end%>
-</div>
+        <%end%>
+    </div>
+<%end%>

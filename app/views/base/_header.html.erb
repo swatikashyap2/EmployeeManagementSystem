@@ -20,7 +20,7 @@
 					<div id='notification-card'></div>
 				</div>
 				<div class="position-relative">
-					<%  notification_count = Notification.where(recipient_id: current_user.id).count %>
+					<%  notification_count = Notification.where(recipient_id: current_user.id).where(read: false).count %>
 					<% if notification_count > 0%>
 						<div id="noti-count">
 							<%= render "/base/notification_count", notification_count: notification_count%>

@@ -1,5 +1,5 @@
 class NotificationsController < ApplicationController
-    before_action :set_all_notifications, only: %i[index read_notification  notification_popup search]
+    before_action :set_all_notifications, only: %i[index read_notification  notification_popup search mark_all_read_notification]
     before_action :set_notification, only: %i[read_notification show]
   
     def index
@@ -24,9 +24,8 @@ class NotificationsController < ApplicationController
      
     def read_notification
         @notification.update(read: true)
-        respond_to do|format|
-            format.js
-        end
+        @notification_count = @notifications.where(read: false)
+        
     end
 
 	def search
@@ -36,6 +35,11 @@ class NotificationsController < ApplicationController
 		  format.js
 		end
 	end
+
+    def mark_all_read_notification
+        @notifications.where(read: false).update(read: true)
+        @notification_count = @notifications.where(read: false)
+    end
 	  
     private
 

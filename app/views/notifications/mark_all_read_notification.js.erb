@@ -1,2 +1,2 @@
 $('#notification-card').html("<%= escape_javascript(render partial: '/notifications/notification_popup', locals: { notifications: @notifications }) %>");
-$('#noti-count').html("<%= escape_javascript(render partial: '/base/notification_count', locals: {notification_count:  @notification_count.count}) %>")
+$('#noti-count').html("<%= escape_javascript(render partial: '/base/notification_count', locals: {notification_count: @notification_count.count}) %>")

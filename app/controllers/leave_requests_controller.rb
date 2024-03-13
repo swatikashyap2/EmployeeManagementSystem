@@ -3,11 +3,11 @@ class LeaveRequestsController < ApplicationController
 
     def index
         if is_admin?
-            @leave_requests = LeaveRequest.order(created_at: :desc)
+            @leave_requests = LeaveRequest.order(created_at: :desc).paginate(page: params[:page], per_page: 10)
         elsif is_manager?
-            @leave_requests = current_user.leave_requests.order(created_at: :desc)
+            @leave_requests = current_user.leave_requests.order(created_at: :desc).paginate(page: params[:page], per_page: 10)
         else
-            @leave_requests = current_user.leave_requests.order(created_at: :desc)
+            @leave_requests = current_user.leave_requests.order(created_at: :desc).paginate(page: params[:page], per_page: 10)
         end 
 		authorize @leave_requests
     end
@@ -20,7 +20,8 @@ class LeaveRequestsController < ApplicationController
     def create
         @leave_request = LeaveRequest.new(leave_request_params)
         if params[:leave_request][:day_type] == 'half_day'
-            existing_leave = LeaveRequest.where(user_id: @leave_request.user_id)
+            leave_requests = current_user.leave_requests.where(approve: [true, nil], canceled: nil)
+            existing_leave = leave_requests.where(user_id: @leave_request.user_id)
                                         .where(leave_from: @leave_request.leave_from..@leave_request.leave_from.end_of_day)
             if existing_leave.exists?
                 redirect_to new_leave_request_path, alert: "Your leave request overlaps with an existing leave request."
@@ -28,7 +29,8 @@ class LeaveRequestsController < ApplicationController
             end
         end
         if params[:leave_request][:day_type] == 'full_day'
-            existing_leave = current_user.leave_requests.where(leave_from: @leave_request.leave_from..@leave_request.leave_from.end_of_day,leave_to: @leave_request.leave_to..@leave_request.leave_to.end_of_day)
+            leave_requests = current_user.leave_requests.where(approve: [true, nil], canceled: nil)
+            existing_leave = leave_requests.where(leave_from: @leave_request.leave_from..@leave_request.leave_from.end_of_day,leave_to: @leave_request.leave_to..@leave_request.leave_to.end_of_day)
             if existing_leave.exists?
                 redirect_to new_leave_request_path, alert: "Your leave request overlaps with an existing leave request."
                 return
@@ -132,11 +134,34 @@ class LeaveRequestsController < ApplicationController
             redirect_to leave_requests_path, notice: "Leave canceled."
         end 
     end
-
+    
     def checkleavedates
-		@leavedates = LeaveRequest.pluck(:leave_from)
-		render json: {leavedates: @leavedates}
-	end
+        @leavetofrom = LeaveRequest.where(approve: [true, nil], canceled: nil).pluck(:leave_from, :leave_to)
+        @leave_between = @leavetofrom.flatten.map { |date| date.strftime("%a, %d %b %Y") } 
+      
+        params_date = Date.parse(params[:key1])
+        @format_date = params_date.strftime("%a, %d %b %Y")
+      
+        @date_diffs = []
+      
+        @leavetofrom.each do |leave|
+          leave_from = Date.parse(leave[0].strftime("%a, %d %b %Y"))
+          leave_to = Date.parse(leave[1].strftime("%a, %d %b %Y"))  
+          dates_between = (leave_from..leave_to).to_a.map { |date| date.strftime("%a, %d %b %Y") }
+      
+          @date_diffs << dates_between
+        end
+      
+        @date_diffs = @date_diffs.flatten
+      
+        if @leave_between.include?(@format_date) || @date_diffs.include?(@format_date)
+          render json: { leavedates: true }
+        else
+          render json: { leavedates: false }
+        end
+    end
+      
+      
 
     def edit
         @leave_request = LeaveRequest.find(params[:id])

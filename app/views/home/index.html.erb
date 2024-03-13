@@ -121,10 +121,10 @@
                                     <div>
                                         <% if is_admin?%>
                                             <% if leave_request.approve.eql?(nil)%>
-                                                <%= button_to  leave_approve_leave_request_path(leave_request), method: :post,  form_class: 'approve-alertbox','data-toggle': 'tooltip', 'data-placement':'top', title: 'Approve Leave' do%>
+                                                <%= button_to  leave_approve_home_path(leave_request), method: :post,  form_class: 'approve-alertbox','data-toggle': 'tooltip', 'data-placement':'top', title: 'Approve Leave' do%>
 													<i class="bi bi-check-circle-fill text-green"></i>
 												<%end%>
-												<%= button_to leave_reject_leave_request_path(leave_request),method: :post,form_class: 'reject-alertbox','data-toggle': 'tooltip', 'data-placement':'top', title: 'Reject Leave' do%>
+												<%= button_to leave_reject_home_path(leave_request),method: :post,form_class: 'reject-alertbox','data-toggle': 'tooltip', 'data-placement':'top', title: 'Reject Leave' do%>
 													<i class="bi bi-x-circle-fill text-danger"></i>
 												<%end%>
                                             <%end%>
@@ -132,7 +132,7 @@
                                             <% if leave_request.approve.eql?(nil)%>
                                                 <div><span class="text-warning">Pending!</span></div>
                                                 <div class="mx-2">
-                                                    <%= button_to cancel_leave_request_path(leave_request),form_class: 'cancel-alertbox',class: "mx-2", 'data-toggle': 'tooltip', 'data-placement':'top', title: 'Cancel Leave' do %>
+                                                    <%= button_to cancel_home_path(leave_request),form_class: 'cancel-alertbox',class: "mx-2", 'data-toggle': 'tooltip', 'data-placement':'top', title: 'Cancel Leave' do %>
                                                         <i class="bi bi-x-circle-fill text-danger"></i>
                                                     <% end %>
                                                 </div>
@@ -216,9 +216,8 @@
 			if (event.target && event.target.className === 'approve-alertbox') {
 			event.preventDefault()
 			Swal.fire({
-				title: 'Are you sure?, you want to Approve this leave',
+				title: 'Are you sure? You want to Approve this leave',
 				text: "You won't be able to revert this!",
-				icon: 'success',
 				showCancelButton: true,
 				confirmButtonColor: 'green',
 				cancelButtonColor: '#d33',
@@ -235,9 +234,8 @@
 			if (event.target && event.target.className === 'reject-alertbox') {
 			event.preventDefault()
 			Swal.fire({
-				title: 'Are you sure?, you want to Reject this leave',
+				title: 'Are you sure? You want to Reject this leave',
 				text: "You won't be able to revert this!",
-				icon: 'error',
 				showCancelButton: true,
 				confirmButtonColor: 'green',
 				cancelButtonColor: '#d33',
@@ -254,9 +252,8 @@
 			if (event.target && event.target.className === 'cancel-alertbox') {
 			event.preventDefault()
 			Swal.fire({
-				title: 'Are you sure?, you want to Cancel your leave',
+				title: 'Are you sure? You want to Cancel your leave',
 				text: "You won't be able to revert this!",
-				icon: 'question',
 				showCancelButton: true,
 				confirmButtonColor: 'green',
 				cancelButtonColor: '#d33',

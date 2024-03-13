@@ -1,6 +1,6 @@
 <div class="p-2 d-flex justify-content-between">
     <h5> Notifications</h5>
-    <span>Mark All Read</span>
+    <span><%= link_to "Mark All Read",mark_all_read_notification_notifications_path,format: :js, remote: true %> </span>
 </div>
 <ul id="notification_list">
     <% if @notifications.present? %>

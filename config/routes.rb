@@ -6,7 +6,13 @@ Rails.application.routes.draw do
   
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root 'home#index'
-  resources :home
+  resources :home do
+    member do
+      post  :leave_approve
+      post  :leave_reject
+      post  :cancel
+    end
+  end
   resources :users do
     collection do 
       get :checkemail
@@ -36,6 +42,7 @@ Rails.application.routes.draw do
     collection do
       get :notification_popup
       post :search
+      get :mark_all_read_notification
     end
     member do
       get :read_notification

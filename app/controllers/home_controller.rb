@@ -13,13 +13,75 @@ class HomeController < ApplicationController
         else
            @leave_requests = current_user.leave_requests.where(approve: nil, canceled: nil).order(created_at: :asc)
         end 
-
-		
 	 end
-	
+	 
+	 def leave_approve    
+        @leave_request = LeaveRequest.find(params[:id])
+        if  @leave_request.canceled == true
+            redirect_to leave_requests_path, alert: "Leave has been cancelled."
+        elsif @leave_request.update(approve: true)
+            @user_leave_type= @leave_request.user_leave_type
+            message = " Hi #{@leave_request.user.first_name.titleize}, your #{@leave_request.user_leave_type.leave_type.name.titleize} has been successfully approved!"
+            @leave_request.notifications.create(recipient: @leave_request.user, user: current_user, message: message, notifiable: @leave_request, recipient_type: "true", read: false)
+            UserMailer.approve_email(@leave_request).deliver_now
+            redirect_to home_index_path,notice: "Leave Approved Successfully."
+        end
+    end
 
-	def new
+    def leave_reject
+        @leave_request = LeaveRequest.find(params[:id])
+        if  @leave_request.canceled == true
+            redirect_to leave_requests_path, alert: "Leave has been cancelled."
+        elsif @leave_request.update(approve: false)
+            @user_leave_type= @leave_request.user_leave_type
+            
+            message = " Hi #{@leave_request.user.first_name.titleize}, your #{@leave_request.user_leave_type.leave_type.name.titleize} has been rejected!"
+            @leave_request.notifications.create(recipient: @leave_request.user, user: current_user, message: message, notifiable: @leave_request, recipient_type: "true", read: false)
+            
+            if @user_leave_type.leave_type.name.eql?("Short Leave")
+                @user_leave_type.update(leave_count: 1)
+            else
+                date_from = Date.parse("#{@leave_request.leave_from}") if @leave_request.leave_from.present?
+                date_to = Date.parse("#{@leave_request.leave_to}") if @leave_request.leave_to.present?
+                if date_from == date_to
+                    no_of_days = 1
+                else
+                    no_of_days = @leave_request.day_type.eql?("full_day") ? ((date_to - date_from).to_i + 1) : 0.5
+                end
+                leave_count = @user_leave_type.leave_count
+                @user_leave_type.update(leave_count: leave_count + no_of_days)
+            end
+            UserMailer.reject_email(@leave_request).deliver_now
+            redirect_to home_index_path, notice: "Leave rejected."
+        end
+    end
 
-	end
+    def cancel
+        @leave_request = LeaveRequest.find_by(id: params[:id])
+        if @leave_request.update(canceled: true)
+            @user_leave_type= @leave_request.user_leave_type
+            if @user_leave_type.leave_type.name.eql?("Short Leave")
+                @user_leave_type.update(leave_count: 1)
+            else
+                date_from = Date.parse("#{@leave_request.leave_from}") if @leave_request.leave_from.present?
+                date_to = Date.parse("#{@leave_request.leave_to}") if @leave_request.leave_to.present?
+                if date_from == date_to
+                    no_of_days = 1
+                else
+                    no_of_days = @leave_request.day_type.eql?("full_day") ? ((date_to - date_from).to_i + 1) : 0.5
+                end
+                leave_count = @user_leave_type.leave_count
+                @user_leave_type.update(leave_count: leave_count + no_of_days)
+            end
+
+            message1 = " Hi #{@leave_request.reporting_manager.first_name.titleize}, #{current_user.first_name.titleize} has been cancel #{@leave_request.user_leave_type.leave_type.name} "
+            message2 = " Hi #{@leave_request.user.first_name.titleize}, you have been cancelled your  #{@leave_request.user_leave_type.leave_type.name.titleize}"
+            @leave_request.notifications.create(recipient: @leave_request.reporting_manager, user: current_user, message: message1,  notifiable: @leave_request, recipient_type: "true", read: false)
+            @leave_request.notifications.create(recipient: @leave_request.user, user: current_user, message: message2, notifiable: @leave_request, recipient_type: "true", read: false)
+
+            UserMailer.leave_cancel_email(@leave_request).deliver_now
+            redirect_to home_index_path, notice: "Leave canceled."
+        end 
+    end
 	  
 end

@@ -2,7 +2,7 @@
 	<div class="row">
 		<div class="form-group col-md-6">
 			<%= f.label :user_leave_type_id, class: "required-field" %>
-			<%= f.select :user_leave_type_id, options_for_select(@user_leave_types), { include_blank: 'Select Leave Type' }, { class: "form-control",  id: "user_leave_type_id", required: true, selected: @leave_request.user_leave_type&.leave_type&.name} %>
+			<%= f.select :user_leave_type_id, options_for_select(@user_leave_types), { :selected => f.object.user_leave_type_id, include_blank: 'Select Leave Type' }, { class: "form-control",  id: "user_leave_type_id", required: true, selected: @leave_request.user_leave_type&.leave_type&.name} %>
 			<div id="show_count"></div>
 			<div id="leave_type_error"></div>
 		</div>
@@ -18,7 +18,7 @@
 		</div>
 
 		
-		<div class="form-group col-md-6", id="date1">
+		<div class="form-group col-md-6" id="date1">
 			<%= f.label :leave_from, class: "required-field"%>
 			<%= f.date_field :leave_from, selected: Date.today, autocomplete: "select_from", class: "form-control",id: "date_type1", placeholder: "Select Starting Date",type: 'text',onfocus: "(this.type='date')",onblur: "(this.type='text')", required: true, min: Date.today%>
 			<div id="date_error1"></div>
@@ -55,6 +55,7 @@
 <%end%>
 <script>
 	var leaveCount = null;
+	var secondDate;
 	document.getElementById('user_leave_type_id').addEventListener('change', function() {
 		var selectedLeaveTypeId = $(this).val();
 		if (selectedLeaveTypeId) { 
@@ -94,7 +95,7 @@
 		}
 
 		$("#leave_type_error").html('');
-		$('#date_type2')[0].removeClass('d-none');
+		$('#date_type2').removeClass('d-none');
 		$('#day_type')[0].disabled = false;
 		$('#date_type1')[0].disabled = false;
 		$('.send-request')[0].disabled = false;		
@@ -153,13 +154,13 @@
 			$("#half_type").removeClass('d-none');
 			$(".leave-to").removeClass("required-field");
 			$('#date_type2, #date2').addClass('d-none');
-			$('#date_type2').addClass('d-none');
 			$('#date_error2').addClass('d-none');
 		} else {
 			$('#show_count').html('Your leave balance is: ' + (leaveCount));
 			$("#half_type").addClass('d-none');
 			$(".leave-to").addClass("required-field");
-			$('#date_type2')[0].disabled = false;
+			$('#date_type2, #date2').removeClass('d-none');
+			$('#date_error2').removeClass('d-none');
 		}
 	}
 
@@ -185,7 +186,6 @@
 		if (dateType2 !== ""){
 			secondDate = new Date(dateType2);
 		}
-
 		let days =  secondDate.getTime() - firstDate.getTime()
 		days = Math.floor(days / (1000 * 60 * 60 * 24)) + 1;
 
@@ -230,41 +230,103 @@
 		}
 	}
 	
+	// document.getElementById('date_type1').addEventListener('change', function() {
+	// 	var leavedates = [];
+	// 	$.ajax({
+	// 		type: "GET",
+	// 		url: "/leave_requests/checkleavedates",
+	// 		dataType: "json",
+	// 		data: { key1: true },
+	// 		success: function(response) {
+	// 			leavedates = response.leavedates;
 
-	document.addEventListener("turbo:load", function() {
-		var leavedates = [];
+	// 		},
+	// 		error: function(jqXHR, textStatus, errorThrown) {
+	// 			console.error("Error fetching leavedates:", errorThrown);
+	// 		}
+	// 	});
 
-		$.ajax({
-			type: "GET",
-			url: "/leave_requests/checkleavedates",
-			dataType: "json",
-			data: { key1: true },
-			success: function(response) {
-				leavedates = response.leavedates;
 
-				$("#date1").on('select', function() {
-					var leaveFromDate = $(this).val();
-					if (leaveFromDate !== "") {
-						if (leavedates.indexOf(leaveFromDate) !== -1) {
-							$("#date1").addClass("error error-border-color");
-							$("#date_error1").text("Leave date already exists. Please choose another date.").css("color", "red");
-							$('.send-request').prop('disabled', true);
-						} else {
-							$("#date1").removeClass("error");
-							$("#date_error1").text("");
-							$('.send-request').prop('disabled', false);
-						}
-					} else {
+	// 	var leaveFromDate = $(this).val();
+	// 	if (leaveFromDate !== "") {
+	// 		debugger
+	// 		if (leavedates.indexOf(leaveFromDate) !== -1) {
+	// 			$("#date1").addClass("error error-border-color");
+	// 			$("#date_error1").text("Leave date already exists. Please choose another date.").css("color", "red");
+	// 			$('.send-request').prop('disabled', true);
+	// 		} else {
+	// 			$("#date1").removeClass("error");
+	// 			$("#date_error1").text("");
+	// 			$('.send-request').prop('disabled', false);
+	// 		}
+	// 	} else {
+	// 		$("#date1").removeClass("error");
+	// 		$("#date_error1").text("");
+	// 		$('.send-request').prop('disabled', false);
+	// 	}
+	// });
+
+	document.getElementById('date_type1').addEventListener('change', function() {
+		var leaveFromDate = $(this).val();
+		if (leaveFromDate !== "") {
+			$.ajax({
+				type: "GET",
+				url: "/leave_requests/checkleavedates",
+				dataType: "json",
+				data: { key1: leaveFromDate },
+				success: function(response) {
+					var leavedates = response.leavedates;
+					if (leavedates == true) {
+						$("#date1").addClass("error error-border-color");
+						$("#date_error1").text("You already have been applied for a leave on same date. Please choose another date.").css("color", "red");
+						$('.send-request').prop('disabled', true);
+					}else {
 						$("#date1").removeClass("error");
 						$("#date_error1").text("");
 						$('.send-request').prop('disabled', false);
 					}
-				});
-			},
-			error: function(jqXHR, textStatus, errorThrown) {
-				console.error("Error fetching leavedates:", errorThrown);
-			}
-		});
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					console.error("Error fetching leavedates:", errorThrown);
+				}
+			});
+		} else {
+			$("#date1").removeClass("error");
+			$("#date_error1").text("");
+			$('.send-request').prop('disabled', false);
+		}
 	});
+	document.getElementById('date_type2').addEventListener('change', function() {
+		var leaveToDate = $(this).val();
+		if (leaveToDate !== "") {
+			$.ajax({
+				type: "GET",
+				url: "/leave_requests/checkleavedates",
+				dataType: "json",
+				data: { key1: leaveToDate },
+				success: function(response) {
+					var leavedates = response.leavedates;
+					
+					if (leavedates == true) {
+						$("#date2").addClass("error error-border-color");
+						$("#date_error2").text("You already have been applied for a leave on same date. Please choose another date.").css("color", "red");
+						$('.send-request').prop('disabled', true);
+					}else {
+						$("#date2").removeClass("error");
+						$("#date_error2").text("");
+						$('.send-request').prop('disabled', false);
+					}
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					console.error("Error fetching leavedates:", errorThrown);
+				}
+			});
+		} else {
+			$("#date2").removeClass("error");
+			$("#date_error2").text("");
+			$('.send-request').prop('disabled', false);
+		}
+	});
+	
 
 </script>
