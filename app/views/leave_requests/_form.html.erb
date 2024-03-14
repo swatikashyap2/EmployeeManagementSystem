@@ -30,6 +30,7 @@
 			<div id="date_error2"></div>
 		</div>
 		
+		
 		<div class="form-group col-md-6 d-none" id="time_field_from">
 			<%= f.label :time_from, class: "required-field" %>
 			<%= f.time_field :time_from,  autocomplete: "time_from", class: "form-control", placeholder: "--choose Time--", min: Time.current.strftime("%H:%M"), id: "time_from" %>
@@ -249,7 +250,7 @@
 
 	// 	var leaveFromDate = $(this).val();
 	// 	if (leaveFromDate !== "") {
-	// 		debugger
+	// 	
 	// 		if (leavedates.indexOf(leaveFromDate) !== -1) {
 	// 			$("#date1").addClass("error error-border-color");
 	// 			$("#date_error1").text("Leave date already exists. Please choose another date.").css("color", "red");
@@ -273,7 +274,7 @@
 				type: "GET",
 				url: "/leave_requests/checkleavedates",
 				dataType: "json",
-				data: { key1: leaveFromDate },
+				data: { dateFrom: leaveFromDate },
 				success: function(response) {
 					var leavedates = response.leavedates;
 					if (leavedates == true) {
@@ -297,13 +298,14 @@
 		}
 	});
 	document.getElementById('date_type2').addEventListener('change', function() {
+		 var leaveFrom = $('#date1 input').val();
 		var leaveToDate = $(this).val();
 		if (leaveToDate !== "") {
 			$.ajax({
 				type: "GET",
 				url: "/leave_requests/checkleavedates",
 				dataType: "json",
-				data: { key1: leaveToDate },
+				data: { leave_from: leaveToDate, leave_to: leaveFrom },
 				success: function(response) {
 					var leavedates = response.leavedates;
 					
@@ -327,6 +329,5 @@
 			$('.send-request').prop('disabled', false);
 		}
 	});
-	
 
 </script>
