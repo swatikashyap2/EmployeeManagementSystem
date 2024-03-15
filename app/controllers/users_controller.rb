@@ -15,8 +15,11 @@ class UsersController < ApplicationController
 		authorize @users
 	end
 
+
+	
 	def new
 		@user = User.new()
+		@managers = User.manager
 		authorize @user, :new?
 	end
 
@@ -78,7 +81,7 @@ class UsersController < ApplicationController
 	end
 	private 
 		def user_params
-			params.require(:user).permit(:email, :password, :password_confirmation, :current_password, :first_name, :last_name, :phone, :address, :zip_code, :employee_code, :dob, :role_id, :designation, :gender, :reporting_manager_id, :avatar)
+			params.require(:user).permit(:email, :password, :password_confirmation, :current_password, :first_name, :last_name, :phone, :address, :zip_code, :employee_code, :dob, :role_id, :designation, :gender, :reporting_manager_id, :avatar, reporting_managers: [])
 		end
 
 		def set_user
