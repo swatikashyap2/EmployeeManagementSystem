@@ -63,7 +63,7 @@
 </div>
 <div>
     <div class="card">
-        <div class="card-body">
+        <div class="card-body overflow-auto">
         <div class="d-flex justify-content-between">
             <div>
                 <h3>Pending Leaves</h3>
@@ -118,13 +118,13 @@
                                     <%= leave_request.created_at.present? ? leave_request.created_at.in_time_zone("Asia/Kolkata").strftime("%I:%M%p") : "N/A"%>
                                 </td>
                                 <td>
-                                    <div>
+                                    <div class="d-flex">
                                         <% if is_admin?%>
                                             <% if leave_request.approve.eql?(nil)%>
-                                                <%= button_to  leave_approve_home_path(leave_request), method: :post,  form_class: 'approve-alertbox','data-toggle': 'tooltip', 'data-placement':'top', title: 'Approve Leave' do%>
+                                                <%= button_to  leave_approve_home_path(leave_request), method: :post,class: 'border-0 bg-transparent',  form_class: 'approve-alertbox','data-toggle': 'tooltip', 'data-placement':'top', title: 'Approve Leave' do%>
 													<i class="bi bi-check-circle-fill text-green"></i>
 												<%end%>
-												<%= button_to leave_reject_home_path(leave_request),method: :post,form_class: 'reject-alertbox','data-toggle': 'tooltip', 'data-placement':'top', title: 'Reject Leave' do%>
+												<%= button_to leave_reject_home_path(leave_request), method: :post,class:'border-0 bg-transparent',form_class: 'reject-alertbox, ','data-toggle': 'tooltip', 'data-placement':'top', title: 'Reject Leave' do%>
 													<i class="bi bi-x-circle-fill text-danger"></i>
 												<%end%>
                                             <%end%>
@@ -132,7 +132,7 @@
                                             <% if leave_request.approve.eql?(nil)%>
                                                 <div><span class="text-warning">Pending!</span></div>
                                                 <div class="mx-2">
-                                                    <%= button_to cancel_home_path(leave_request),form_class: 'cancel-alertbox',class: "mx-2", 'data-toggle': 'tooltip', 'data-placement':'top', title: 'Cancel Leave' do %>
+                                                    <%= button_to cancel_home_path(leave_request), class:'border-0 bg-transparent' ,form_class: 'cancel-alertbox', 'data-toggle': 'tooltip', 'data-placement':'top', title: 'Cancel Leave' do %>
                                                         <i class="bi bi-x-circle-fill text-danger"></i>
                                                     <% end %>
                                                 </div>

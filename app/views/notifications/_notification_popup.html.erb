@@ -1,5 +1,5 @@
-<div class="p-2 d-flex justify-content-between">
-    <h5> Notifications</h5>
+<div class="p-2 d-flex justify-content-between border-bottom align-items-center">
+    <h5 class="m-0"> Notifications</h5>
     <span><%= link_to "Mark All Read",mark_all_read_notification_notifications_path,format: :js, remote: true %> </span>
 </div>
 <ul id="notification_list">
@@ -8,7 +8,7 @@
             <% if notification.read == true%>
                 <%= link_to notifications_path(user_name: notification.user.first_name), class: "text-black" do%>
                     <li class="mt-2">
-                        <div>
+                        <div class="text-black">
                             <%= notification.message %>
                         </div>
                         <div class="d-flex justify-content-between" >
@@ -27,7 +27,7 @@
                 <div class="notification-bg">
                     <%= link_to notifications_path(user_name: notification.user.first_name), class: "text-black" do%>
                         <li class="mt-2">
-                            <div>
+                            <div class="text-success">
                                 <%= notification.message %>
                             </div>
                             <div class="d-flex justify-content-between" >
@@ -49,7 +49,7 @@
         <h5 class="mt-3">Record Not Found</h5>
     <% end %>
 </ul>
-  <%= link_to "Show All", notifications_path %>
+  <div class="border-top p-2"><%= link_to "Show All", notifications_path, class:'p-2 mb-3' %></div>
 <style>
     #notification_list{
         width: 100% !important;
@@ -58,7 +58,7 @@
         max-height: 600px !important;
         min-height: 200px !important;
     }
-    .notification-bg{
-        background-color: #cdbebe70;
-    }
+    # .notification-bg{
+    #     background-color: #cdbebe70;
+    # }
 </style>

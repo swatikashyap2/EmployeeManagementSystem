@@ -1,7 +1,10 @@
 
-<nav class="main-header navbar navbar-expand bg-color d-flex justify-content-end" style="height:80px !important">
+<nav class="main-header navbar navbar-expand bg-color d-flex justify-content-between" style="height:80px !important">
+    <button class="border-0 bg-transparent" onclick="myFunction()" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="true" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
 	<!-- Left navbar links -->
-	<ul class="navbar-nav">
+	<ul class="navbar-nav align-items-center id="hide-navbar">
 		<!-- li class="nav-item">
 			<a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
 		</li>
@@ -34,8 +37,11 @@
 		<li class="nav-item mx-2">
 			<strong><%= current_user.role.name.titleize %></strong>
 		</li>
-		<li class="nav-item mx-1">	
-			<%= link_to "logout", destroy_user_session_path, method: :delete, class: "btn btn-warning", id: "logout-button" %>
+		<li class="nav-item mx-1">
+		<%= button_to destroy_user_session_path, method: :delete, class:'border-0 bg-transparent text-danger fs-4' , 'data-toggle': 'tooltip', 'data-placement':'top', title: 'logout' do %>
+			<strong><i class="bi bi-power"></i></strong>
+		<% end %>
+			
 		</li>
 		
 		<li>
@@ -226,6 +232,26 @@
 		height: 40px;
     	width: 40px;
 	}
-</style>
+	.navbar-toggler-icon {
+		background-image: var(--bs-navbar-toggler-icon-bg) !important;
 
+	}
+	#hide-navbar {
+		width: 100%;
+		padding: 50px 0;
+		text-align: center;
+		background-color: lightblue;
+		margin-top: 20px;
+	  }
+</style>
+<script>
+function myFunction() {
+  var x = document.getElementById("hide-navbar");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+</script>
   

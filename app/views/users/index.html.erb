@@ -19,7 +19,7 @@
 		</div>
 	</div>
 </div>
-<div class="card">
+<div class="card overflow-auto">
 	<div class="card-body">
 		<table class='table'>
 			<div>
@@ -100,7 +100,7 @@
 											<%end%>
 											<%if is_admin?%>	
 												<% if current_user != user %>
-													<%= button_to user_path(user), method: :delete,form_class: 'delete-alertbox', 'data-toggle': 'tooltip', 'data-placement': 'top', title: 'Delete User' do %> 
+													<%= button_to user_path(user), method: :delete, class:'border-0 bg-transparent text-danger', form_class: 'delete-alertbox', 'data-toggle': 'tooltip', 'data-placement': 'top', title: 'Delete User' do %> 
 														<i class="bi bi-trash3-fill"></i>
 													<% end %>      
 												<%end%>	
