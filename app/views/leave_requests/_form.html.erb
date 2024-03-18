@@ -274,7 +274,7 @@
 				type: "GET",
 				url: "/leave_requests/checkleavedates",
 				dataType: "json",
-				data: { dateFrom: leaveFromDate },
+				data: { leave_from: leaveFromDate },
 				success: function(response) {
 					var leavedates = response.leavedates;
 					if (leavedates == true) {

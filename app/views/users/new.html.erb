@@ -59,26 +59,34 @@
 
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :role, class: "required-field" %>
-					<%= f.select :role_id, options_for_select(Role.where.not(name: 'admin').collect { |role| [role.name.titleize, role.id] }), { include_blank: '--Select Role--' }, { class: "form-control", required: true } %>
+					<%= f.select :role_id, options_for_select(Role.where.not(name: 'admin').collect { |role| [role.name.titleize, role.id] }), { include_blank: 'Select Role..' }, { class: "form-control", required: true } %>
+					
 				</div>
 
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :designation, class: "required-field" %>
-					<%= f.select :designation,options_for_select(User.designations.keys.map { |d| [d.humanize, d] }),{include_blank: "--Select Designation--"},{class: "form-control",required: true }%>
+					<%= f.select :designation,options_for_select(User.designations.keys.map { |d| [d.humanize, d] }),{include_blank: "Select Designation.."},{class: "form-control",required: true }%>
 				</div>
 
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :gender %>
-					<%= f.select :gender,options_for_select(User.genders.keys.map { |g| [g.humanize, g] }), {include_blank: "--Select Gender--"},{class: "form-control"}%>
+					<%= f.select :gender,options_for_select(User.genders.keys.map { |g| [g.humanize, g] }), {include_blank: "Select Gender.."},{class: "form-control"}%>
 				</div>
-
 
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :zip_code %>
 					<%= f.text_field :zip_code, autofocus: true, autocomplete: "zip_code", class: "form-control", placeholder: "Enter Zip-Code"   %>
 				</div>
+
 				
-				<div class="field mb-2">
+				<div class="form-group col-md-6 mb-2">
+					<%= f.label :reporting_managers %>
+					<%= f.select :reporting_managers, options_for_select(@managers.collect.map { |manager| [manager.first_name.titleize, manager.id] }), { }, { class: "form-control", multiple: true } %>
+				</div>
+
+
+				
+				<div class="form-group col-md-6 mb-2">
 					<%= f.label :add_image%>
 					<%= f.file_field :avatar, class: "form-control" %>
 				</div>

@@ -18,51 +18,56 @@ class LeaveRequestsController < ApplicationController
     end
 
     def create
-        @leave_request = LeaveRequest.new(leave_request_params)
-        if params[:leave_request][:day_type] == 'half_day'
-            leave_requests = current_user.leave_requests.where(approve: [true, nil], canceled: nil)
-            existing_leave = leave_requests.where(user_id: @leave_request.user_id)
-                                        .where(leave_from: @leave_request.leave_from..@leave_request.leave_from.end_of_day)
-            if existing_leave.exists?
-                redirect_to new_leave_request_path, alert: "Your leave request overlaps with an existing leave request."
-                return
-            end
-        end
-        if params[:leave_request][:day_type] == 'full_day'
-            leave_requests = current_user.leave_requests.where(approve: [true, nil], canceled: nil)
-            existing_leave = leave_requests.where(leave_from: @leave_request.leave_from..@leave_request.leave_from.end_of_day,leave_to: @leave_request.leave_to..@leave_request.leave_to.end_of_day)
-            if existing_leave.exists?
-                redirect_to new_leave_request_path, alert: "Your leave request overlaps with an existing leave request."
-                return
-            end
-        end
-        if @leave_request.save
-            @user_leave_type= @leave_request.user_leave_type
-            if @user_leave_type.leave_type.name.eql?("Short Leave")
-                @user_leave_type.update(leave_count: 0)
-            else
-                date_from = Date.parse("#{@leave_request.leave_from}") if @leave_request.leave_from.present?
-                date_to = Date.parse("#{@leave_request.leave_to}") if @leave_request.leave_to.present?
-                if date_from == date_to
-                    no_of_days = 1
-                else
-                    no_of_days = @leave_request.day_type.eql?("full_day") ? ((date_to - date_from).to_i + 1) : 0.5
+        result = abcd(params[:leave_request])
+        if !result
+            @leave_request = LeaveRequest.new(leave_request_params)
+            if params[:leave_request][:day_type] == 'half_day'
+                leave_requests = current_user.leave_requests.where(approve: [true, nil], canceled: nil)
+                existing_leave = leave_requests.where(user_id: @leave_request.user_id)
+                                            .where(leave_from: @leave_request.leave_from..@leave_request.leave_from.end_of_day)
+                if existing_leave.exists?
+                    redirect_to new_leave_request_path, alert: "Your leave request overlaps with an existing leave request."
+                    return
                 end
-                leave_count = @user_leave_type.leave_count
-                @user_leave_type.update(leave_count: leave_count - no_of_days)
             end
-          
-            message1 = "Hi #{@leave_request.reporting_manager.first_name.titleize}, #{current_user.first_name.titleize} has been applied for #{@leave_request.user_leave_type.leave_type.name} "
-            message2 = "Hi #{current_user.first_name.titleize}, your #{@leave_request.user_leave_type.leave_type.name.titleize} has been successfully applied! "
-            @leave_request.notifications.create(recipient: @leave_request.reporting_manager, user: current_user, message: message1, recipient_type: "true", read: false)
-            @leave_request.notifications.create(recipient: @leave_request.user, user: current_user, message: message2, recipient_type: "true", read: false)
+            if params[:leave_request][:day_type] == 'full_day'
+                leave_requests = current_user.leave_requests.where(approve: [true, nil], canceled: nil)
+                existing_leave = leave_requests.where(leave_from: @leave_request.leave_from..@leave_request.leave_from.end_of_day,leave_to: @leave_request.leave_to..@leave_request.leave_to.end_of_day)
+                if existing_leave.exists?
+                    redirect_to new_leave_request_path, alert: "Your leave request overlaps with an existing leave request."
+                    return
+                end
+            end
+            if @leave_request.save
+                @user_leave_type= @leave_request.user_leave_type
+                if @user_leave_type.leave_type.name.eql?("Short Leave")
+                    @user_leave_type.update(leave_count: 0)
+                else
+                    date_from = Date.parse("#{@leave_request.leave_from}") if @leave_request.leave_from.present?
+                    date_to = Date.parse("#{@leave_request.leave_to}") if @leave_request.leave_to.present?
+                    if date_from == date_to
+                        no_of_days = 1
+                    else
+                        no_of_days = @leave_request.day_type.eql?("full_day") ? ((date_to - date_from).to_i + 1) : 0.5
+                    end
+                    leave_count = @user_leave_type.leave_count
+                    @user_leave_type.update(leave_count: leave_count - no_of_days)
+                end
             
-            UserMailer.leave_apply_email(@leave_request).deliver_later
-            UserMailer.notify_to_admin(@leave_request).deliver_later
-            # NotificationsChannel.broadcast_to(current_user, @leave_request.notifications.last)
-             redirect_to leave_requests_path, notice: "Request Created Successfully."
+                message1 = "Hi #{@leave_request.reporting_manager.first_name.titleize}, #{current_user.first_name.titleize} has been applied for #{@leave_request.user_leave_type.leave_type.name} "
+                message2 = "Hi #{current_user.first_name.titleize}, your #{@leave_request.user_leave_type.leave_type.name.titleize} has been successfully applied! "
+                @leave_request.notifications.create(recipient: @leave_request.reporting_manager, user: current_user, message: message1, recipient_type: "true", read: false)
+                @leave_request.notifications.create(recipient: @leave_request.user, user: current_user, message: message2, recipient_type: "true", read: false)
+                
+                UserMailer.leave_apply_email(@leave_request).deliver_later
+                UserMailer.notify_to_admin(@leave_request).deliver_later
+                # NotificationsChannel.broadcast_to(current_user, @leave_request.notifications.last)
+                redirect_to leave_requests_path, notice: "Request Created Successfully."
+            else
+                redirect_to new_leave_request_path, error:  @leave_request.errors.full_messages
+            end
         else
-            redirect_to new_leave_request_path, error:  @leave_request.errors.full_messages
+            redirect_to new_leave_request_path, alert: "Your leave request ovjkhbvkjhvkjhvkjherlaps with an existing leave request." 
         end
     end
      
@@ -148,18 +153,18 @@ class LeaveRequestsController < ApplicationController
           @date_diffs << dates_between1
         end
         @date_diffs = @date_diffs.flatten
-      
+
         @date_diffs2 = []
-        
+
         @leavetofrom.each do |leave|
           leave_from = Date.parse(leave[0].strftime("%a, %d %b %Y"))
           leave_to = Date.parse(leave[1].strftime("%a, %d %b %Y"))  
           dates_between = (leave_from..leave_to).to_a.map { |date| date.strftime("%a, %d %b %Y") }
           @date_diffs2 << dates_between
         end
-        
+
         @date_diffs2 = @date_diffs2.flatten
-        
+
         dates_match = false
         @date_diffs2.each do |date2|
           @date_diffs.each do |date1|
@@ -225,6 +230,47 @@ class LeaveRequestsController < ApplicationController
              redirect_to leave_requests_path, notice: "Request Created Successfully."
         else
             redirect_to new_leave_request_path, error:  @leave_request.errors.full_messages
+        end
+    end
+    def abcd(param)
+        @leavetofrom = LeaveRequest.where(approve: [true, nil], canceled: nil).pluck(:leave_from, :leave_to)
+        @leave_between = @leavetofrom.flatten.map { |date| date.strftime("%a, %d %b %Y") } 
+        params_date1 = Date.parse(param[:leave_from])
+        @format_date1 = params_date1.strftime("%a, %d %b %Y")
+        @date_diffs = []
+        if param[:leave_to].present?
+          params_date2 = Date.parse(param[:leave_to])
+          @format_date2 = params_date2.strftime("%a, %d %b %Y")
+          dates_between1 = (params_date2..params_date1).to_a.map { |date| date.strftime("%a, %d %b %Y") }
+          @date_diffs << dates_between1
+        end
+        @date_diffs = @date_diffs.flatten
+      
+        @date_diffs2 = []
+        
+        @leavetofrom.each do |leave|
+          leave_from = Date.parse(leave[0].strftime("%a, %d %b %Y"))
+          leave_to = Date.parse(leave[1].strftime("%a, %d %b %Y"))  
+          dates_between = (leave_from..leave_to).to_a.map { |date| date.strftime("%a, %d %b %Y") }
+          @date_diffs2 << dates_between
+        end
+        
+        @date_diffs2 = @date_diffs2.flatten
+        
+        dates_match = false
+        @date_diffs2.each do |date2|
+          @date_diffs.each do |date1|
+            if date1 == date2
+              dates_match = true
+              break
+            end
+          end
+          break if dates_match
+        end
+        if @leave_between.include?(@format_date1) || @date_diffs2.include?(@format_date1) || dates_match
+          return true
+        else
+          return false
         end
     end
     private
