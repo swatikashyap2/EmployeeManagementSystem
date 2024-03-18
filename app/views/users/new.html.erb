@@ -81,11 +81,9 @@
 				
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :reporting_managers %>
-					<%= f.select :reporting_managers, options_for_select(@managers.collect.map { |manager| [manager.first_name.titleize, manager.id] }), { }, { class: "form-control", multiple: true } %>
+					<%= f.select :reporting_managers, options_for_select(@managers.map { |manager| [manager.first_name.titleize, manager.id] }), { }, { class: "form-control", multiple: true } %>
 				</div>
 
-
-				
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :add_image%>
 					<%= f.file_field :avatar, class: "form-control" %>
