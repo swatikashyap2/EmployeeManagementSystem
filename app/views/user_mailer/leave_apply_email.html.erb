@@ -1,65 +1,99 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
-	</head>
-	<body>
-		<div style="width: 100%;background-color: #f7f7f7; font-family: Verdana, Geneva, Tahoma, sans-serif; -webkit-font-smoothing: antialiased; font-size: 14px; line-height: 1.4; margin: 0; padding: 0; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;">
-			<table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt;width: 100%;">
-				<tr>
-					<td style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px; vertical-align: top;">&nbsp;</td>
-					<td style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px; display: block; margin: 0 auto !important; max-width: 600px; padding: 10px; width: 600px; padding: 0 !important; width: 100% !important;">
-						<div style="box-sizing: border-box; display: block; margin: 0 auto; max-width: 600px; padding: 10px;">
+<html lang="en">
+    <head>
+        <title>Backspacce Technology</title>
+    </head>
+<body
+    style="width: 100%;background-color: #f7f7f7; font-family: Verdana, Geneva, Tahoma, sans-serif; -webkit-font-smoothing: antialiased; font-size: 14px; line-height: 1.4; margin: 0; padding: 0; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;">
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0"
+        style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt;width: 100%;">
+        <tr>
+            <td style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px; vertical-align: top;">&nbsp;
+            </td>
+            <td
+                style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px; display: block; margin: 0 auto !important; max-width: 600px; padding: 10px; width: 600px; padding: 0 !important; width: 100% !important;">
+                <div style="box-sizing: border-box; display: block; margin: 0 auto; max-width: 600px; padding: 10px;box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);">
 
-						<!-- START CENTERED WHITE CONTAINER -->
-						<table role="presentation" style="background: #ffffff; border-radius: 3px; width: 100%; border-left-width: 0 !important; border-radius: 0 !important; border-right-width: 0 !important; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt;width: 100%;">
-							<tr>
-								<td style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px; vertical-align: top; box-sizing: border-box; padding: 20px;">
-									<h3>Hi <%= @leave_request.user&.first_name&.titleize %></h3>
+                    <!-- START CENTERED WHITE CONTAINER -->
+                    <table role="presentation"
+                        style="background: #ffffff; border-radius: 3px; width: 100%; border-left-width: 0 !important; border-radius: 0 !important; border-right-width: 0 !important;border-top:4px solid #009ae4 !important;"
+                        style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt;width: 100%; ">
 
-									<!-- START MAIN CONTENT AREA -->
-									<p style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">
-									<% if @leave_request.day_type == "full_day"%>
-										Your <%= @leave_request.user_leave_type.leave_type.name %> from <%= @leave_request.leave_from %> to <%= @leave_request.leave_to%> have been applied successfully.
-									<%else%>
-										Your <%= @leave_request.user_leave_type.leave_type.name %> on <%= @leave_request.leave_from %> have been applied successfully.
-									<%end%>
-									</p>
-									<p style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">Thank you.</p>
-								</td>
-							</tr>
+                        <!-- START MAIN CONTENT AREA -->
+                        <tr>
+                            <td
+                                style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px; vertical-align: top; box-sizing: border-box; padding: 20px;">
+                                <table role="presentation" border="0" cellpadding="0" cellspacing="0"
+                                    style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt;width: 100%;">
+                                    <tr>
+                                        <td
+                                            style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px; vertical-align: top;">
+                                            <!-- <p
+                                                style="text-transform: capitalize; font-family: Verdana, Geneva, Tahoma, sans-serif; color:#009ae4 ;font-size: 15px; font-weight: bold; margin: 0; margin-bottom: 15px;text-align: center;">
+                                                Back<span style="color:#1b1464;font-family: Verdana, Geneva, Tahoma, sans-serif;font-size: 15px; font-weight: bold;">Spacce</span></p> -->
 
-							<!-- END MAIN CONTENT AREA -->
-						</table>
-						<!-- END CENTERED WHITE CONTAINER -->
+                                            <p style="text-align: center;margin-top: 0px;">
+                                                <img style="border: none; -ms-interpolation-mode: bicubic; max-width: 300px; height: auto;"
+                                                    src="https://backspacce.com/images/1668256479983104000_banner_image.jpeg"
+                                                    alt="Backspacce Technology">
+                                            </p>
+                                            <p>
+                                                <h3>Hi <%= @leave_request.user&.first_name&.titleize %></h3>
+                                            </p>
+                                            <p>
+												<% if @leave_request.day_type == "full_day"%>
+													Your <%= @leave_request.user_leave_type.leave_type.name %> from <%= @leave_request.leave_from %> to <%= @leave_request.leave_to%> have been applied successfully.
+												<%else%>
+													Your <%= @leave_request.user_leave_type.leave_type.name %> on <%= @leave_request.leave_from %> have been applied successfully.
+												<%end%>
+											</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
 
-						<!-- START FOOTER -->
-						<div style="clear: both; background-color: #fff;">
-							<table role="presentation"  cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt;width: 100%;">
-								<tr style="display: block; padding: 0 20px;">
-									<td style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px; vertical-align: top; padding-bottom: 10px; padding-top: 10px; color: #000; font-size: 12px;">
-									<span style="color: #000; font-size: 12px;">This is an automated message from the <b>Backspacce Technologies</b>.</span><br>
-									<span style="color: #000; font-size: 12px;">Please do not reply to this message.</span>
-									</td>
-								</tr>
-								<tr style="display: block; padding: 0 20px;">
-									<td style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px; vertical-align: top; padding-bottom: 10px; padding-top: 10px; color: #000; font-size: 12px;">
-									<b>Backspacce Technologies</b>
-									</td>
-								</tr>
-								<tr style="display: block; margin-top: 15px;">
-									<td style="background: #009ae4; text-align: center;">
-										<%= image_tag("logo.png", size: "200x100", class: "position-absolute top", alt: "Sample image") %>
-									</td>
-								</tr>
-							</table>
-						</div>
-						<!-- END FOOTER -->
-						</div>
-					</td>
-					<td style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px; vertical-align: top;">&nbsp;</td>
-				</tr>
-			</table>
-		</div>
-	</body>
+                        <!-- END MAIN CONTENT AREA -->
+                    </table>
+                    <!-- END CENTERED WHITE CONTAINER -->
+
+                    <!-- START FOOTER -->
+                    <div style="clear: both; background-color: #fff;">
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0"
+                            style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt;width: 100%;">
+                            <tr style="display: block; padding: 0 20px;margin-bottom: 20px;">
+                                <td style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px; vertical-align: top; padding-bottom: 10px; padding-top: 10px; color: #000;
+                                            font-size: 12px;">
+                                    <span style="color: #000; font-size: 12px;">
+                                        This is an automated message from the <b>Backspacce Technologies</b>.
+                                    </span>
+                                    <br>
+                                    <span style="color: #000; font-size: 12px;">
+                                        Please do not reply to this message.
+                                    </span>
+                                </td>
+                            </tr>
+                            <!-- <tr style="display: block; padding: 0 20px;">
+                                <td style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px; vertical-align: top; padding-bottom: 10px; padding-top: 10px; color: #000;
+                                            font-size: 12px;">
+                                    <b>Powered by Forwood</b>
+                                </td>
+                            </tr> -->
+                            <!-- <tr style="display: block; margin-top: 15px;">
+                                <td style="background: #009ae4;">
+                                    <img style="border: none; -ms-interpolation-mode: bicubic; max-width: 580px; height: auto;"
+                                        src="./images/1668256479983104000_banner_image.jpeg"
+                                        alt="forwood">
+                                </td>
+                            </tr> -->
+                        </table>
+                    </div>
+                    <!-- END FOOTER -->
+                </div>
+            </td>
+            <td style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px; vertical-align: top;">&nbsp;
+            </td>
+        </tr>
+    </table>
+</body>
 </html>

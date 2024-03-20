@@ -1,0 +1,33 @@
+<%= form_tag(search_teams_path(format: :js), html: { method: :post }, remote: true, class: 'd-flex align-items-center justify-content-end gap-1 flex-wrap search-form') do %>
+    <%= hidden_field_tag :method_name, params[:action]%> 
+	
+	<div class="form-group w-22">
+        <div class= 'd-flex align-items-center mx-2'>
+            <div class="form-group m-0 mx-2">
+                Managers:
+            </div>
+            <div>
+                <%= select_tag :id, options_for_select(@managers.map{|m| [m.first_name, m.id]}), include_blank: 'Manager', class: 'form-control search-field', id: 'search-field' %>  
+            </div>
+            <div class="form-group m-0 mx-2">
+                Designations:
+            </div>
+            <div>
+                <%= select_tag :designation,options_for_select(User.designations.keys.map { |d| [d.humanize, d] }),include_blank: "Select Designation..", class: "form-control", id: 'search-field1'%>
+            </div>
+        </div>
+	</div> 
+	<%= button_tag type: 'submit', id: "search-submit-btn", class: "btn btn-sm btn-secondary", style: "display: none;"  do %>
+		<i class='mdi mdi-magnify search-icon'></i>
+	<%end%>
+<%end%>
+ 
+
+<script>
+	document.getElementById('search-field').addEventListener('change', function(e) {
+		$("#search-submit-btn").trigger("click");
+	})
+    document.getElementById('search-field1').addEventListener('change', function(e) {
+		$("#search-submit-btn").trigger("click");
+	})
+</script>

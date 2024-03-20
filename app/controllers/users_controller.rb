@@ -79,6 +79,17 @@ class UsersController < ApplicationController
 		@user = User.find(params[:id])
 		redirect_to users_path
 	end
+
+	def search 
+		@users = User.all
+		@users = @users.where("lower(first_name) LIKE ?", "%#{params[:search].downcase}%") if params[:search].present?
+		@users = @users.where(role_id: params[:role_id]) if params[:role_id].present?
+		@users = @users.where(designation: params[:designation]) if params[:designation].present?
+		respond_to do|format|
+			format.js
+		end
+	end
+
 	private 
 		def user_params
 			params.require(:user).permit(:email, :password, :password_confirmation, :current_password, :first_name, :last_name, :phone, :address, :zip_code, :employee_code, :dob, :role_id, :designation, :gender, :reporting_manager_id, :avatar, reporting_managers: [])

@@ -10,6 +10,8 @@ class LeaveRequestsController < ApplicationController
             @leave_requests = current_user.leave_requests.order(created_at: :desc).paginate(page: params[:page], per_page: 10)
         end 
 		authorize @leave_requests
+        @leave_type = LeaveRequest.include(:user_leave_type)
+      
     end
 
     def new
@@ -18,7 +20,7 @@ class LeaveRequestsController < ApplicationController
     end
 
     def create
-        result = abcd(params[:leave_request])
+        result = check_for_leaves(params[:leave_request])
         if !result
             @leave_request = LeaveRequest.new(leave_request_params)
             if params[:leave_request][:day_type] == 'half_day'
@@ -67,7 +69,7 @@ class LeaveRequestsController < ApplicationController
                 redirect_to new_leave_request_path, error:  @leave_request.errors.full_messages
             end
         else
-            redirect_to new_leave_request_path, alert: "Your leave request ovjkhbvkjhvkjhvkjherlaps with an existing leave request." 
+            redirect_to new_leave_request_path, alert: "Your leave request overlaps with an existing leave request." 
         end
     end
      
@@ -141,44 +143,51 @@ class LeaveRequestsController < ApplicationController
     end
 
     def checkleavedates
-        @leavetofrom = LeaveRequest.where(approve: [true, nil], canceled: nil).pluck(:leave_from, :leave_to)
-        @leave_between = @leavetofrom.flatten.map { |date| date.strftime("%a, %d %b %Y") } 
-        params_date1 = Date.parse(params[:leave_from])
-        @format_date1 = params_date1.strftime("%a, %d %b %Y")
-        @date_diffs = []
-        if params[:leave_to].present?
-          params_date2 = Date.parse(params[:leave_to])
-          @format_date2 = params_date2.strftime("%a, %d %b %Y")
-          dates_between1 = (params_date2..params_date1).to_a.map { |date| date.strftime("%a, %d %b %Y") }
-          @date_diffs << dates_between1
-        end
-        @date_diffs = @date_diffs.flatten
-
-        @date_diffs2 = []
-
-        @leavetofrom.each do |leave|
-          leave_from = Date.parse(leave[0].strftime("%a, %d %b %Y"))
-          leave_to = Date.parse(leave[1].strftime("%a, %d %b %Y"))  
-          dates_between = (leave_from..leave_to).to_a.map { |date| date.strftime("%a, %d %b %Y") }
-          @date_diffs2 << dates_between
-        end
-
-        @date_diffs2 = @date_diffs2.flatten
-
-        dates_match = false
-        @date_diffs2.each do |date2|
-          @date_diffs.each do |date1|
-            if date1 == date2
-              dates_match = true
-              break
-            end
-          end
-          break if dates_match
-        end
-        if @leave_between.include?(@format_date1) || @date_diffs2.include?(@format_date1) || dates_match
-          render json: { leavedates: true }
+        @leavetofrom = current_user.leave_requests.where(approve: [true, nil], canceled: nil).pluck(:leave_from, :leave_to)
+        if @leavetofrom.empty?
+            render json: { leavedates: false }
+            return
         else
-          render json: { leavedates: false }
+            @leave_between = @leavetofrom.flatten.map { |date| date.strftime("%a, %d %b %Y") }
+            params_date1 = Date.parse(params[:leave_from])
+            @format_date1 = params_date1.strftime("%a, %d %b %Y")
+            @date_diffs = []
+            if params[:leave_to].present?
+                params_date2 = Date.parse(params[:leave_to])
+                @format_date2 = params_date2.strftime("%a, %d %b %Y")
+                dates_between1 = (params_date2..params_date1).to_a.map { |date| date.strftime("%a, %d %b %Y") }
+                @date_diffs << dates_between1
+            end
+            @date_diffs = @date_diffs.flatten
+
+            @date_diffs2 = []
+
+            @leavetofrom.each do |leave|
+                leave_from = Date.parse(leave[0].strftime("%a, %d %b %Y"))
+                leave_to = Date.parse(leave[1].strftime("%a, %d %b %Y"))  
+                dates_between = (leave_from..leave_to).to_a.map { |date| date.strftime("%a, %d %b %Y") }
+                @date_diffs2 << dates_between
+            end
+
+            @date_diffs2 = @date_diffs2.flatten
+
+            dates_match = false
+            @date_diffs2.each do |date2|
+                @date_diffs.each do |date1|
+                    if date1 == date2
+                     dates_match = true
+                    break
+                end
+            end
+
+            break if dates_match
+
+            end
+            if @leave_between.include?(@format_date1) || @date_diffs2.include?(@format_date1) || dates_match
+                render json: { leavedates: true }
+            else
+              render json: { leavedates: false }
+            end
         end
     end
      
@@ -232,45 +241,62 @@ class LeaveRequestsController < ApplicationController
             redirect_to new_leave_request_path, error:  @leave_request.errors.full_messages
         end
     end
-    def abcd(param)
-        @leavetofrom = LeaveRequest.where(approve: [true, nil], canceled: nil).pluck(:leave_from, :leave_to)
-        @leave_between = @leavetofrom.flatten.map { |date| date.strftime("%a, %d %b %Y") } 
-        params_date1 = Date.parse(param[:leave_from])
-        @format_date1 = params_date1.strftime("%a, %d %b %Y")
-        @date_diffs = []
-        if param[:leave_to].present?
-          params_date2 = Date.parse(param[:leave_to])
-          @format_date2 = params_date2.strftime("%a, %d %b %Y")
-          dates_between1 = (params_date2..params_date1).to_a.map { |date| date.strftime("%a, %d %b %Y") }
-          @date_diffs << dates_between1
-        end
-        @date_diffs = @date_diffs.flatten
-      
-        @date_diffs2 = []
-        
-        @leavetofrom.each do |leave|
-          leave_from = Date.parse(leave[0].strftime("%a, %d %b %Y"))
-          leave_to = Date.parse(leave[1].strftime("%a, %d %b %Y"))  
-          dates_between = (leave_from..leave_to).to_a.map { |date| date.strftime("%a, %d %b %Y") }
-          @date_diffs2 << dates_between
-        end
-        
-        @date_diffs2 = @date_diffs2.flatten
-        
-        dates_match = false
-        @date_diffs2.each do |date2|
-          @date_diffs.each do |date1|
-            if date1 == date2
-              dates_match = true
-              break
-            end
-          end
-          break if dates_match
-        end
-        if @leave_between.include?(@format_date1) || @date_diffs2.include?(@format_date1) || dates_match
-          return true
+
+    def check_for_leaves(param)
+        @leavetofrom = current_user.leave_requests.where(approve: [true, nil], canceled: nil).pluck(:leave_from, :leave_to)
+        if @leavetofrom.empty?
+            render json: { leavedates: false }
+            return
         else
-          return false
+            @leave_between = @leavetofrom.flatten.map { |date| date.strftime("%a, %d %b %Y") } 
+            params_date1 = Date.parse(param[:leave_from])
+            @format_date1 = params_date1.strftime("%a, %d %b %Y")
+            @date_diffs = []
+            if param[:leave_to].present?
+                params_date2 = Date.parse(param[:leave_to])
+                @format_date2 = params_date2.strftime("%a, %d %b %Y")
+                dates_between1 = (params_date2..params_date1).to_a.map { |date| date.strftime("%a, %d %b %Y") }
+                @date_diffs << dates_between1
+            end
+                @date_diffs = @date_diffs.flatten
+            
+                @date_diffs2 = []
+                
+            @leavetofrom.each do |leave|
+                leave_from = Date.parse(leave[0].strftime("%a, %d %b %Y"))
+                leave_to = Date.parse(leave[1].strftime("%a, %d %b %Y"))  
+                dates_between = (leave_from..leave_to).to_a.map { |date| date.strftime("%a, %d %b %Y") }
+                @date_diffs2 << dates_between
+            end
+            
+            @date_diffs2 = @date_diffs2.flatten
+            
+            dates_match = false
+            @date_diffs2.each do |date2|
+                @date_diffs.each do |date1|
+                    if date1 == date2
+                    dates_match = true
+                    break
+                end
+            end
+
+            break if dates_match
+
+            end
+            if @leave_between.include?(@format_date1) || @date_diffs2.include?(@format_date1) || dates_match
+                return true
+            else
+                return false
+            end
+        end
+    end
+
+
+    def search
+        @leave_requests = LeaveRequest.all
+		@leave_requests = @leave_requests.where("lower(first_name) LIKE ?", "%#{params[:search].downcase}%") if params[:search].present?
+        respond_to do|format|
+            format.js
         end
     end
     private

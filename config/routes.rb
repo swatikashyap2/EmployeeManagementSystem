@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   resources :users do
     collection do 
       get :checkemail
+      post :search
     end
     member do
       get :send_password
@@ -28,6 +29,7 @@ Rails.application.routes.draw do
   resources :leave_requests do
     collection do 
       get :checkleavedates
+      post :search
     end
     member do
       post  :leave_approve
@@ -36,7 +38,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :teams
+  resources :teams do
+    collection do
+      post :search
+    end
+  end
   resources :policies
   resources :notifications do
     collection do

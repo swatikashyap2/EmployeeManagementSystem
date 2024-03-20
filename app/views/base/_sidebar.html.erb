@@ -36,11 +36,13 @@
 						<i class="bi bi-journal-text p-2"></i>Leave Requests
 					<%end%>
 				</li>
-				<li class="nav-item">
-					<%= link_to teams_path, class: "nav-link",id: "team-link" do%> 
-						<i class="bi bi-people p-2"></i>Teams
-					<%end%>
-				</li>
+				<% if is_admin? %>
+					<li class="nav-item">
+						<%= link_to teams_path, class: "nav-link",id: "team-link" do%> 
+							<i class="bi bi-people p-2"></i>Teams
+						<%end%>
+					</li>
+				<%end%>
 				<li class="nav-item">
 					<%= link_to policies_path, class: "nav-link", id: "policy-link" do%> 
 						<i class="bi bi-file-earmark-text-fill p-2"></i>Policy
