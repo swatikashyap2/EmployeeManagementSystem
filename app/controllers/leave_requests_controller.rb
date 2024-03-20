@@ -10,7 +10,7 @@ class LeaveRequestsController < ApplicationController
             @leave_requests = current_user.leave_requests.order(created_at: :desc).paginate(page: params[:page], per_page: 10)
         end 
 		authorize @leave_requests
-        @leave_type = LeaveRequest.include(:user_leave_type)
+        # @leave_type = LeaveRequest.include(:user_leave_type)
       
     end
 

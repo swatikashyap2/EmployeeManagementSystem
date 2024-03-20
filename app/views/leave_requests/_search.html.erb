@@ -14,14 +14,14 @@
                 Leave Type:
             </div>
             <div>
-                <%= select_tag :leave_type, options_for_select(@leave_type.collect{ |role| [role.name.titleize, role.id] }),include_blank: 'Select Leave Type..', class: "form-control", id:"search-field1" %>           
+                <%# <%= select_tag :leave_type, options_for_select(@leave_type.collect{ |role| [role.name.titleize, role.id] }),include_blank: 'Select Leave Type..', class: "form-control", id:"search-field1" %>            
             </div>
 
             <div class="form-group m-0 mx-2">
                 Day:
             </div>
             <div>
-                <%# <%= select_tag :designations,options_for_select(LeaveRequest.day_type.keys.map { |d| [d.humanize, d] }),include_blank: "Select Designation..", class: "form-control", id: 'search-field2'%> %>
+                <%# <%= select_tag :designations,options_for_select(LeaveRequest.day_type.keys.map { |d| [d.humanize, d] }),include_blank: "Select Designation..", class: "form-control", id: 'search-field2'%>
             </div>
         </div>
 	</div> 
