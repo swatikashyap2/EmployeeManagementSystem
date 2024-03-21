@@ -90,7 +90,7 @@ class UsersController < ApplicationController
 			format.js
 		end
 	end
-	ask.where('name=? OR some_another_field=?', params[:name], params[:some_another_fields])
+	
 
 	private 
 		def user_params
