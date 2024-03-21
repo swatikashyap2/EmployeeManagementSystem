@@ -82,13 +82,15 @@ class UsersController < ApplicationController
 
 	def search 
 		@users = User.all
-		@users = @users.where("lower(first_name) LIKE ?", "%#{params[:search].downcase}%") if params[:search].present?
+		@users = @users.where("lower(first_name ||) LIKE ?", "%#{params[:search].downcase}%") if params[:search].present?
 		@users = @users.where(role_id: params[:role_id]) if params[:role_id].present?
 		@users = @users.where(designation: params[:designation]) if params[:designation].present?
+		@users = @users.paginate(page: params[:page], per_page: 10)
 		respond_to do|format|
 			format.js
 		end
 	end
+	ask.where('name=? OR some_another_field=?', params[:name], params[:some_another_fields])
 
 	private 
 		def user_params

@@ -14,14 +14,14 @@
                 Leave Type:
             </div>
             <div>
-                <%# <%= select_tag :leave_type, options_for_select(@leave_type.collect{ |role| [role.name.titleize, role.id] }),include_blank: 'Select Leave Type..', class: "form-control", id:"search-field1" %>            
+               
             </div>
 
             <div class="form-group m-0 mx-2">
                 Day:
             </div>
             <div>
-                <%# <%= select_tag :designations,options_for_select(LeaveRequest.day_type.keys.map { |d| [d.humanize, d] }),include_blank: "Select Designation..", class: "form-control", id: 'search-field2'%>
+                <%= select_tag :day_type,options_for_select(LeaveRequest.day_types.keys.map { |dt| [dt.humanize, dt] }),include_blank: "Select Day Type..", class: "form-control ", id: "search-field2"%>
             </div>
         </div>
 	</div> 
@@ -35,9 +35,7 @@
 	document.getElementById('search-field').addEventListener('change', function(e) {
 		$("#search-submit-btn").trigger("click");
 	})
-    document.getElementById('search-field1').addEventListener('change', function(e) {
-		$("#search-submit-btn").trigger("click");
-	})
+   
     document.getElementById('search-field2').addEventListener('change', function(e) {
 		$("#search-submit-btn").trigger("click");
 	})

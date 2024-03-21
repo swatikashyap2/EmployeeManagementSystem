@@ -34,11 +34,6 @@
 			  <%= render partial: '/users/list', locals: {users: @users}%>
 		</div>
 	</div>
-	<div class="p-4">
-		<% if is_admin? || is_manager?%>
-			<%= will_paginate @users%>
-		<%end%>
-	</div>
 </div>
 <div id="ppc_manager"></div>
 

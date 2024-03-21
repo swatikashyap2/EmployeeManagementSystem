@@ -10,7 +10,7 @@ class LeaveRequestsController < ApplicationController
             @leave_requests = current_user.leave_requests.order(created_at: :desc).paginate(page: params[:page], per_page: 10)
         end 
 		authorize @leave_requests
-        # @leave_type = LeaveRequest.include(:user_leave_type)
+        # @leave_type = LeaveRequest.include(:user_leave_type).
       
     end
 
@@ -147,7 +147,8 @@ class LeaveRequestsController < ApplicationController
         if @leavetofrom.empty?
             render json: { leavedates: false }
             return
-        else
+        end
+        if @leavetofrom.present?
             @leave_between = @leavetofrom.flatten.map { |date| date.strftime("%a, %d %b %Y") }
             params_date1 = Date.parse(params[:leave_from])
             @format_date1 = params_date1.strftime("%a, %d %b %Y")
@@ -294,7 +295,8 @@ class LeaveRequestsController < ApplicationController
 
     def search
         @leave_requests = LeaveRequest.all
-		@leave_requests = @leave_requests.where("lower(first_name) LIKE ?", "%#{params[:search].downcase}%") if params[:search].present?
+        @leave_requests = @leave_requests.where(day_type: params[:day_type]) if params[:day_type].present?
+        @leave_requests =  @leave_requests.paginate(page: params[:page], per_page: 10)
         respond_to do|format|
             format.js
         end

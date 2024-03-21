@@ -105,6 +105,11 @@
         </tbody>
     </div>
 </table>
+<div class="p-4">
+    <% if is_admin? || is_manager?%>
+        <%= will_paginate @users%>
+    <%end%>
+</div>
 <script>
 	window.addEventListener(('turbo:load'), () => {
 		document.addEventListener('submit', (event) => {

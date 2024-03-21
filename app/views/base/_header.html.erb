@@ -14,7 +14,7 @@
 		<li class="nav-item d-none d-sm-inline-block">
 			<%# <a href="#" class="nav-link">Contact</a> %>
 		</li -->
-		<li class="">
+		<li class="mx-2">
 			<div class="d-flex">
 				<div class="">
 					<%= link_to notification_popup_notifications_path, remote: true do %>
@@ -32,29 +32,24 @@
 				</div>	
 			</div>
 		</li>
-
-
-		<li class="nav-item mx-2">
-			<strong><%= current_user.role.name.titleize %></strong>
-		</li>
-		<li class="nav-item mx-1">
-		<%= button_to destroy_user_session_path, method: :delete,form_class: 'delete-alertbox', class:'border-0 bg-transparent text-danger fs-4' , 'data-toggle': 'tooltip', 'data-placement':'top', title: 'logout' do %>
-			<strong><i class="bi bi-power"></i></strong>
-		<% end %>
-			
-		</li>
 		
 		<li>
-			<%= link_to edit_user_path(current_user) do %>
+			<div class="dropdown mx-2">
 				<% if current_user.avatar.attached? %>
-						<%= image_tag current_user.avatar, class: 'rounded-circle avatar_style' %>
+						<%= image_tag current_user.avatar, class: 'rounded-circle avatar_style dropbtn', onclick: "myFunction()" %>
 				<% else %>
-					<%= image_tag 'placeholder.jpg', class: 'rounded-circle avatar_style' %>
+					<%= image_tag 'placeholder.jpg', class: 'rounded-circle avatar_style dropbtn', onclick: "myFunction()"%>
 				<% end %>
-			<% end %>
+				<div id="myDropdown" class="dropdown-content">
+					<strong> Hi<%= current_user.role.name.titleize %> !</strong>
+					<%= link_to "My Profile!",edit_user_path(current_user) %>
+					<%= link_to "Log Out!",destroy_user_session_path, method: :delete,form_class: 'delete-alertbox', class:'border-0 bg-transparent' , 'data-toggle': 'tooltip', 'data-placement':'top', title: 'logout' %>
+						<%# <strong><i class="bi bi-power"></i></strong>
+					<% end %> 
+				</div>
+			</div>
 		</li>
 	</ul>
-
 	<!-- Right navbar links -->
 	<!--ul class="navbar-nav ml-auto">
 		<!-- Navbar Search >
@@ -228,6 +223,24 @@
 			}
 		})
 	});
+
+	function myFunction() {
+		document.getElementById("myDropdown").classList.toggle("show");
+	}
+
+	// Close the dropdown if the user clicks outside of it
+	window.onclick = function(event) {
+		if (!event.target.matches('.dropbtn')) {
+			var dropdowns = document.getElementsByClassName("dropdown-content");
+			var i;
+			for (i = 0; i < dropdowns.length; i++) {
+			var openDropdown = dropdowns[i];
+			if (openDropdown.classList.contains('show')) {
+				openDropdown.classList.remove('show');
+			}
+			}
+		}
+	}
 </script>
 <style>
 	#notification-card{
@@ -272,7 +285,37 @@
 		text-align: center;
 		background-color: lightblue;
 		margin-top: 20px;
-	  }
+	}
+
+	.dropbtn:hover, .dropbtn:focus {
+		background-color: #2980B9;
+	}
+
+	.dropdown {
+		position: relative;
+		display: inline-block;
+	}
+
+	.dropdown-content {
+		display: none;
+		position: absolute;
+		background-color: #f1f1f1;
+		min-width: 160px;
+		overflow: auto;
+		box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+		z-index: 1;
+	}
+
+	.dropdown-content a {
+		color: black;
+		padding: 12px 16px;
+		text-decoration: none;
+		display: block;
+	}
+
+	.dropdown a:hover {background-color: #ddd;}
+
+	.show {display: block;}
 </style>
 
   
