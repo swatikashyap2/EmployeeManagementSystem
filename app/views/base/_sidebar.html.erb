@@ -1,4 +1,5 @@
-<aside class="main-sidebar bg-color elevation-0">
+<aside class="main-sidebar bg-color elevation-0" id="mySidenav" class="sidenav">
+    
 	<div class="position-relative" style="padding-bottom: 10px;">
 		<%= link_to home_index_path do%>
 			<%= image_tag("logo.png", :size => "200x100", class: "position-absolute top", alt: "Sample image") %>
@@ -6,9 +7,10 @@
 	</div>
 
 	<!-- Sidebar -->
-	<div class="sidebar mt-5">
-		<nav class="mt-5">
+	<div class="sidebar" style="margin-top:46px">
+		<nav class="mt-4">
 			<ul class="nav nav-pills flex-column mb-auto" id="sidebbar-nav">
+			
 				<li class="nav-item">
 					<%= link_to home_index_path, class: "nav-link home-index"  do%>
 						<i class="bi bi-box p-2"></i>Dashboard
@@ -66,15 +68,122 @@
 	</div>
 	<!-- /.sidebar -->
 </aside>  
+
+<aside class="main-sidebar bg-color elevation-0 d-none" id="mySidenavIcon">
+    
+		<div class="position-relative" style="padding-bottom: 10px;">
+		<%= link_to home_index_path do%>
+			<%= image_tag("image.png", :size => "30x30", class: "position-absolute top-2", alt: "Sample image") %>
+		<%end%>
+		</div>
+
+	<!-- Sidebar -->
+	<div class="sidebar" style="margin-top:50px">
+		<nav class="mt-4">
+			<ul class="nav nav-pills flex-column mb-auto" id="sidebbar-nav">
+			
+				<li class="nav-item">
+					<%= link_to home_index_path, class: "nav-link home-index" do%>
+						<i class="bi bi-box p-2" data-toggle="tooltip" title="Dashboard"></i>
+					<%end%>
+				</li>
+				<li class="nav-item">
+					<%= link_to users_path, class: "nav-link", id: "dashboard-link" do%>
+						<i class="bi bi-people-fill p-2" data-toggle="tooltip" title="Employees"></i>
+					<%end%>
+				</li>
+				<% if is_admin? %>
+					<li class="nav-item">
+						<%= link_to roles_path, class: "nav-link",id: "employee-link" do%>
+							<i class="bi bi-person-fill-up p-2" data-toggle="tooltip" title=" Our Roles &nbsp; "></i>						
+						<%end%>
+					</li>
+					<li class="nav-item">
+						<%= link_to leave_types_path, class: "nav-link",id: "leavetype-link" do%>
+							<i class="bi bi-plus-circle p-2" data-toggle="tooltip" title="Leave Types"></i>
+						<%end%>
+					</li>
+				<%end%>
+				<li class="nav-item">
+					<%= link_to leave_requests_path, class: "nav-link",id: "leaverequest-link" do%>
+						<i class="bi bi-journal-text p-2" data-toggle="tooltip" title="Leave Request"></i>
+					<%end%>
+				</li>
+				<% if is_admin? %>
+					<li class="nav-item">
+						<%= link_to teams_path, class: "nav-link",id: "team-link" do%> 
+							<i class="bi bi-people p-2" data-toggle="tooltip" title="Our Teams"></i>
+						<%end%>
+					</li>
+				<%end%>
+				<li class="nav-item">
+					<%= link_to policies_path, class: "nav-link", id: "policy-link" do%> 
+						<i class="bi bi-file-earmark-text-fill p-2" data-toggle="tooltip" title="Company Policy"></i>
+					<%end%>
+				</li>
+				<!-- li class="nav-item dropdown">
+					<a href="#works" class="nav-link dropdown-toggle" data-toggle="dropdown">Works <span
+						class="caret"></span>
+					</a>
+					< Add your dropdown menu items here >
+					<div class="dropdown-menu">
+						< Example dropdown items >
+						<a class="dropdown-item" href="#">Item 1</a>
+						<a class="dropdown-item" href="#">Item 2</a>
+						<a class="dropdown-item" href="#">Item 3</a>
+					</div>
+				</li-->
+			</ul>
+		</nav>
+			<!-- /.sidebar-menu -->
+	</div>
+	<!-- /.sidebar -->
+</aside>  
 <style>
 	.top{
 		top: -10px;
-		width: 100%;
+		width: 94%;
 		height: 100px;
+		right:13px;
+	}
+	.top-2{
+		top: 24px;
+		right:24px;
+	}
+	.main-sidebar{
+		background: lightgray;
+        transition: 0.3s ease-in-out;
+	}
+	.main-sidebar-show{
+      width:80px;
 	}
 	.active{
 		color: red;
 	}
+	.sidenav a:hover {
+     color: #f1f1f1;
+    }
+
+	.sidenav {
+	position: absolute;
+	top: 0;
+	right: 25px;
+	font-size: 36px;
+	margin-left: 50px;
+	}
+	.closebtn {
+		position: absolute;
+		top: 13px;
+		right: 8px;
+		font-size: 36px;
+		margin-left: 50px;
+		
+	}
+	.flip-slide{
+     position: relative;
+	}
+	
+
 	
 </style>
 <script>
@@ -95,4 +204,33 @@
             }
         });
 	});
+	
+	function openNav() {
+		let count = document.getElementById("mySidenavIcon").style.width;
+		if(count!= "80px"){
+			closeNav();
+			$('#mySidenav').addClass("d-none");
+			$("#mySidenavIcon").removeClass("d-none");
+		}else{
+			$('#mySidenav').removeClass("d-none");
+			$("#mySidenavIcon").addClass("d-none");
+			document.getElementById("mySidenavIcon").style.width = "0px";
+			document.getElementById("mySidenav").style.width = "250px";
+			document.getElementById("collapse-sidebar").style.marginLeft = "250px"
+			document.getElementById("mainDiv").style.marginLeft = "250px"
+			document.getElementById("footerDiv").style.marginLeft = "250px"
+		}
+	}
+
+	function closeNav() {
+		document.getElementById("collapse-sidebar").style.marginLeft = "80px"
+		document.getElementById("mainDiv").style.marginLeft = "80px"
+		document.getElementById("footerDiv").style.marginLeft = "80px"
+		document.getElementById("mySidenavIcon").style.width = "80px";
+	}
+	$(document).ready(function(){
+		$('[data-toggle="tooltip"]').tooltip();
+    });
 </script>
+
+   

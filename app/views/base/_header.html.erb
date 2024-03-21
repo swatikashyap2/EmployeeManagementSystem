@@ -1,16 +1,17 @@
 
-<nav class="main-header navbar navbar-expand bg-color d-flex justify-content-between" style="height:80px !important">
-    <button class="border-0 bg-transparent" onclick="myFunction()" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="true" aria-label="Toggle navigation">
+<nav class="main-header  navbar navbar-expand bg-color d-flex justify-content-between" id="collapse-sidebar" style="height:80px !important">
+    <button class="border-0 bg-transparent" onclick="openNav()" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="true" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
     </button>
 	<!-- Left navbar links -->
-	<ul class="navbar-nav align-items-center id="hide-navbar">
+	<ul class="navbar-nav align-items-center" id="hide-navbar-1">
 		<!-- li class="nav-item">
 			<a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
 		</li>
 		<li class="nav-item d-none d-sm-inline-block">
 			<%# <a href="index3.html" class="nav-link">Home</a> %>
-		</li>
+		</li>Sidenav").style.width = "0";
+		document.getElementById("body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav)
 		<li class="nav-item d-none d-sm-inline-block">
 			<%# <a href="#" class="nav-link">Contact</a> %>
 		</li -->
@@ -18,7 +19,7 @@
 			<div class="d-flex">
 				<div class="">
 					<%= link_to notification_popup_notifications_path, remote: true do %>
-						<i class="bi bi-bell-fill notification-icon" ></i>
+						<i class="bi bi-bell-fill notification-icon" data-toggle="tooltip" title="Notification"></i>
 					<% end %>
 					<div id='notification-card'></div>
 				</div>
@@ -199,7 +200,7 @@
 		}
 	});
 	function myFunction() {
-		var x = document.getElementById("hide-navbar");
+		var x = document.getElementById("hide-navbar-1");
 		if (x.style.display === "none") {
 			x.style.display = "block";
 		} else {
@@ -273,6 +274,7 @@
 		background-color: lightblue;
 		margin-top: 20px;
 	  }
+	 
 </style>
 
   
