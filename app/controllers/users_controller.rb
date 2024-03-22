@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-	before_action :set_user, only: [:show, :edit, :update, :destroy]
+	before_action :set_user, only: [:edit, :update, :destroy]
 	before_action :authenticate_user!
 	
 
@@ -82,7 +82,7 @@ class UsersController < ApplicationController
 
 	def search 
 		@users = User.all
-		@users = @users.where("lower(first_name ||) LIKE ?", "%#{params[:search].downcase}%") if params[:search].present?
+		@users = @users.where("lower(first_name) LIKE ? OR lower(last_name) LIKE ? OR lower(email) LIKE ?", "%#{params[:search].downcase}%", "%#{params[:search].downcase}%",  "%#{params[:search].downcase}%")
 		@users = @users.where(role_id: params[:role_id]) if params[:role_id].present?
 		@users = @users.where(designation: params[:designation]) if params[:designation].present?
 		@users = @users.paginate(page: params[:page], per_page: 10)
@@ -90,8 +90,11 @@ class UsersController < ApplicationController
 			format.js
 		end
 	end
-	
 
+	def show
+		@user = User.find_by(id: params[:id])
+	end
+	
 	private 
 		def user_params
 			params.require(:user).permit(:email, :password, :password_confirmation, :current_password, :first_name, :last_name, :phone, :address, :zip_code, :employee_code, :dob, :role_id, :designation, :gender, :reporting_manager_id, :avatar, reporting_managers: [])

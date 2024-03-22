@@ -10,9 +10,11 @@
 						</ol>
 					</div>
                     <div>
-						<div>
-							<%= render partial: "search", locals: {leave_requests: @leave_requests}%>
-						</div>
+						<% if is_admin?%>
+							<div>
+								<%= render partial: "search", locals: {leave_requests: @leave_requests}%>
+							</div>
+						<%end%>
 						<% if is_manager? || is_employee?%>
 							<%= button_to "Apply Leave",new_leave_request_path, method: :get, class: "btn btn-sm btn-primary"%>
 						<%end%>

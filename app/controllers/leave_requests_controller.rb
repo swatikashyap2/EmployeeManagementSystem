@@ -294,7 +294,8 @@ class LeaveRequestsController < ApplicationController
 
 
     def search
-        @leave_requests = LeaveRequest.all
+        @leave_requests = LeaveRequest.includes(:user).all
+        @leave_requests = @leave_requests.where("lower(first_name) LIKE ? ", "%#{params[:search].downcase}%") if params[:search].present?
         @leave_requests = @leave_requests.where(day_type: params[:day_type]) if params[:day_type].present?
         @leave_requests =  @leave_requests.paginate(page: params[:page], per_page: 10)
         respond_to do|format|

@@ -11,7 +11,7 @@
 					</div>
 					<div>
 						<div class="d-flex  justify-content-end">
-							<% if is_admin? || is_manager?%>
+							<% if is_admin?%>
 								<div>
 									<%= render partial: "search", locals: {users: @users}%>
 								</div>

@@ -77,10 +77,9 @@
 					<%= f.text_field :zip_code, autofocus: true, autocomplete: "zip_code", class: "form-control", placeholder: "Enter Zip-Code"   %>
 				</div>
 
-				
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :reporting_managers %>
-					<%= f.collection_select :reporting_managers, User.all, :id, :first_name, {},class: 'form_control', multiple: true  %>
+					<%= f.collection_select :reporting_managers, User.all, :id, :first_name, { }, class: 'form_control', multiple: true  %>
 				</div>
 
 				<div class="form-group col-md-6 mb-2">

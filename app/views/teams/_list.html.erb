@@ -56,7 +56,10 @@
                             <%= user.zip_code.present? ?  user.zip_code : "N/A"%>
                         </td>
                         <td>
-                            <%= user.address.present? ?  user.address : "N/A"%>
+                             <div class="d-none address">
+                                <%= user.address %>
+                            </div>
+                            <i class="bi bi-info-circle text-primary" onclick="showAddress(this)" data-bs-toggle="tooltip" data-bs-placement="top" title="View Address"></i>
                         </td>
                         
                     </tr>
@@ -76,3 +79,14 @@
         <%= will_paginate users%>
     <%end%>
 </div>
+<script>
+    function showAddress(element) {
+		var tr = $(element).closest('tr');
+		var address = tr.find('.address').text();
+		Swal.fire({
+		title: 'Address',
+		text: address,
+		confirmButtonText: 'OK'
+		});
+	}
+</script>
