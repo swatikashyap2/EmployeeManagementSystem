@@ -1,4 +1,4 @@
-<section style="background-color: #eee;">
+<section>
     <div class="container py-5">
         <div class="row">
         <div class="col-lg-4">
@@ -6,17 +6,26 @@
                 <div class="card-body text-center">
                      <% if @user.present?%>
                         <% if @user.avatar.attached? %>
-                            <%= image_tag user.avatar, class:'rounded-circle img-height'%>
+                            <%= image_tag @user.avatar, class:'rounded-circle img-height'%>
+                        <%else%>
+                            <%= image_tag 'placeholder.jpg', class: 'rounded-circle img-height' %>
                         <%end%>
-                    <%else%>
-                        <%= image_tag 'placeholder.jpg', class: 'rounded-circle img-height' %>
                     <%end%>
-                    <h5 class="my-3">John Smith</h5>
-                    <p class="text-muted mb-1">Full Stack Developer</p>
-                    <p class="text-muted mb-4">Bay Area, San Francisco, CA</p>
-                    <div class="d-flex justify-content-center mb-2">
-                        <button type="button" class="btn btn-primary">Follow</button>
-                        <button type="button" class="btn btn-outline-primary ms-1">Message</button>
+                    <div class="mt-1">
+                        <label class="label-font-color"><b>Name :</b></label>
+                        <%= @user.first_name.present? ? @user.first_name.titleize  : "N/A"%> 
+                    </div>
+                    <div class="mt-1">
+                        <label class="label-font-color"><b>Last Name :</b></label>
+                        <%= @user.last_name.present? ? @user.last_name.titleize  : "N/A"%> 
+                    </div>
+                    <div class="mt-1">
+                        <label class="label-font-color"><b>Email :</b></label>
+                        <%= @user.email.present? ? @user.email : "N/A"%>
+                    </div>
+                    <div class="mt-1">
+                        <label class="label-font-color"><b>Employee Code :</b></label>
+                        <%= @user.employee_code.present? ? @user.employee_code : "N/A"%>
                     </div>
                 </div>
             </div>
@@ -26,37 +35,55 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-sm-3">
-                            <p class="mb-0">Full Name</p>
+                            <p class="mb-0">Role</p>
                         </div>
                         <div class="col-sm-9">
-                            <p class="text-muted mb-0">Johnatan Smith</p>
+                            <%= @user.role.present? ? @user.role.name.titleize : "N/A"%>
                         </div>
                     </div>
-                        <hr>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Designation</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <%= @user.designation.present? ? @user.designation.titleize : "N/A"%>
+                        </div>
+                    </div>
+                    <hr>
                         <div class="row">
                             <div class="col-sm-3">
-                                <p class="mb-0">Email</p>
+                                <p class="mb-0">Gender</p>
                             </div>
                             <div class="col-sm-9">
-                                <p class="text-muted mb-0">example@example.com</p>
+                                <%= @user.gender.present? ? @user.gender.titleize : "N/A"%>
                             </div>
                         </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Reporting Manager</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <%= @user.reporting_manager.present? ? @user.reporting_manager.titleize : "N/A"%>
+                        </div>
+                    </div>
                     <hr>
                     <div class="row">
                         <div class="col-sm-3">
                             <p class="mb-0">Phone</p>
                         </div>
                         <div class="col-sm-9">
-                            <p class="text-muted mb-0">(097) 234-5678</p>
+                        <%= @user.phone.present? ? @user.phone : "N/A"%>
                         </div>
                     </div>
                     <hr>
                     <div class="row">
                         <div class="col-sm-3">
-                            <p class="mb-0">Mobile</p>
+                            <p class="mb-0">Date Of Birth</p>
                         </div>
                         <div class="col-sm-9">
-                            <p class="text-muted mb-0">(098) 765-4321</p>
+                            <%= @user.dob.present? ? @user.dob : "N/A"%>
                         </div>
                     </div>
                     <hr>
@@ -65,7 +92,16 @@
                             <p class="mb-0">Address</p>
                         </div>
                         <div class="col-sm-9">
-                            <p class="text-muted mb-0">Bay Area, San Francisco, CA</p>
+                            <%= @user.address.present? ? @user.address : "N/A"%>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Zip Code</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <%= @user.zip_code.present? ? @user.zip_code : "N/A"%>
                         </div>
                     </div>
                 </div>
