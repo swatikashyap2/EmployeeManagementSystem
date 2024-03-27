@@ -19,7 +19,7 @@ class LeaveRequestsController < ApplicationController
 		authorize @leave_request
     end
 
-    def create
+    def creat
         result = check_for_leaves(params[:leave_request])
         if !result
             @leave_request = LeaveRequest.new(leave_request_params)
@@ -249,7 +249,7 @@ class LeaveRequestsController < ApplicationController
             render json: { leavedates: false }
             return
         else
-            @leave_between = @leavetofrom.flatten.map { |date| date.strftime("%a, %d %b %Y") } 
+            @leave_between = @leavetofrom.flatten.compact.map { |date| date.strftime("%a, %d %b %Y") } 
             params_date1 = Date.parse(param[:leave_from])
             @format_date1 = params_date1.strftime("%a, %d %b %Y")
             @date_diffs = []
@@ -313,4 +313,3 @@ class LeaveRequestsController < ApplicationController
     end
 
 end
-

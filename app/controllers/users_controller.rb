@@ -34,7 +34,7 @@ class UsersController < ApplicationController
 		end
 	end
 	  
-	def checkemail
+	def checkemail  
 		@emails = User.pluck(:email)
 		render json: {emails: @emails}
 	end
@@ -77,7 +77,11 @@ class UsersController < ApplicationController
 
 	def send_password
 		@user = User.find(params[:id])
-		redirect_to users_path
+		@user.update(password_send: true)
+		@user.set_default_password
+		@default_password = @user.password
+		UserMailer.send_password_email(@user, @default_password).deliver_later
+		redirect_to users_path, notice: "Password Send Successfully."
 	end
 
 	def search 
@@ -97,7 +101,7 @@ class UsersController < ApplicationController
 	
 	private 
 		def user_params
-			params.require(:user).permit(:email, :password, :password_confirmation, :current_password, :first_name, :last_name, :phone, :address, :zip_code, :employee_code, :dob, :role_id, :designation, :gender, :reporting_manager_id, :avatar, reporting_managers: [])
+			params.require(:user).permit(:email, :password, :password_confirmation, :current_password, :first_name, :last_name, :phone, :address, :zip_code, :employee_code, :dob, :role_id, :designation, :gender, :reporting_manager_id, :avatar, :password_send, reporting_managers: [])
 		end
 
 		def set_user

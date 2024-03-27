@@ -21,10 +21,11 @@ class User < ApplicationRecord
 	validate :dob_on_or_before_current_date
 	 
 	has_one_attached :avatar
-	
+	validates :avatar, presence: false
+
 	after_create :assign_all_leave_types
 	before_validation :set_default_password, on: :create
-	# before_validation :set_default_reporting_manager, on: :create
+	before_validation :set_default_reporting_manager, on: :create
 
 	scope :manager, -> {includes(:role).where(roles: {name: "manager"})}
 	scope :employees, -> {includes(:role).where(roles: {name: "employee"})}

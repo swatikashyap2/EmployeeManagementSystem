@@ -23,7 +23,7 @@
                     <tr>
                         <td>
                             <% if user.avatar.attached? %>
-                                    <%= image_tag user.avatar, class: 'rounded-circle avatar_style' %>
+                                <%= image_tag user.avatar, class: 'rounded-circle avatar_style' %>
                             <% else %>
                                 <%= image_tag 'placeholder.jpg', class: 'rounded-circle avatar_style' %>
                             <% end %>
@@ -72,11 +72,13 @@
                                             <i class="bi bi-pencil-square"></i>
                                         <%end%>
                                     </div>
-                                    <div>
-                                        <%= link_to send_password_user_path(user), method: :get,class: "mx-2",'data-toggle': 'tooltip', 'data-placement':'top', title: 'Send Password' do %>
-                                            <i class="bi bi-arrow-right-circle"></i>
-                                        <%end%>
-                                    </div>	
+                                    <% if user.password_send !=  true%>
+                                        <div>
+                                            <%= link_to send_password_user_path(user), method: :get,id: "send-password-link",class: "mx-2 send-password-link",'data-toggle': 'tooltip', 'data-placement':'top', title: 'Send Password' do %>
+                                                <i class="bi bi-arrow-right-circle"></i>
+                                            <%end%>
+                                        </div>	
+                                    <%end%>
                                 <%end%>
                                 <%if is_admin?%>	
                                     <%= link_to edit_user_leave_type_path(user), {remote: true, "data-bs-toggle": "modal", "data-bs-target": "#ppc_manager_modal" } do%>

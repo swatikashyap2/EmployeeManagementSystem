@@ -79,7 +79,7 @@
 
 				<div class="form-group col-md-6 mb-2">
 					<%= f.label :reporting_managers %>
-					<%= f.collection_select :reporting_managers, User.all, :id, :first_name, { }, class: 'form_control', multiple: true  %>
+					<%= f.select :reporting_managers, options_for_select(User.manager.reject{ |m| m.first_name.nil? }.map{ |m| [m.first_name, m.id] }), {placeholder: "Select Managers"}, { id: 'select2', class: 'form-control', multiple: true } %>
 				</div>
 
 				<div class="form-group col-md-6 mb-2">
@@ -90,22 +90,6 @@
 				<div class="form-group mb-2">
 					<%= f.label :address %>
 					<%= f.text_area :address, autofocus: true, autocomplete: "address", class: "form-control", placeholder: "Enter Address" %>
-				</div>
-
-
-				<div class="form-group mb-2">
-					<%= f.label :password %> <i>(create your password)</i>
-					<%= f.password_field :password, autocomplete: "new-password", class: "form-control", id: "pass", placeholder: "Create Password" %>
-					<% if @minimum_password_length %>
-						
-						<em><%= @minimum_password_length %> characters minimum</em>
-					<% end %>
-				</div>
-
-				<div class="form-group mb-2">
-					<%= f.label :password_confirmation %> <i>(please confirm your password)</i>
-					<%= f.password_field :password_confirmation, autocomplete: "new-password",  class: "con_pass form-control",id: "con_pass confirm-pass", placeholder: "Confirm Password"%>
-					<span id="user_pass_error"></span>
 				</div>
 
 				<div class="form-group mt-2">
@@ -267,6 +251,8 @@
 			}
 		});
 	});
-
+	$(document).ready(function() {
+		$('#select2').select2();
+	});
 </script>
 

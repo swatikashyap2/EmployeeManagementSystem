@@ -65,7 +65,7 @@
                             <p class="mb-0">Reporting Manager</p>
                         </div>
                         <div class="col-sm-9">
-                            <%= @user.reporting_manager.present? ? @user.reporting_manager.titleize : "N/A"%>
+                            <%= @user.reporting_manager.present? ? @user.reporting_manager.first_name.titleize : "N/A"%>
                         </div>
                     </div>
                     <hr>

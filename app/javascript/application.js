@@ -8,3 +8,4 @@ import "bootstrap"
 import "./channels"
 import Highcharts from "highcharts"
 window.Highcharts = Highcharts;
+import "select2"

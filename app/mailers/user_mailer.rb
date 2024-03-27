@@ -30,5 +30,11 @@ class UserMailer < ApplicationMailer
     def leave_approved_notification(leave_request)
         @leave_request = leave_request
         mail(to: @leave_request.user.email, subject: 'Leave Request Approved')
-      end
+    end
+
+    def send_password_email(user, default_password)
+        @user = user
+        @default_password = default_password
+        mail(to: @user.email, subject: 'Your Default Password')
+    end
 end
