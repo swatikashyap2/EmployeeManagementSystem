@@ -60,13 +60,8 @@
                         <div class="col-sm-4">
                             <p class="mb-0">Reporting Manager</p>
                         </div>
-<<<<<<< HEAD
-                        <div class="col-sm-9">
-                            <%= @user.reporting_manager.present? ? @user.reporting_manager.first_name.titleize : "N/A"%>
-=======
                         <div class="col-sm-8">
-                            <%= @user.reporting_manager.present? ? @user.reporting_manager.titleize : "N/A"%>
->>>>>>> 25cf95cc5c7232d78ad5f09099934cec5417e1a8
+                            <%= @user.reporting_manager.present? ? @user.reporting_manager.first_name.titleize : "N/A"%>
                         </div>
                     </div>
                     <hr>
