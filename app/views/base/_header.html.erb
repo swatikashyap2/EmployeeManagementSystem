@@ -42,13 +42,13 @@
 					<%= image_tag 'placeholder.jpg', class: 'rounded-circle avatar_style dropbtn', onclick: "myFunction()"%>
 				<% end %>
 				<div id="myDropdown" class="dropdown-content end-0  text-center">
-					<div class="mt-2 text-bold"> Hi <%= current_user.role.name.titleize %> </div>
+					<div class="mt-2 text-bold"> Hi <%= current_user.first_name.titleize %>! </div>
 					<hr>
-					<%= link_to "Profile!",user_path(current_user) %>
-					<%= link_to "Edit Profile!",edit_user_path(current_user) %>
-					<%= link_to "Change Password", password_popup_user_path(current_user), remote: true%>
+					<%= link_to "Profile",user_path(current_user) %>
+					<%= link_to "Edit Profile",edit_user_path(current_user) %>
+					<%= link_to "Change Password", "#", "data-bs-toggle": "modal", "data-bs-target": "#change_password" %>
 					<div id='password_form'></div>
-					<%= link_to "Log Out!",destroy_user_session_path, method: :delete,form_class: 'delete-alertbox', class:'border-0 bg-transparent' , 'data-toggle': 'tooltip', 'data-placement':'top', title: 'logout' %>
+					<%= link_to "Log Out",destroy_user_session_path, method: :delete, form_class: 'delete-alertbox', class:'border-0 bg-transparent' %>
 						<%# <strong><i class="bi bi-power"></i></strong>
 					<% end %> 
 				</div>
@@ -175,6 +175,7 @@
 		</li>
 	</ul-->
 </nav>
+<%= render partial: '/users/change_password'%>
 <script>
 	var count = 0;
 	document.body.addEventListener('click', function(event) {

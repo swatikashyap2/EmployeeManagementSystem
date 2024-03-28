@@ -6,7 +6,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def index?
-    true
+    is_admin? || is_manager?
   end
   
   def new?
@@ -33,5 +33,9 @@ class UserPolicy < ApplicationPolicy
 
   def destroy?
      is_admin?
+  end
+
+  def show?
+    true
   end
 end

@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-	before_action :set_user, only: [:edit, :update, :destroy]
+	before_action :set_user, only: [:edit, :update, :destroy, :password_popup]
 	before_action :authenticate_user!
 	
 
@@ -96,7 +96,14 @@ class UsersController < ApplicationController
 	end
 
 	def show
+		authorize @user
 		@user = User.find_by(id: params[:id])
+	end
+
+	def password_popup
+		@user.update(user_params)
+		redirect_to users_path
+		
 	end
 	
 	private 
