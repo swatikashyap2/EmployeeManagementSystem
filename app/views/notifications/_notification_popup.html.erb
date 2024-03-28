@@ -13,7 +13,7 @@
                         </div>
                         <div class="d-flex justify-content-between" >
                             <div>
-                                <strong><%= time_ago_in_words(notification.created_at.in_time_zone("Asia/Kolkata")) + ' ago' %> </strong>
+                                <div class="text-muted"><%= time_ago_in_words(notification.created_at.in_time_zone("Asia/Kolkata")) + ' ago' %> </div>
                             </div>
                             <div>
                                 <%= link_to read_notification_notification_path(notification), format: :js, remote: true do  %>
@@ -27,12 +27,12 @@
                 <div class="notification-bg">
                     <%= link_to notifications_path(user_name: notification.user.first_name), class: "text-black" do%>
                         <li class="mt-2">
-                            <div class="text-success">
+                            <div class="text-dark fw-bold">
                                 <%= notification.message %>
                             </div>
                             <div class="d-flex justify-content-between" >
                                 <div>
-                                    <strong><%= time_ago_in_words(notification.created_at.in_time_zone("Asia/Kolkata")) + ' ago' %> </strong>
+                                    <div class="text-muted"><%= time_ago_in_words(notification.created_at.in_time_zone("Asia/Kolkata")) + ' ago' %> </div>
                                 </div>
                                 <div>
                                     <%= link_to read_notification_notification_path(notification), format: :js, remote: true do  %>

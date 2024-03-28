@@ -41,9 +41,13 @@
 				<% else %>
 					<%= image_tag 'placeholder.jpg', class: 'rounded-circle avatar_style dropbtn', onclick: "myFunction()"%>
 				<% end %>
-				<div id="myDropdown" class="dropdown-content end-0 p-3 text-center">
-					<strong> Hi<%= current_user.role.name.titleize %> !</strong>
-					<%= link_to "My Profile!",edit_user_path(current_user) %>
+				<div id="myDropdown" class="dropdown-content end-0  text-center">
+					<div class="mt-2 text-bold"> Hi <%= current_user.role.name.titleize %> </div>
+					<hr>
+					<%= link_to "Profile!",user_path(current_user) %>
+					<%= link_to "Edit Profile!",edit_user_path(current_user) %>
+					<%= link_to "Change Password", password_popup_user_path(current_user), remote: true%>
+					<div id='password_form'></div>
 					<%= link_to "Log Out!",destroy_user_session_path, method: :delete,form_class: 'delete-alertbox', class:'border-0 bg-transparent' , 'data-toggle': 'tooltip', 'data-placement':'top', title: 'logout' %>
 						<%# <strong><i class="bi bi-power"></i></strong>
 					<% end %> 
@@ -77,7 +81,7 @@
 
 		<!-- Messages Dropdown Menu -->
 		<!-- li class="nav-item dropdown">
-			<a class="nav-link" data-toggle="dropdown" href="#">
+			<a class="nav-link" data-toggle="dropdown" href="#"
 				<i class="far fa-comments"></i>
 				<span class="badge badge-danger navbar-badge">3</span>
 			</a>
@@ -311,9 +315,17 @@
 
 	.dropdown-content a {
 		color: black;
-		padding: 12px 16px;
+		padding: 10px 16px;
 		text-decoration: none;
 		display: block;
+		
+	}
+	.dropdown-content strong {
+		margin-top:10px
+	}
+	.dropdown-content hr{
+		margin-bottom:0px !important;
+		margin-top:10px !important
 	}
 
 	.dropdown a:hover {background-color: #ddd;}
