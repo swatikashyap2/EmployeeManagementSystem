@@ -7,21 +7,21 @@
                 Search By:
             </div>
             <div>
-               	<%= text_field_tag :search, params[:search],id:"search-field", class:"form-control", placeholder:"Search "%>
+               	<%= text_field_tag :search, params[:search],id:"search-field", class:"form-control text-muted", placeholder:"Search "%>
             </div>
 
             <div class="form-group m-0 mx-2">
                 Role:
             </div>
             <div>
-                <%= select_tag :role_id, options_for_select(Role.where.not(name: 'admin').collect { |role| [role.name.titleize, role.id] }),include_blank: 'Select Role..', class: "form-control", id:"search-field1" %>           
+                <%= select_tag :role_id, options_for_select(Role.where.not(name: 'admin').collect { |role| [role.name.titleize, role.id] }),include_blank: 'Select Role..', class: "form-control text-muted", id:"search-field1" %>           
             </div>
 
             <div class="form-group m-0 mx-2">
                 Designations:
             </div>
             <div>
-                <%= select_tag :designation,options_for_select(User.designations.keys.map { |d| [d.humanize, d] }),include_blank: "Select Designation..", class: "form-control", id: 'search-field2'%>
+                <%= select_tag :designation,options_for_select(User.designations.keys.map { |d| [d.humanize, d] }),include_blank: "Select Designation..", class: "form-control text-muted", id: 'search-field2'%>
             </div>
         </div>
 	</div> 

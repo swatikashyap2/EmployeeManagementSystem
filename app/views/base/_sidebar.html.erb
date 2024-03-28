@@ -16,11 +16,13 @@
 						<i class="bi bi-box p-2"></i>Dashboard
 					<%end%>
 				</li>
-				<li class="nav-item">
-					<%= link_to users_path, class: "nav-link", id: "dashboard-link" do%>
-						<i class="bi bi-people-fill p-2"></i>Employees
-					<%end%>
-				</li>
+				<% if is_admin? || is_manager? %>
+					<li class="nav-item">
+						<%= link_to users_path, class: "nav-link", id: "dashboard-link" do%>
+							<i class="bi bi-people-fill p-2"></i>Employees
+						<%end%>
+					</li>
+				<%end%>
 				<% if is_admin? %>
 					<li class="nav-item">
 						<%= link_to roles_path, class: "nav-link",id: "employee-link" do%>
@@ -87,11 +89,13 @@
 						<i class="bi bi-box p-2" data-toggle="tooltip" title="Dashboard"></i>
 					<%end%>
 				</li>
-				<li class="nav-item">
-					<%= link_to users_path, class: "nav-link", id: "dashboard-link" do%>
-						<i class="bi bi-people-fill p-2" data-toggle="tooltip" title="Employees"></i>
-					<%end%>
-				</li>
+				<% if is_admin? || is_manager? %>
+					<li class="nav-item">
+						<%= link_to users_path, class: "nav-link", id: "dashboard-link" do%>
+							<i class="bi bi-people-fill p-2" data-toggle="tooltip" title="Employees"></i>
+						<%end%>
+					</li>
+				<%end%>
 				<% if is_admin? %>
 					<li class="nav-item">
 						<%= link_to roles_path, class: "nav-link",id: "employee-link" do%>
