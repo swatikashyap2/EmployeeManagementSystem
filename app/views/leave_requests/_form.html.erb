@@ -111,8 +111,11 @@
 		}else{
 			$("#leave_type_error").html('');
 			$('#date_type2')[0].disabled = false;
+			$('#date_type2')[0].value = '';
 			$('#date_type1')[0].disabled = false;
+			$('#date_type1')[0].value = '';
 			$('.send-request')[0].disabled = false;
+			$("#date_error2").text = '';
 			selectedDayType();
 		}
 		
@@ -170,6 +173,7 @@
 		if (dateType1 !== ""){
 			if(dayType === 'Half day'){
 				$('#date_type2')[0].disabled = true;
+				$('#date_type2')[0].value = dateType1;
 			} else {
 				firstDate = new Date(dateType1);
 				$("#date_type2")[0].min = dateType1;
@@ -187,7 +191,7 @@
 		if (dateType2 !== ""){
 			secondDate = new Date(dateType2);
 		}
-		let days =  secondDate.getTime() - firstDate.getTime()
+		let days =  secondDate.getTime() - firstDate.getTime();
 		days = Math.floor(days / (1000 * 60 * 60 * 24)) + 1;
 
 		if (days !=""){
@@ -195,19 +199,27 @@
 				$('#show_count').html('Your leave balance is: ' + (leaveCount - days));
 				$('#date_error2').html('');
 				$('.send-request')[0].disabled = false;
+				checkDateToOverLap();
 			}else if (leaveCount < days){
-				$('#date_error2').html('You can not select more then your leave balance').css('color', 'red');
-				$('.send-request')[0].disabled = true;
+				if (leaveCount == 0.5){
+					$('#date_error2').html('You can not select more then your leave balance. You can apply for half day').css('color', 'red');
+					$('.send-request')[0].disabled = true;
+				} else{
+					$('#date_error2').html('You can not select more then your leave balance').css('color', 'red');
+					$('.send-request')[0].disabled = true;
+				}
 			}else if (leaveCount == days){
 				$('#show_count').html('Your leave balance is:  0');
 				$('#date_error2').html('');
 				$('.send-request')[0].disabled = false;
+				checkDateToOverLap();
 			} else {
 				$('#date_error2').removeClass('.error')
 				$('#date_error2').html('');
 				$('.send-request')[0].disabled = false;
+				checkDateToOverLap();
 			}
-		}else{
+		} else{
 			$('#date_error2').removeClass('.error')
 			$('#date_error2').html('');
 			$('.send-request')[0].disabled = false;
@@ -230,44 +242,8 @@
 			$('.send-request')[0].disabled = false;
 		}
 	}
-	
-	// document.getElementById('date_type1').addEventListener('change', function() {
-	// 	var leavedates = [];
-	// 	$.ajax({
-	// 		type: "GET",
-	// 		url: "/leave_requests/checkleavedates",
-	// 		dataType: "json",
-	// 		data: { key1: true },
-	// 		success: function(response) {
-	// 			leavedates = response.leavedates;
 
-	// 		},
-	// 		error: function(jqXHR, textStatus, errorThrown) {
-	// 			console.error("Error fetching leavedates:", errorThrown);
-	// 		}
-	// 	});
-
-
-	// 	var leaveFromDate = $(this).val();
-	// 	if (leaveFromDate !== "") {
-	// 	
-	// 		if (leavedates.indexOf(leaveFromDate) !== -1) {
-	// 			$("#date1").addClass("error error-border-color");
-	// 			$("#date_error1").text("Leave date already exists. Please choose another date.").css("color", "red");
-	// 			$('.send-request').prop('disabled', true);
-	// 		} else {
-	// 			$("#date1").removeClass("error");
-	// 			$("#date_error1").text("");
-	// 			$('.send-request').prop('disabled', false);
-	// 		}
-	// 	} else {
-	// 		$("#date1").removeClass("error");
-	// 		$("#date_error1").text("");
-	// 		$('.send-request').prop('disabled', false);
-	// 	}
-	// });
-
-	document.getElementById('date_type1').addEventListener('change', function() {
+	document.getElementById('date_type1').addEventListener('change', function() {	
 		var leaveFromDate = $(this).val();
 		if (leaveFromDate !== "") {
 			$.ajax({
@@ -297,9 +273,9 @@
 			$('.send-request').prop('disabled', false);
 		}
 	});
-	document.getElementById('date_type2').addEventListener('change', function() {
-		 var leaveFrom = $('#date1 input').val();
-		var leaveToDate = $(this).val();
+	function checkDateToOverLap() {
+		var leaveFrom = $('#date_type1').val();
+		var leaveToDate = $('#date_type2').val();
 		if (leaveToDate !== "") {
 			$.ajax({
 				type: "GET",
@@ -328,6 +304,6 @@
 			$("#date_error2").text("");
 			$('.send-request').prop('disabled', false);
 		}
-	});
+	};
 
 </script>

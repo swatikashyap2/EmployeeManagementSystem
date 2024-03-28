@@ -44,7 +44,7 @@
 				<div id="myDropdown" class="dropdown-content end-0 p-3 text-center">
 					<strong> Hi<%= current_user.role.name.titleize %> !</strong>
 					<%= link_to "My Profile!",edit_user_path(current_user) %>
-					<%= link_to "Log Out!",destroy_user_session_path, method: :delete,form_class: 'delete-alertbox', class:'border-0 bg-transparent' , 'data-toggle': 'tooltip', 'data-placement':'top', title: 'logout' %>
+					<%= link_to "Log Out!",destroy_user_session_path, method: :delete, form_class: 'delete-alertbox', class:'border-0 bg-transparent' , 'data-toggle': 'tooltip', 'data-placement':'top', title: 'logout' %>
 						<%# <strong><i class="bi bi-power"></i></strong>
 					<% end %> 
 				</div>
@@ -319,6 +319,7 @@
 	.dropdown a:hover {background-color: #ddd;}
 
 	.show {display: block;}
+
 </style>
 
   
