@@ -10,6 +10,7 @@ class User < ApplicationRecord
 	belongs_to :role
 	has_many :notifications, dependent: :destroy
 	belongs_to :reporting_manager,  class_name: 'User', foreign_key: 'reporting_manager_id', optional: true
+	
 
 	validates :first_name, presence: true
 	validates :designation, presence: true
@@ -21,7 +22,7 @@ class User < ApplicationRecord
 	validate :dob_on_or_before_current_date
 	 
 	has_one_attached :avatar
-	validates :avatar, presence: false
+
 
 	after_create :assign_all_leave_types
 	before_validation :set_default_password, on: :create
@@ -52,7 +53,7 @@ class User < ApplicationRecord
 
 	def set_default_reporting_manager
 		admin_user = User.admin.first
-		self.reporting_manager_id = admin_user.id if admin_user
+		self.reporting_managers.push(admin_user.id ).compact! if admin_user
 	end
 
 	def image_url(style_name = :medium)

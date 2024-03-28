@@ -41,14 +41,14 @@
 				<% else %>
 					<%= image_tag 'placeholder.jpg', class: 'rounded-circle avatar_style dropbtn', onclick: "myFunction()"%>
 				<% end %>
-				<div id="myDropdown" class="dropdown-content end-0  text-center">
-					<div class="mt-2 text-bold"> Hi <%= current_user.first_name.titleize %>! </div>
+				<div id="myDropdown" class="dropdown-content end-0">
+					<div class="mt-2 text-bold text-center"> Hi <%= current_user.first_name.titleize %>! </div>
 					<hr>
 					<%= link_to "Profile",user_path(current_user) %>
 					<%= link_to "Edit Profile",edit_user_path(current_user) %>
 					<%= link_to "Change Password", "#", "data-bs-toggle": "modal", "data-bs-target": "#change_password" %>
 					<div id='password_form'></div>
-					<%= link_to "Log Out",destroy_user_session_path, method: :delete, form_class: 'delete-alertbox', class:'border-0 bg-transparent' %>
+					<%= link_to "Log Out",destroy_user_session_path, method: :delete, form_class: 'delete-alertbox',id: "logout" %>
 						<%# <strong><i class="bi bi-power"></i></strong>
 					<% end %> 
 				</div>
@@ -211,6 +211,7 @@
 	window.addEventListener(('turbo:load'), () => {
 		document.addEventListener('submit', (event) => {
 			if (event.target && event.target.className === 'delete-alertbox') {
+
 			event.preventDefault()
 			Swal.fire({
 				title: 'Are you sure? You want to Logout',
@@ -291,9 +292,9 @@
 		text-align: center;
 		background-color: lightblue;
 		margin-top: 20px;
-	  }
-	 
 	}
+	 
+	
 
 	.dropbtn:hover, .dropbtn:focus {
 		background-color: #2980B9;
@@ -308,7 +309,7 @@
 		display: none;
 		position: absolute;
 		background-color: #f1f1f1;
-		min-width: 160px;
+		min-width: 210px;
 		overflow: auto;
 		box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 		z-index: 1;

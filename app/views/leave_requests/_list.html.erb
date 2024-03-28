@@ -2,6 +2,7 @@
     <thead> 
         <% if is_admin?%>
             <th>Employee Name</th>
+            <th>Last Name</th>
         <%end%>
         <th>Reporting Manager</th>
         <th>Leave Type</th>
@@ -19,6 +20,9 @@
                     <% if is_admin?%>
                         <td>
                             <%= leave_request&.user&.first_name.present? ? leave_request.user.first_name.titleize : "N/A"%>
+                        </td>
+                        <td>
+                            <%= leave_request&.user&.last_name.present? ? leave_request.user.last_name.titleize : "N/A"%>
                         </td>
                     <%end%>
                     <td>

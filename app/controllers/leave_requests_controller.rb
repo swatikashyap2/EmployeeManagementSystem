@@ -42,10 +42,15 @@ class LeaveRequestsController < ApplicationController
                         leave_count = @user_leave_type.leave_count
                         @user_leave_type.update(leave_count: leave_count - no_of_days)
                     end
-                
-                    message1 = "Hi #{@leave_request.reporting_manager.first_name.titleize}, #{current_user.first_name.titleize} has been applied for #{@leave_request.user_leave_type.leave_type.name} "
+
+                    @leave_request.user.reporting_managers.each do |reporting_manager|
+                        user = User.find(reporting_manager)
+                        message1 = "Hi #{user.first_name.titleize}, #{current_user.first_name.titleize} has applied for #{@user_leave_type.leave_type.name} leave."
+                      
+                        @leave_request.notifications.create(recipient: user, user: current_user, message: message1, recipient_type: "reporting_manager", read: false)
+                    end
+                      
                     message2 = "Hi #{current_user.first_name.titleize}, your #{@leave_request.user_leave_type.leave_type.name.titleize} has been successfully applied! "
-                    @leave_request.notifications.create(recipient: @leave_request.reporting_manager, user: current_user, message: message1, recipient_type: "true", read: false)
                     @leave_request.notifications.create(recipient: @leave_request.user, user: current_user, message: message2, recipient_type: "true", read: false)
                     
                     UserMailer.leave_apply_email(@leave_request).deliver_later
@@ -121,10 +126,14 @@ class LeaveRequestsController < ApplicationController
                 leave_count = @user_leave_type.leave_count
                 @user_leave_type.update(leave_count: leave_count + no_of_days)
             end
-
-            message1 = " Hi #{@leave_request.reporting_manager.first_name.titleize}, #{current_user.first_name.titleize} has been cancel #{@leave_request.user_leave_type.leave_type.name} "
+            @leave_request.user.reporting_managers.each do |reporting_manager|
+                user = User.find(reporting_manager)
+                message1 = "Hi #{user.first_name.titleize}, #{current_user.first_name.titleize} has been cancel #{@leave_request.user_leave_type.leave_type.name} "
+              
+                @leave_request.notifications.create(recipient: user, user: current_user, message: message1, recipient_type: "reporting_manager", read: false)
+            end
             message2 = " Hi #{@leave_request.user.first_name.titleize}, you have been cancelled your  #{@leave_request.user_leave_type.leave_type.name.titleize}"
-            @leave_request.notifications.create(recipient: @leave_request.reporting_manager, user: current_user, message: message1,  notifiable: @leave_request, recipient_type: "true", read: false)
+    
             @leave_request.notifications.create(recipient: @leave_request.user, user: current_user, message: message2, notifiable: @leave_request, recipient_type: "true", read: false)
 
             UserMailer.leave_cancel_email(@leave_request).deliver_now
@@ -284,8 +293,9 @@ class LeaveRequestsController < ApplicationController
 
 
     def search
-        @leave_requests = LeaveRequest.includes(:user).all
-        @leave_requests = @leave_requests.where("lower(first_name) LIKE ? ", "%#{params[:search].downcase}%") if params[:search].present?
+        @leave_requests = LeaveRequest.includes(:user, user_leave_type: :leave_type).references(:users, :user_leave_types) #LeaveRequest.includes(:user).references(:users)
+        @leave_requests = @leave_requests.where("lower(users.first_name) LIKE ? OR lower(users.last_name) LIKE ? ", "%#{params[:search].downcase}%", "%#{params[:search].downcase}%") if params[:search].present?
+        @leave_requests = @leave_requests.where(leave_types: {id: params[:leave_type_id]}) if params[:leave_type_id].present?
         @leave_requests = @leave_requests.where(day_type: params[:day_type]) if params[:day_type].present?
         @leave_requests =  @leave_requests.paginate(page: params[:page], per_page: 10)
         respond_to do|format|
@@ -303,3 +313,56 @@ class LeaveRequestsController < ApplicationController
     end
 
 end
+
+
+def create
+    leave_from = params[:leave_request][:leave_from]
+    leave_to = params[:leave_request][:leave_to]
+    user_leave_type_id = params[:leave_request][:user_leave_type_id]
+    date_from = leave_from.present? ? Date.parse("#{leave_from}") : 0
+    date_to = leave_to.present? ? Date.parse("#{leave_to}") : Date.parse("#{leave_from}")
+    
+    if (date_to - date_from).to_i < current_user.user_leave_types.find(user_leave_type_id).leave_count
+      result = check_for_leaves(params[:leave_request])
+      
+      if !result
+        @leave_request = LeaveRequest.new(leave_request_params)
+        
+        if @leave_request.save
+          @leave_request.update(leave_to: @leave_request.leave_from) if @leave_request.day_type.eql?("half_day")
+          @user_leave_type = @leave_request.user_leave_type
+          
+          if @user_leave_type.leave_type.name.eql?("Short Leave")
+            @user_leave_type.update(leave_count: 0)
+          else
+            if date_from == date_to && !@leave_request.day_type.eql?("half_day")
+              no_of_days = 1
+            else
+              no_of_days = @leave_request.day_type.eql?("full_day") ? ((date_to - date_from).to_i + 1) : 0.5
+            end
+            
+            leave_count = @user_leave_type.leave_count
+            @user_leave_type.update(leave_count: leave_count - no_of_days)
+          end
+          
+          message1 = "Hi #{current_user.reporting_manager.first_name.titleize}, #{current_user.first_name.titleize} has applied for #{@user_leave_type} leave."
+          message2 = "Hi #{current_user.first_name.titleize}, your #{@user_leave_type} leave has been successfully applied!"
+          
+          @leave_request.notifications.create(recipient: current_user.reporting_manager, user: current_user, message: message1, recipient_type: "reporting_manager", read: false)
+          @leave_request.notifications.create(recipient: current_user, user: current_user, message: message2, recipient_type: "user", read: false)
+          
+          UserMailer.leave_apply_email(@leave_request).deliver_later
+          UserMailer.notify_to_admin(@leave_request).deliver_later
+          
+          redirect_to leave_requests_path, notice: "Request Created Successfully."
+        else
+          redirect_to new_leave_request_path, error: @leave_request.errors.full_messages
+        end
+      else
+        redirect_to new_leave_request_path, alert: "Your leave request overlaps with an existing leave request."
+      end
+    else
+      redirect_to new_leave_request_path, alert: "You are requesting more than your leave balance."
+    end
+  end
+  

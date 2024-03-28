@@ -96,8 +96,8 @@ class UsersController < ApplicationController
 	end
 
 	def show
-		authorize @user
 		@user = User.find_by(id: params[:id])
+		authorize @user
 	end
 
 	def password_popup

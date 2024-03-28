@@ -24,6 +24,10 @@ class ApplicationController < ActionController::Base
 		current_user.role.name == "employee" ? true : false
 	end
 
+	def after_sign_in_path_for(resource)
+		home_index_path(current_user)
+	  end
+
 	private
 
 		def user_not_authorized

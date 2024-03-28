@@ -97,6 +97,7 @@
 					<%= f.label :zip_code %>
 					<%= f.text_field :zip_code, autofocus: true, autocomplete: "zip_code", class: "form-control", placeholder: "Enter Zip-Code"   %>
 				</div>
+
 				<div class="field mb-2">
 					<%= f.label :add_image%>
 					<%= f.file_field :avatar, class: "form-control" %>
@@ -106,20 +107,7 @@
 					<%= f.label :address %>
 					<%= f.text_area :address, autofocus: true, autocomplete: "address", class: "form-control", placeholder: "Enter Address" %>
 				</div>
-				<div class="field mb-2">
-					<%= f.label :password %> <i>(leave blank if you don't want to change it)</i>
-					<%= f.password_field :password, autocomplete: "new-password",id: "pass", class: "form-control", placeholder: "Create Password" %>
-					<% if @minimum_password_length %>
-						
-						<em><%= @minimum_password_length %> characters minimum</em>
-					<% end %>
-				</div>
 
-				<div class="field mb-2">
-					<%= f.label :password_confirmation %><i>(please confirm your password)</i>
-					<%= f.password_field :password_confirmation, autocomplete: "new-password",  class: " con_pass form-control", placeholder: "Confirm Password"%>
-					<span id="user_pass_error"></span>
-				</div>
 				<div class="field mt-2">
 					<%= f.submit "Update", class: "btn btn-sm btn-primary send-request" %>
 				</div>	
@@ -307,5 +295,19 @@
 			}
 		});
 	});
+
+	$(document).ready(function() {
+		$('#select2').select2();
+	});
 </script>
+<style>
+	.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+		margin-left:0px !important;
+	}
+	.select2-container--default .select2-selection--multiple .select2-selection__choice__display {
+		padding-left:10px;
+		padding-right:10px;
+		color:black;
+	}
+</style>
 
