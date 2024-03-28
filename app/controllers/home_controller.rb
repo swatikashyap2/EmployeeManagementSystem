@@ -13,6 +13,7 @@ class HomeController < ApplicationController
         else
            @leave_requests = current_user.leave_requests.where(approve: nil, canceled: nil).order(created_at: :asc)
         end 
+        @leave_requests = @leave_requests.paginate(page: params[:page], per_page: 10)
 	 end
 	 
 	 def leave_approve    
@@ -73,10 +74,13 @@ class HomeController < ApplicationController
                 leave_count = @user_leave_type.leave_count
                 @user_leave_type.update(leave_count: leave_count + no_of_days)
             end
-
-            message1 = " Hi #{@leave_request.reporting_manager.first_name.titleize}, #{current_user.first_name.titleize} has been cancel #{@leave_request.user_leave_type.leave_type.name} "
+            @leave_request.user.reporting_managers.each do |reporting_manager|
+                user = User.find(reporting_manager)
+                message1 = "Hi #{user.first_name.titleize}, #{current_user.first_name.titleize} has been cancel #{@leave_request.user_leave_type.leave_type.name} "
+              
+                @leave_request.notifications.create(recipient: user, user: current_user, message: message1, recipient_type: "reporting_manager", read: false)
+            end
             message2 = " Hi #{@leave_request.user.first_name.titleize}, you have been cancelled your  #{@leave_request.user_leave_type.leave_type.name.titleize}"
-            @leave_request.notifications.create(recipient: @leave_request.reporting_manager, user: current_user, message: message1,  notifiable: @leave_request, recipient_type: "true", read: false)
             @leave_request.notifications.create(recipient: @leave_request.user, user: current_user, message: message2, notifiable: @leave_request, recipient_type: "true", read: false)
 
             UserMailer.leave_cancel_email(@leave_request).deliver_now

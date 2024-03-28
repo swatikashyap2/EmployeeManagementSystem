@@ -44,7 +44,7 @@
 				<div id="myDropdown" class="dropdown-content end-0">
 					<div class="mt-2 text-bold text-center"> Hi <%= current_user.first_name.titleize %>! </div>
 					<hr>
-					<%= link_to "Profile",user_path(current_user) %>
+					<%= link_to " My Profile",user_path(current_user) %>
 					<%= link_to "Edit Profile",edit_user_path(current_user) %>
 					<%= link_to "Change Password", "#", "data-bs-toggle": "modal", "data-bs-target": "#change_password" %>
 					<div id='password_form'></div>
